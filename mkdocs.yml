@@ -110,3 +110,10 @@ markdown_extensions:
   - pymdownx.tasklist:
       custom_checkbox: true
   - pymdownx.tilde
+
+# ------------------------------------------------------------------------------
+# NAVIGATION TREE
+# ------------------------------------------------------------------------------
+nav:
+  - 1. Windows:
+    - 1. Evidence of Execution: 1.Evidence_of_Execution/README.md
