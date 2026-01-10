@@ -1,0 +1,7 @@
+site_name: DFIR Techniques
+site_url: https://jrjones9440.github.io/DFIR-Techniques
+repo_url: https://github.com/jrjones9440/DFIR-Techniques
+
+
+theme:  
+  name: material
