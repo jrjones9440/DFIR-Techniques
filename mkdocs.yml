@@ -117,3 +117,7 @@ markdown_extensions:
 nav:
   - 1. Windows: 1.Windows/README.md
     - 1. Evidence of Execution: 1.Windows/1.Evidence_Of_Execution/README.md
+      - 1.01 - Prefetch: 1.Windows/1.Evidence_Of_Execution/1.01-Prefetch/README.md
+      - 1.02 - ShimCache: 1.Windows/1.Evidence_Of_Execution/1.02-ShimCache/README.md
+      - 1.03 - Amcache.hve: 1.Windows/1.Evidence_Of_Execution/1.03-Amcache.hve/README.md
+      - 1.04 - Scaling Evidence of Execution Analysis: 1.Windows/1.Evidence_Of_Execution/1.04-Scaling_Evidence_of_Execution_Analysis/README.md
