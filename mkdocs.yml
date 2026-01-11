@@ -115,6 +115,7 @@ markdown_extensions:
 # NAVIGATION TREE
 # ------------------------------------------------------------------------------
 nav:
+  - Home: index.md
   - "1. Windows":
       - Overview: 1.Windows/README.md
       - "1. Evidence of Execution":
