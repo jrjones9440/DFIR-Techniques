@@ -12,7 +12,6 @@ Use the navigation menu to explore the following domains:
 - **Cloud** - Cloud forensics and investigation procedures
 - **Malware** - Malware analysis techniques and tools
 - **ICS** - Industrial Control Systems security and forensics
-- [Evidence of Execution](1.Windows/Evidence_of_Execution.md)
 
 ## Getting Started
 
