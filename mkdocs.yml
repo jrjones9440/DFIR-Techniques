@@ -116,7 +116,7 @@ markdown_extensions:
 # ------------------------------------------------------------------------------
 nav:
   - Home: index.md
-  - "1.Windows":
+  - 1.Windows:
       - Overview: 1.Windows/index.md
       - Evidence of Execution: 1.Windows/Evidence_Of_Execution.md
        
