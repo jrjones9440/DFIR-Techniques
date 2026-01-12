@@ -1,6 +1,6 @@
 # Windows Execution Artifacts for DFIR
 
-This README provides a **Digital Forensics & Incident Response (DFIR)**–focused overview of three core Windows execution artifacts:
+This section provides a **Digital Forensics & Incident Response (DFIR)**–focused overview of three core Windows execution artifacts:
 
 - **Prefetch**
 - **Amcache**
