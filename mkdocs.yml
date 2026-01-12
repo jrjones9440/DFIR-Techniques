@@ -118,6 +118,7 @@ nav:
   - Home: index.md
   - 1.Windows:
       - Overview: 1.Windows/index.md
-      
+  - Malware:
+      - Overview: Malware/index.md
        
 
