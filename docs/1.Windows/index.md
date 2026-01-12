@@ -1,2 +1,3 @@
 - [Evidence of Execution](Evidence_of_Execution.md)
 - [AutoStart Persistence](AutoStart_Persistence.md)
+- [Windows Services Persistence](Windows_Services_Persistence.md)
