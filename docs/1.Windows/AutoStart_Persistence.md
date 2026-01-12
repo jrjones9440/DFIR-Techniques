@@ -33,13 +33,13 @@ These artifacts are critical for:
 
 ## HKCU Run
 
-### AutoStart Location
+### Registry Entry
 
 ```
 NTUSER.DAT\Software\Microsoft\Windows\CurrentVersion\Run
 ```
 
-### What is this autostart location?
+### What is HKCU Run?
 
 The **HKCU Run** key starts listed programs **automatically when the user logs on**. The key is stored in the user’s `NTUSER.DAT` hive and applies only to that specific user.
 
@@ -49,7 +49,7 @@ Attackers frequently use this location because:
 * it triggers reliably at logon
 * it blends in with legitimate software
 
-### Where to find this autostart location
+### Location
 
 Offline forensics:
 
@@ -104,13 +104,13 @@ RECmd.exe -f NTUSER.DAT --kn "Software\Microsoft\Windows\CurrentVersion\Run" --c
 
 ## HKCU RunOnce
 
-### AutoStart Location
+### Registry Entry
 
 ```
 NTUSER.DAT\Software\Microsoft\Windows\CurrentVersion\RunOnce
 ```
 
-### What is this autostart location?
+### What is HKCU RunOnce?
 
 **RunOnce** entries execute automatically at the next user logon, then are **removed after execution**.
 
@@ -120,7 +120,7 @@ This location is often abused for:
 * staging secondary persistence elsewhere
 * running cleanup tools
 
-### Where to find this autostart location
+### Location
 
 Offline:
 
@@ -158,13 +158,13 @@ RECmd.exe -f NTUSER.DAT --kn "Software\Microsoft\Windows\CurrentVersion\RunOnce"
 
 ## HKLM RunOnce
 
-### AutoStart Location
+### Registry Entry
 
 ```
 SOFTWARE\Microsoft\Windows\CurrentVersion\RunOnce
 ```
 
-### What is this autostart location?
+### What is HKLM RunOnce?
 
 The **HKLM RunOnce** key triggers one-time execution at startup or logon, depending on the entry.
 
@@ -175,7 +175,7 @@ Unlike HKCU RunOnce, it applies to:
 
 This typically requires admin rights to set.
 
-### Where to find this autostart location
+### Location
 
 Offline:
 
@@ -214,13 +214,13 @@ RECmd.exe -f SOFTWARE --kn "Microsoft\Windows\CurrentVersion\RunOnce" --csv auto
 
 ## HKLM Policies Explorer Run
 
-### AutoStart Location
+### Registry Entry
 
 ```
 SOFTWARE\Microsoft\Windows\CurrentVersion\policies\Explorer\Run
 ```
 
-### What is this autostart location?
+### What is HKLM Policies Explorer Run?
 
 This key is commonly used for:
 
@@ -229,7 +229,7 @@ This key is commonly used for:
 
 Because it appears “official,” it is sometimes abused for stealth persistence.
 
-### Where to find this autostart location
+### Location
 
 Offline:
 
@@ -268,13 +268,13 @@ RECmd.exe -f SOFTWARE --kn "Microsoft\Windows\CurrentVersion\policies\Explorer\R
 
 ## HKLM Run
 
-### AutoStart Location
+### Registry Entry
 
 ```
 SOFTWARE\Microsoft\Windows\CurrentVersion\Run
 ```
 
-### What is this autostart location?
+### What is HKLM Run?
 
 The HKLM Run key launches programs at logon for **all users**.
 
@@ -283,7 +283,7 @@ Commonly used by:
 * legitimate software (AV, sync tools)
 * attackers with admin rights to establish persistence
 
-### Where to find this autostart location
+### Location
 
 Offline:
 
@@ -325,13 +325,13 @@ RECmd.exe -f SOFTWARE --kn "Microsoft\Windows\CurrentVersion\Run" --csv autoruns
 
 ## Winlogon Userinit
 
-### AutoStart Location
+### Registry Entry
 
 ```
 SOFTWARE\Microsoft\Windows NT\CurrentVersion\Winlogon\Userinit
 ```
 
-### What is this autostart location?
+### What is Winlogon Userinit?
 
 The `Userinit` value controls which program runs immediately after a successful logon.
 
@@ -343,7 +343,7 @@ C:\Windows\System32\userinit.exe,
 
 Attackers may append an additional executable/script.
 
-### Where to find this autostart location
+### Location
 
 Offline:
 
@@ -382,13 +382,13 @@ RECmd.exe -f SOFTWARE --kn "Microsoft\Windows NT\CurrentVersion\Winlogon" --csv 
 
 ## Startup Folder (Per-User)
 
-### AutoStart Location
+### File Location
 
 ```
 %AppData%\Roaming\Microsoft\Windows\Start Menu\Programs\Startup
 ```
 
-### What is this autostart location?
+### What is the Startup Folder?
 
 Files placed in the Startup folder automatically execute when the user logs in.
 
@@ -398,7 +398,7 @@ This is a popular attacker choice because:
 * supports `.lnk`, `.bat`, `.vbs`, `.ps1`, EXEs
 * blends in with legitimate shortcuts
 
-### Where to find this autostart location
+### Location
 
 Typical path:
 
