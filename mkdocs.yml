@@ -116,9 +116,17 @@ markdown_extensions:
 # ------------------------------------------------------------------------------
 nav:
   - Home: index.md
-  - 1.Windows:
+  - Windows:
       - Overview: 1.Windows/index.md
+  - Linux:
+      - Overview: Linux/index.md
+  - Networking:
+      - Overview: Networking/index.md
+  - Cloud:
+      - Overview: Cloud/index.md
   - Malware:
       - Overview: Malware/index.md
+  - ICS:
+      - Overview: ICS/index.md
        
 
