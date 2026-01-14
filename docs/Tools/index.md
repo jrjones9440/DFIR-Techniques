@@ -1,1 +1,2 @@
 - [Find Evil Run Book](Find_Evil_Run_Book.md)
+- [DFIR Command Line Tools for Host Investigations](DFIR_Host_Command_Line_Tool_Cheatsheet.md)
