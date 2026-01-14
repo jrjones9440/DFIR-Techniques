@@ -1,7 +1,7 @@
 # Find Evil DFIR Run Book (SANS Hunt Evil Poster Driven)
 
 > **Purpose:** This run book operationalizes the **SANS DFIR “Hunt Evil / Find Evil” poster** into an Incident Response + Forensic Analysis workflow. It provides step-by-step **collection**, **analysis**, and **hunting** checklists, including a **RECmd `.reb` bundle** for poster registry artifacts.  
-> Source poster: **SANS DFIR Hunt Evil Poster** fileciteturn0file0
+> Source poster: **SANS DFIR Hunt Evil Poster** 
 
 ---
 
@@ -71,10 +71,10 @@ Collect triage set +:
 
 **Disk**
 - MFT / USN Journal (if possible)
-- Prefetch (`C:\Windows\Prefetch`) fileciteturn0file0
-- Amcache (`C:\Windows\AppCompat\Programs\Amcache.hve`) fileciteturn0file0
-- SRUM (`C:\Windows\System32\SRU\SRUDB.dat`) fileciteturn0file0
-- Jump Lists (AutomaticDestinations) fileciteturn0file0
+- Prefetch (`C:\Windows\Prefetch`) 
+- Amcache (`C:\Windows\AppCompat\Programs\Amcache.hve`) 
+- SRUM (`C:\Windows\System32\SRU\SRUDB.dat`) 
+- Jump Lists (AutomaticDestinations) 
 
 **Registry**
 - SYSTEM / SOFTWARE / SECURITY / SAM
@@ -86,7 +86,7 @@ Collect triage set +:
   - Scheduled TaskCache
   - RDP Client servers list
   - MountPoints2
-  - PowerShell ExecutionPolicy fileciteturn0file0
+  - PowerShell ExecutionPolicy 
 
 **Event logs**
 - `Security.evtx`
@@ -98,13 +98,13 @@ Collect triage set +:
   - WMI Activity Operational
   - RDPClient Operational
   - RdpCoreTS / RemoteConnectionManager / LocalSessionManager
-  - SMBClient Security fileciteturn0file0
+  - SMBClient Security 
 
 ---
 
 ## Know Normal (Process Baseline)
 
-The poster emphasizes **“Know Normal”** to identify malicious outliers quickly. fileciteturn0file0
+The poster emphasizes **“Know Normal”** to identify malicious outliers quickly. 
 
 ### Baseline validation checklist
 - [ ] Validate **image path** is expected (system binaries in correct directories)
@@ -121,10 +121,10 @@ The poster emphasizes **“Know Normal”** to identify malicious outliers quick
 
 ## Evidence of Program Execution
 
-The poster execution artifacts to prioritize: **SRUM, BAM/DAM, UserAssist, Jump Lists, ShimCache, Prefetch, Amcache**. fileciteturn0file0
+The poster execution artifacts to prioritize: **SRUM, BAM/DAM, UserAssist, Jump Lists, ShimCache, Prefetch, Amcache**. 
 
 ### SRUM
-- Location: `C:\Windows\System32\SRU\SRUDB.dat` fileciteturn0file0
+- Location: `C:\Windows\System32\SRU\SRUDB.dat`
 - Hunt:
   - [ ] Identify apps with unusual network usage
   - [ ] Identify rare executables and spikes
@@ -134,21 +134,21 @@ The poster execution artifacts to prioritize: **SRUM, BAM/DAM, UserAssist, Jump 
 - Location:  
   - `SYSTEM\CurrentControlSet\Services\bam\UserSettings\{SID}`  
   - `SYSTEM\CurrentControlSet\Services\dam\UserSettings\{SID}`  
-  - `...bam\State\UserSettings\{SID}` (Win10 1809+) fileciteturn0file0
+  - `...bam\State\UserSettings\{SID}` (Win10 1809+) 
 - Hunt:
   - [ ] Flag executions from user-writable dirs
   - [ ] Identify LOLBins used unusually
 
 ### UserAssist
 - Location:  
-  `NTUSER.DAT\Software\Microsoft\Windows\CurrentVersion\Explorer\UserAssist\{GUID}\Count` fileciteturn0file0
+  `NTUSER.DAT\Software\Microsoft\Windows\CurrentVersion\Explorer\UserAssist\{GUID}\Count` 
 - Hunt:
   - [ ] Decode ROT13 values
   - [ ] Identify first-seen admin tools or remote tools
 
 ### Jump Lists
 - Location:  
-  `%USERPROFILE%\AppData\Roaming\Microsoft\Windows\Recent\AutomaticDestinations` fileciteturn0file0
+  `%USERPROFILE%\AppData\Roaming\Microsoft\Windows\Recent\AutomaticDestinations` 
 - Hunt:
   - [ ] Identify remote paths / staging locations
   - [ ] Map access to sensitive files
@@ -156,19 +156,19 @@ The poster execution artifacts to prioritize: **SRUM, BAM/DAM, UserAssist, Jump 
 ### ShimCache (AppCompatCache)
 - Location:  
   - XP: `SYSTEM\...\Session Manager\AppCompatibility`  
-  - Win7+: `SYSTEM\...\Session Manager\AppCompatCache` fileciteturn0file0
+  - Win7+: `SYSTEM\...\Session Manager\AppCompatCache` 
 - Hunt:
   - [ ] Identify suspicious executables that existed on disk
   - [ ] Correlate with MFT/Amcache hashes
 
 ### Prefetch
-- Location: `C:\Windows\Prefetch` fileciteturn0file0
+- Location: `C:\Windows\Prefetch` 
 - Hunt:
   - [ ] Identify suspicious EXE executions
   - [ ] Review embedded referenced files/paths
 
 ### Amcache.hve
-- Location: `C:\Windows\AppCompat\Programs\Amcache.hve` fileciteturn0file0
+- Location: `C:\Windows\AppCompat\Programs\Amcache.hve` 
 - Hunt:
   - [ ] Extract SHA1 for suspicious binaries/drivers
   - [ ] Identify odd compilation time/publisher anomalies
@@ -177,58 +177,57 @@ The poster execution artifacts to prioritize: **SRUM, BAM/DAM, UserAssist, Jump 
 
 ## Lateral Movement
 
-Poster provides a practical map for **Remote Access** and **Remote Execution** artifact hunting. fileciteturn0file0
+Poster provides a practical map for **Remote Access** and **Remote Execution** artifact hunting. 
 
 ### Remote Access: SMB / Admin shares
 **Source host**
 - Security log: **4648**
 - SMBClient Security: **31001**
 - Registry: MountPoints2, Shellbags
-- Execution: ShimCache/BAM-DAM/Amcache/Prefetch for `net.exe` / `net1.exe` fileciteturn0file0
+- Execution: ShimCache/BAM-DAM/Amcache/Prefetch for `net.exe` / `net1.exe` 
 
 **Destination host**
 - Security: **4624 Type 3**, **4672**, **4776**, **5140**, **5145**
 - DC: **4768**, **4769**
-- Files: attacker tool drops (creation time = copy time) fileciteturn0file0
+- Files: attacker tool drops (creation time = copy time) 
 
 ### Remote Access: RDP
 **Source**
 - Registry: `NTUSER\...\Terminal Server Client\Servers`
 - RDPClient Operational: **1024**, **1102**
-- Files: Jump lists for MSTSC, bitmap cache, `Default.rdp` fileciteturn0file0
+- Files: Jump lists for MSTSC, bitmap cache, `Default.rdp`
 
 **Destination**
 - Security: **4624 Type 10**, **4778/4779**
-- RDS logs: 1149, 21/22/25/41, 98/131 fileciteturn0file0
+- RDS logs: 1149, 21/22/25/41, 98/131 
 
 ### Remote Execution: Scheduled Tasks
 - Security: **4698**, **4702**, **4699**, **4700/4701**
 - TaskScheduler Operational: **106**, **140**, **141**, **200/201**
 - Registry: TaskCache `Tasks` + `Tree`
-- Files: `C:\Windows\Tasks`, `C:\Windows\System32\Tasks`, `C:\Windows\SysWOW64\Tasks` fileciteturn0file0
+- Files: `C:\Windows\Tasks`, `C:\Windows\System32\Tasks`, `C:\Windows\SysWOW64\Tasks` 
 
 ### Remote Execution: Services
 - Security: **4697** (if enabled)
 - System: **7034**, **7035**, **7036**, **7040**, **7045**
-- Registry: `SYSTEM\CurrentControlSet\Services\` fileciteturn0file0
+- Registry: `SYSTEM\CurrentControlSet\Services\` 
 
 ### Remote Execution: PowerShell Remoting / WinRM
 - WinRM Operational: **6**, **91**, **142**, **161**, **169**
 - PowerShell Operational: **40961**, **40962**, **8193/8194**, **8197**
 - Script Block Logging: **4103/4104** (if enabled)
-- Registry: ExecutionPolicy key fileciteturn0file0
+- Registry: ExecutionPolicy key 
 
 ### Remote Execution: WMI/WMIC
 - WMI Activity Operational: **5857**, **5860**, **5861**
-- Files: `.mof`, repository changes under `C:\Windows\System32\wbem\Repository` fileciteturn0file0
+- Files: `.mof`, repository changes under `C:\Windows\System32\wbem\Repository` 
 
 ### Remote Execution: PsExec
 - Registry:
   - `NTUSER.DAT\Software\Sysinternals\PsExec\EulaAccepted`
   - `SYSTEM\CCS\Services\PSEXESVC`
 - System: **7045**
-- Files: `psexesvc.exe` in `ADMIN$ (\Windows)` fileciteturn0file0
-
+- Files: `psexesvc.exe` in `ADMIN$ (\Windows)` 
 ---
 
 ## KAPE Collection Mapping
@@ -261,7 +260,7 @@ Poster provides a practical map for **Remote Access** and **Remote Execution** a
 ## Appendix A — RECmd `.reb` Bundle
 
 > Save as: `SANS_HuntEvil_PosterArtifacts.reb`  
-> This RECmd bundle aligns to poster artifacts: **BAM/DAM, ShimCache, Amcache (hive), Services, Scheduled TaskCache**, plus key lateral-movement support keys (RDP servers, MountPoints2, PsExec, ExecutionPolicy). fileciteturn0file0
+> This RECmd bundle aligns to poster artifacts: **BAM/DAM, ShimCache, Amcache (hive), Services, Scheduled TaskCache**, plus key lateral-movement support keys (RDP servers, MountPoints2, PsExec, ExecutionPolicy). 
 
 ```xml
 <?xml version="1.0" encoding="utf-8"?>
