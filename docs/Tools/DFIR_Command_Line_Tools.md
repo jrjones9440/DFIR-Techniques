@@ -1,0 +1,463 @@
+# DFIR Command-Line Tools (SANS EZ Tools Poster Run Book)
+
+> **Purpose:** This page documents the **common DFIR command-line tools** highlighted in the **SANS “Forensics the EZ Way – Results in Seconds at the Command Line” poster**, including what each tool is for, what artifacts it processes, and copy/paste-ready usage examples. fileciteturn1file0  
+> Recommended use: bake these into **repeatable triage scripts** and standardize output formats (CSV/JSON/HTML) across investigations. 
+
+---
+
+## Common EZ Tools CLI Conventions
+
+The poster highlights common switches shared across many EZ tools: 
+
+### Common input options
+- `-d` : directory to process
+- `-f` : file to process
+- `-q` : quiet mode
+
+### Common output options
+- `--csv <dir>` : export CSV
+- `--json <dir>` : export JSON
+- `--html <dir>` : export HTML
+- Multiple export formats can be specified at once (ex: `--csv ... --json ...`). 
+
+### Time format + verbosity
+- `--dt <format>` : custom date/time format
+- `--debug` : debug output
+- `--trace` : trace output (usually with `--debug`)
+- `--sync` : sync updates from GitHub (ex: KAPE targets/modules updates; evtxecmd map updates). 
+
+### Volume Shadow Copy processing
+- `--vss` : process Volume Shadow Copies  
+  Supported in **EvtxECmd, MFTECmd, PECmd, and RECmd**. 
+
+---
+
+## VSCMount — Volume Shadow Copy Mounter
+
+### What it is
+**VSCMount** mounts each **Volume Shadow Copy** from a mounted evidence disk to a folder so you can browse historical versions of the filesystem and recover deleted/older files. fileciteturn1file0
+
+### Artifact type
+- Volume Shadow Copies (VSS)
+
+### Basic usage
+> Evidence must be mounted as a physical drive first (example uses drive `E:`). fileciteturn1file0
+
+```powershell
+.\VSCMount.exe --dl E --mp C:\VSCs
+```
+
+### Advanced usage
+Add creation date to each mapped VSC folder (`--ud`). fileciteturn1file1
+
+```powershell
+.\VSCMount.exe --dl E --mp C:\VSCs --ud
+```
+
+### What to look for
+- Prior versions of:
+  - registry hives
+  - event logs
+  - malware that was deleted/wiped
+  - renamed payloads
+- Compare attacker-modified timestamps against older copies for tampering.
+
+---
+
+## SQLECmd — SQLite Parser
+
+### What it is
+Parses **SQLite databases** using schema-specific **map files** (e.g., Chrome History). fileciteturn1file1
+
+### Artifact type
+- SQLite DBs (browsers, cloud tools, chat apps, phone backups, etc.) fileciteturn1file1
+
+### Basic usage
+Single DB:
+```powershell
+SQLECmd.exe -f G:\databases\database.db --csv G:\SQLECmd_output
+```
+
+Folder of DBs:
+```powershell
+SQLECmd.exe -d G:\databases\ --csv G:\SQLECmd_output
+```
+
+### Key output
+- Multiple CSVs depending on DB schema (for Chrome History: history, downloads, keyword searches, etc.). fileciteturn1file1
+
+### Advanced notes
+- SQLECmd only parses schemas that have map files; custom maps can be made by adding SQL queries. fileciteturn1file1
+
+---
+
+## SumECmd — User Access Log Parser (Windows Server)
+
+### What it is
+Parses **User Access Logs** from Windows Servers (tracks user requests, connections, usernames, client IPs; useful for lateral movement). fileciteturn1file4
+
+### Artifact type
+- User Access Logging databases (SUM) on Windows Server fileciteturn1file4
+
+### Inputs
+- `C:\Windows\System32\LogFiles\SUM`
+
+### Pre-processing (REQUIRED)
+Poster recommends repairing the copied SUM ESE databases before parsing: fileciteturn1file4
+
+```powershell
+esentutl.exe /r svc /i /o
+esentutl.exe /p Current.mdb
+esentutl.exe /p SystemIdentity.mdb
+esentutl.exe /p <GUID>.mdb
+```
+
+### Basic usage
+```powershell
+SumECmd.exe -d G:\sum_fixed\ --csv G:\sum_output
+```
+
+### Key output
+- `ClientDetail` (dates/times, role/service accessed, domain, username, source IP). fileciteturn1file4
+
+### Hunt tip
+- Look for domains/users/IPs not part of the org (anomalous access). fileciteturn1file4
+
+---
+
+## bstrings — Extract Text From Binary Files
+
+### What it is
+Searches *any file type* for interesting strings (including Unicode and selected ANSI code pages). 
+
+### Artifact type
+- Any binary file, including EVTX, EXE, DLL, memory dumps, etc.
+
+### Basic usage
+```powershell
+bstrings.exe -f <file>
+```
+
+Search for a string:
+```powershell
+bstrings.exe -f <file> --ls "password"
+```
+
+### Useful switches
+- `-x` / `-m` : set maximum/minimum string lengths
+- `--off` : show offset for each hit 
+
+### Regex hunting
+List built-in regex patterns:
+```powershell
+bstrings.exe -p
+```
+
+Use a built-in regex (example: email):
+```powershell
+bstrings.exe -f suspect.exe --lr email
+```
+
+Multiple regexes from a file:
+```powershell
+bstrings.exe -f suspect.exe -fr DFIR_RegExs.txt
+```
+
+### EVTX note (important)
+Windows Event Logs require code page **1201** to find strings: 
+
+```powershell
+bstrings.exe -f Powershell.evtx --ls download --cp 1201
+```
+
+---
+
+## AppCompatCacheParser — ShimCache Parser
+
+### What it is
+Parses **Application Compatibility Cache** (ShimCache) from a SYSTEM hive. 
+
+### Artifact type
+- AppCompatCache / ShimCache (registry-derived execution-ish evidence)
+
+### Basic usage
+```powershell
+AppCompatCacheParser.exe -f E:\Windows\System32\config\SYSTEM --csv G:\AppCompatCache
+```
+
+### Key output fields
+- `Path`
+- `LastModifiedTimeUTC` (file last modified; **NOT execution time**)
+- `Executed` (flag/indicator) 
+
+### Investigation tip
+- Watch `Path` prefix (e.g., `SYSVOL\...` indicates OS volume). 
+
+---
+
+## RBCmd — Recycle Bin Artifact Parser
+
+### What it is
+Parses `$I` files in Recycle Bin to identify original path/name and deletion timestamps. 
+
+### Artifact type
+- Recycle Bin `$I` metadata files
+
+### Basic usage
+Single `$I` file:
+```powershell
+RBCmd.exe -f E:\$Recycle.Bin\<SID>\$I7YQ28P.jpg
+```
+
+Folder mode:
+```powershell
+RBCmd.exe -d F:\$Recycle.Bin\<SID> --csv G:\RBFiles -q
+```
+
+### Pro tip
+On mounted drives Windows may not expose deleted files; recover `$I` files first, then parse. 
+
+---
+
+## JLECmd — Jump List Explorer (CLI)
+
+### What it is
+Parses Windows **Jump Lists** (AutoDestinations) for evidence of file knowledge and execution context. 
+
+### Artifact type
+- Jump Lists (AutomaticDestinations)
+
+### Basic usage
+Single Jump List:
+```powershell
+JLECmd.exe -f E:\Users\Donald\AppData\Microsoft\Windows\Recent\AutomaticDestinations\<appid>.automaticDestinations-ms --csv G:\Jumplists -q
+```
+
+Folder mode:
+```powershell
+JLECmd.exe -d E:\Users\Donald\AppData\Microsoft\Windows\Recent\AutomaticDestinations --csv G:\Jumplists -q
+```
+
+### Advanced hunting (poster tip)
+Look for changes in:
+- `DriveType`
+- `VolumeSerialNumber`
+- `VolumeLabel`  
+These indicate files opened from external devices. 
+
+---
+
+## SRUMECmd — SRUM Parser
+
+### What it is
+Parses SRUM to understand app usage, network usage, power usage, and wireless network context. 
+
+### Artifact type
+- `SRUDB.dat` (ESE database) + SOFTWARE hive
+
+### Required repair step
+Poster recommends repairing SRUDB after copying the folder: 
+
+```powershell
+esentutl.exe /r sru /i /o
+esentutl.exe /p SRUDB.dat /o
+```
+
+### Basic usage
+```powershell
+SRUMECmd.exe -f G:\sru_fixed\SRUDB.dat -r E:\Windows\System32\config\SOFTWARE --csv G:\SRUM_output
+```
+
+### Key output
+Multiple CSVs (application usage, energy, network usage/connectivity). Data is recorded in **30–60 minute segments**. fileciteturn1file3
+
+### Reporting tip
+Plot bandwidth/application usage over time in Excel for report visuals. fileciteturn1file3
+
+---
+
+## WxTCmd — Timeline Explorer
+
+### What it is
+Parses Windows 10 Timeline (**ActivitiesCache.db**) tracking last ~30 days of apps/files opened by user and synced devices. fileciteturn1file3
+
+### Artifact type
+- ActivitiesCache.db (Windows Timeline)
+
+### Basic usage
+```powershell
+WxTCmd.exe -f E:\Users\srogers\AppData\Local\ConnectedDevicesPlatform\<varies>\ActivitiesCache.db --csv G:\WxT_output
+```
+
+### Key fields
+- `Executable` (path)
+- `Display Text` (content opened + app)
+- `Content Info` (location/resource)
+- `Start Time` (first time this activity occurred in last 30 days) fileciteturn1file3
+
+### Advanced tip
+`Content Info` can include a **Volume GUID**, enabling correlation to a specific device/volume. fileciteturn1file3
+
+---
+
+## LECmd — LNK File Explorer
+
+### What it is
+Parses Windows **shortcut (.lnk)** files (target path, drive type, volume serial/label, timestamps, etc.). fileciteturn1file3
+
+### Artifact type
+- `*.lnk` shortcut files
+
+### Basic usage
+Single file:
+```powershell
+LECmd.exe -f E:\Users\srogers\AppData\Microsoft\Windows\Recent\Peggy.jpg.lnk
+```
+
+Folder mode:
+```powershell
+LECmd.exe -d E:\Users\srogers\AppData\Microsoft\Windows\Recent --csv G:\LnkFiles -q
+```
+
+### Forensic interpretations (poster highlights)
+- If `TargetModified` precedes `TargetCreated`, file likely copied from another volume.
+- Multiple opens may be inferred by differences in source created/modified fields. fileciteturn1file3
+
+---
+
+## AmcacheParser — Amcache Parser
+
+### What it is
+Parses `Amcache.hve` hive to identify programs present/run and extract SHA1 hashes. fileciteturn1file3
+
+### Artifact type
+- `Amcache.hve`
+
+### Basic usage
+```powershell
+AmcacheParser.exe -f E:\Windows\AppCompat\Programs\Amcache.hve --csv G:\Amcache
+```
+
+### Key output fields
+- `FileIDLastWriteTimestamp` (first time executable was run)
+- `SHA1`
+- `FullPath`
+- Volume/MFT identifiers for NTFS correlation fileciteturn1file3
+
+### Advanced usage: blacklist/whitelist by hash
+```powershell
+AmcacheParser.exe -f E:\Windows\AppCompat\Programs\Amcache.hve -b G:\Blacklist.txt --csv G:\Amcache
+```
+
+---
+
+## MFTECmd — MFT Explorer
+
+### What it is
+Parses NTFS internal files:
+- `$MFT`, `$J` (USN Journal), `$SDS`, `$LogFile`, `$Boot` fileciteturn1file3
+
+### Artifact type
+- NTFS metadata artifacts
+
+### Basic usage
+Exported MFT:
+```powershell
+MFTECmd.exe -f "G:\Exports\$MFT" --csv G:\MFT_Output
+```
+
+Directly from mounted evidence:
+```powershell
+MFTECmd.exe -f "E:\$MFT" --csv G:\MFT_Output
+```
+
+Alternate data streams for USN + Secure:
+```powershell
+MFTECmd.exe -f "E:\$Extend\$UsnJrnl:$MFT" --csv G:\USN_Output
+MFTECmd.exe -f "E:\$Secure:$SDS" --csv G:\SDS_Output
+```
+
+### VSS processing
+Poster highlights MFTECmd can pull older versions via VSS using `--vss` and avoid duplicates with `--dedupe`: fileciteturn1file3
+
+```powershell
+MFTECmd.exe -f "E:\$Extend\$UsnJrnl:$J" --csv G:\MFT_Output --vss --dedupe
+```
+
+### Key interpretations
+- `Modified < Created` strongly suggests a file was copied from another volume. fileciteturn1file3
+
+---
+
+## RECmd — Registry Explorer (CLI)
+
+### What it is
+Command-line Registry parsing/search/export at scale (consistent output across many hosts). fileciteturn1file3
+
+### Artifact type
+- Registry hives (NTUSER/SAM/SECURITY/SOFTWARE/SYSTEM/USRCLASS/AMCACHE/etc.) fileciteturn1file3
+
+### Search examples
+Search NTUSER key names:
+```powershell
+RECmd.exe -f "C:\Temp\NTUSER.dat" --sk Dropbox
+```
+
+Search USRCLASS value data:
+```powershell
+RECmd.exe -f "C:\Temp\UsrClass.dat" --sd Dropbox
+```
+
+Search directory of hives with filters:
+```powershell
+RECmd.exe --d "C:\Temp\registry_files" --sk "Dropbox" --StartDate "11/13/2014 15:35:01" --RegEx --sv "(App|Display)Name" --recover false --nl
+```
+
+### Search notes (poster)
+- Start/EndDate filter uses **LastWrite timestamps (UTC)**
+- `--minsize` can find very large values (often used for malware)
+- `--Base64` decodes Base64-encoded registry values
+- `--recover true` retrieves deleted keys/values (when supported) fileciteturn1file3
+
+Example large/base64 hunting:
+```powershell
+RECmd.exe -d "C:\Temp\registry_files" --minsize 1M --Base64 --recover true
+```
+
+### Batch mode (REB)
+RECmd supports batch mode with `.reb` bundles, using `HiveType` to target only relevant hives. fileciteturn1file3
+
+Example:
+```powershell
+RECmd.exe --bn .\BatchExamples\BatchExampleUserAssist.reb -f C:\Temp\NTUSER_dblake.DAT --nl --csv C:\Temp
+```
+
+---
+
+## Quick Start: Standardized Output Folder Layout
+
+Recommended standard run folder (repeatable across cases/hosts):
+
+```text
+Case_<ID>\
+  Host_<HOSTNAME>\
+    EZTools\
+      VSCMount\
+      SQLECmd\
+      SumECmd\
+      bstrings\
+      AppCompatCache\
+      RecycleBin\
+      JumpLists\
+      SRUM\
+      Timeline\
+      LNK\
+      Amcache\
+      MFT\
+      Registry\
+```
+
+---
+
+*End of file.*  
+Poster reference: SANS EZ Tools Poster fileciteturn1file0
