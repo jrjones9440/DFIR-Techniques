@@ -1,2 +1,2 @@
 - [Find Evil Run Book](Find_Evil_Run_Book.md)
-- [DFIR Command Line Tools for Host Investigations](DFIR_Command_Line_Tools.md)
+- [DFIR Eric Zimmerman Tools for Host Investigations](DFIR_Command_Line_Tools.md)
