@@ -1,5 +1,6 @@
 - [1. User Account Profiling](User_Account_Profiling.md)
 - [2. System Profiling](System_Profiling.md)
+- [3. NTUSER.DAT Analysis](NTUSER_DAT_Analysis.md)
 - [Evidence of Execution](Evidence_of_Execution.md)
 - [AutoStart Persistence](AutoStart_Persistence.md)
 - [Windows Services Persistence](Windows_Services_Persistence.md)
