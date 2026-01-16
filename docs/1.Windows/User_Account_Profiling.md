@@ -71,37 +71,17 @@ Use Registry Explorer’s built-in parsing for `Users` to quickly enumerate acco
 1. Open **Registry Explorer**
 2. Load the **SAM hive**
 3. Navigate to:
-
-   `SAM\Domains\Account\Users`
-
+      -`SAM\Domains\Account\Users`
 4. Select the **Users** key
-5. In the lower pane, select the **User accounts** tab
-
-You should now see parsed accounts from the SAM.
+5. After selecting the Users key, in the data viewing pane, select the **User accounts** Tab at the top of the pane and view the data parsed by the Registry Explorer plugin
 
 📸 **Screenshot Example** (add yours here):
 
 ```markdown
 ![Registry Explorer - SAM Users User accounts tab](img/user_account_profiling/01_registry_explorer_users_tab.png)
 ```
-
----
-
-## Step 2 — Count User Accounts (RID ≥ 1000)
-
-### Background
-The first column in the User Accounts view is **User Id** which is the **Relative Identifier (RID)**.
-
-- **RID < 1000**: built-in/system accounts
-- **RID ≥ 1000**: user-created accounts (local and cloud-linked)
-
-### Task
-**How many user accounts are present in this SAM hive?**
-
-### How to Answer
-In the User Accounts tab:
-- Filter/sort by **User Id**
-- Count all rows where RID ≥ 1000
+6. The first column in the Registry Explorer User Accounts plugin-in is named User Id and represents a value Microsoft calls the "Relative Identifier (RID)". RID values of 1000 or higher are reserved for user accounts and those below that value are used for system accounts. Document:
+      - How many user accounts are present in this SAM hive?
 
 📸 **Screenshot Example**:
 
@@ -109,17 +89,7 @@ In the User Accounts tab:
 ![Registry Explorer - Sorted RIDs](img/user_account_profiling/02_sorted_by_rid.png)
 ```
 
----
-
-## Step 3 — Identify Accounts of Interest
-
-### Task
-What are the **User Names** of accounts of interest and what are their **User Id (RID)** values?
-
-### How to Answer
-From the User Accounts plugin output:
-- Record `User Name`
-- Record `User Id`
+7. What are the User Names of the accounts of interest and document their User Id values.
 
 📸 **Screenshot Example**:
 
@@ -134,27 +104,9 @@ From the User Accounts plugin output:
 | Administrator | 500 | Built-in |
 | Guest | 501 | Built-in |
 | jsnow | 1002 | Account of interest |
-| svc-backup | 1004 | Suspicious service account |
+| svc-backup | 1004 | Suspicious service account 
 
----
-
-## Step 4 — Group Memberships and Admin Rights
-
-### Task
-What **Groups** are the accounts of interest a member of? Identify groups with **Administrative rights**.
-
-### Where to check
-- Registry Explorer parsing (if populated)
-- SAM group membership artifacts under:
-  - `SAM\Domains\Builtin\Aliases`
-  - `SAM\Domains\Account\Aliases`
-
-> In many incidents, the key question is whether the user is in **Administrators** (RID 544 group).
-
-### Approach
-In Registry Explorer:
-- Identify account RID
-- Check group membership in parsed views OR pivot into alias membership
+8. What Groups are the accounts of interest a member of? Annotate any Group memberships that have Administrative rights.
 
 📸 **Screenshot Example**:
 
@@ -162,92 +114,29 @@ In Registry Explorer:
 ![Registry Explorer - Group memberships view](img/user_account_profiling/04_group_memberships.png)
 ```
 
-**Annotate administrative groups:**
-- Administrators
-- Remote Desktop Users (situational)
-- Backup Operators (situational)
-- Hyper-V Administrators (situational)
-
----
-
-## Step 5 — Determine Last Login Time
-
-### Task
-What is the **Last Login Time** for the account(s) of interest?
-
-### How to Answer
-In Registry Explorer User Accounts tab:
-- Locate `Last login time` (or similar parsed field)
-
+9. Document the Last Login Time for the account(s) of interest.
+      - Why might the Total Login Count = 0 for the account of interest?  New Microsoft Accounts no longer update this value within the SAM. Since there is a Last Login Time we would expect Total Login Count to be greater than zero.
+      - 
 📸 **Screenshot Example**:
 
 ```markdown
 ![Registry Explorer - Last login time](img/user_account_profiling/05_last_login_time.png)
 ```
 
-**DFIR note:**  
-If the account is suspicious, correlate Last Login with:
-- Security log 4624 logons
-- RDP logons (RemoteInteractive)
-- Logon type anomalies
-
----
-
-## Step 6 — Used Built-In Accounts (RID < 1000)
-
-### Task
-How many built-in system accounts (**RID < 1000**) have been used on the system?
-
-### How to Answer
-In the User Accounts tab:
-- Filter RID < 1000
-- Evaluate Last Login timestamps
-- A “used” account typically shows Last Login > null/zero
+10. How many of the built-in system accounts (RID < 1000) have been used on the system?
 
 📸 **Screenshot Example**:
 
 ```markdown
 ![Registry Explorer - Built-in accounts usage](img/user_account_profiling/06_builtin_accounts_used.png)
 ```
-
 **Common built-in accounts**
 - 500 Administrator
 - 501 Guest
 - 502 KRBTGT (domain controllers)
 - Other service/system accounts depending on context
 
----
-
-## Step 7 — Why Total Login Count Might Be 0
-
-### Task
-Why might **Total Login Count = 0** even though a **Last Login Time exists**?
-
-### Explanation
-For **newer Microsoft Accounts (cloud-linked logons)**, Windows may **not reliably update** the legacy SAM values like:
-
-- Total Login Count
-- Some password metadata
-
-Even if logons are occurring, the SAM counters may remain `0`.
-
-**How to validate**
-- Use Security event logs:
-  - 4624 successful logon
-  - 4625 failed logon
-
----
-
-## Step 8 — Invalid Login Count for Administrator Accounts
-
-### Task
-What is the **Invalid Login Count** for any Administrator accounts?
-
-### How to Answer
-In Registry Explorer:
-- Locate `Invalid login count` for:
-  - RID 500 Administrator
-  - Any local accounts in Administrators group
+12. What is the Invalid Login Count for the any Administrator accounts?
 
 📸 **Screenshot Example**:
 
@@ -262,42 +151,9 @@ In Registry Explorer:
   - credential stuffing
   - misconfigured service using stale password
 
----
 
-## Step 9 — Password Change Timestamp Before Created Timestamp
-
-### Task
-Why might **Last Password Change** time be *before* **Created On** time?
-
-### Explanation
-Major Windows updates are known to modify/normalize registry timestamps. This can lead to timestamp behavior that **does not align with true historical creation**.
-
-### Validation workflow
-- Identify the **last major system update time**
-- Validate via:
-  - `SYSTEM` hive
-  - Windows Update logs
-  - CBS logs
-  - Event logs (Setup / WindowsUpdateClient)
-
-Document update time and justify timestamp inconsistency.
-
----
-
-## Step 10 — Review Raw SAM User Subkeys (Hex RID)
-
-### Task
-Each user is stored as a **subkey under Users**, named as the **hex RID**.
-
-Example:
-- RID `1002` in hex = `3EA`
-
-### How to Answer
-1. Find RID for account of interest (ex: 1002)
-2. Convert RID → hex
-3. Navigate to:
-
-`SAM\Domains\Account\Users\000003EA`
+14. Why might the Last Password Change time be before the account Created On time of the account of interest?  Major system updates are known to change a lot of timestamps in the Windows Registry. This is a known phenomenon for major Windows updates,  document the last system update time to validate.
+15. he raw data for user accounts in the SAM hive are stored as sub-keys under the Users key. Each account has a sub-key named according to the hex representation of its Relative Identifier (RID). For example the hex value for RID 1002 is 3EA. Examine the accounts of interest.
 
 📸 **Screenshot Example**:
 
@@ -305,36 +161,13 @@ Example:
 ![Registry Explorer - User subkey 000003EA](img/user_account_profiling/08_hex_rid_subkey.png)
 ```
 
-### What to review
-Inspect values such as:
-- `V`
-- `F`
-- `InternetUserName` (if present)
-
----
-
-## Step 11 — Identify Microsoft (Cloud) Accounts (Internet* values)
-
-### Task
-Determine if an account is a Microsoft/cloud account using values containing `Internet`.
-
-### Procedure (Registry Explorer)
-1. Select the account subkey (hex RID)
-2. Locate values with `Internet` in their name (example: `InternetUserName`)
-3. Click the value
-4. In the **Type Viewer pane**, inspect raw contents
-5. Document the email address tied to that account
+17. How we can tell a particular account is a Microsoft (Cloud) Account are the values with "Internet" in their names. Click on the InternetUserName value and look at the raw data in the Type Viewer pane. Document the email account associated with the accounts of interest.
 
 📸 **Screenshot Example**:
 
 ```markdown
 ![Registry Explorer - InternetUserName raw view](img/user_account_profiling/09_internetusername_raw.png)
 ```
-
-**DFIR significance**
-- Confirms Microsoft account linkage
-- Adds **identity attribution** (email address)
-- Supports scoping and correlating across devices/cloud logs
 
 ---
 
