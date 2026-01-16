@@ -150,11 +150,10 @@ Identify deleted OneDrive items relevant to incident scope.
 
 ### Procedure
 1. Locate the **Deleted Files** folder in OneDrive Explorer
-2. Identify files of interest (keyword search first)
-3. Document:
-   - filename
-   - prior OneDrive path
-   - deleted time (if present)
+2. Identify files of interest (keyword search first) and document:
+     - filename
+     - prior OneDrive path
+     - deleted time (if present)
 4. Use the **Find** bar for sensitive keywords
 
 📸 **Example Screenshot**
@@ -185,10 +184,10 @@ This can reveal:
 1. Open **ShadowExplorer**
 2. Select mounted evidence drive from dropdown (example: `F:`)
 3. If drive letter isn’t visible:
-   - evidence likely mounted incorrectly (must be “Write temporary”)
-   - close/reopen ShadowExplorer after remount
+     - evidence likely mounted incorrectly (must be “Write temporary”)
+     - close/reopen ShadowExplorer after remount
 4. Navigate to:
-   - `Users\user1\OneDrive`
+     - `Users\user1\OneDrive`
 5. Review shadow copies from newest → oldest
 6. Compare results to OneDrive Explorer findings and document differences
 
@@ -260,13 +259,13 @@ Move from OneDrive Explorer GUI browsing → high speed bulk analysis using Time
 1. While the OneDriveExplorer GUI is useful for navigating early investigations, if you correctly set the Auto Save Preferences earlier in this workflow, you should also have .csv output available for each OneDrive .dat file parsed.
 2. Open CSV in **Timeline Explorer**
 3. Reset wide columns:
-   - Tools → Reset column widths
+     - Tools → Reset column widths
 4. Perform the same analysis as above concerning:
-   - sensitive keywords
-   - file names
-   - specific directories
-   - delete activity
-   - downloads/sync conflicts
+     - sensitive keywords
+     - file names
+     - specific directories
+     - delete activity
+     - downloads/sync conflicts
 
 📸 **Example Screenshot**
 
@@ -276,10 +275,10 @@ Move from OneDrive Explorer GUI browsing → high speed bulk analysis using Time
 
 ### Exportable Evidence
 Timeline Explorer provides:
-- filtering
-- sorting
-- bookmarks
-- CSV export for reporting
+  - filtering
+  - sorting
+  - bookmarks
+  - CSV export for reporting
 
 ---
 
