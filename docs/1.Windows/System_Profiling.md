@@ -43,7 +43,7 @@ Through analysis of the **SYSTEM** and **SOFTWARE** registry hives, investigator
 1. Launch **Registry Explorer**
 2. Select **File → Load Hive**
 3. Browse to the offline SYSTEM hive  
-   Example: `E:\C\Windows\System32\config\SYSTEM`
+      - Example: `E:\C\Windows\System32\config\SYSTEM`
 4. If a **dirty hive** is detected, select **Yes**
 5. Click **OK** to select transaction logs (skip if not prompted)
 6. Highlight `SYSTEM.LOG1` and `SYSTEM.LOG2` (CTRL + click) and select **Open**
