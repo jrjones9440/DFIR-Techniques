@@ -116,7 +116,7 @@ Use Registry Explorer’s built-in parsing for `Users` to quickly enumerate acco
 
 9. Document the Last Login Time for the account(s) of interest.
       - Why might the Total Login Count = 0 for the account of interest?  New Microsoft Accounts no longer update this value within the SAM. Since there is a Last Login Time we would expect Total Login Count to be greater than zero.
-      - 
+        
 📸 **Screenshot Example**:
 
 ```markdown
@@ -130,7 +130,7 @@ Use Registry Explorer’s built-in parsing for `Users` to quickly enumerate acco
 ```markdown
 ![Registry Explorer - Built-in accounts usage](img/user_account_profiling/06_builtin_accounts_used.png)
 ```
-**Common built-in accounts**
+**Analysis Tip: Common built-in accounts**
 - 500 Administrator
 - 501 Guest
 - 502 KRBTGT (domain controllers)
@@ -144,7 +144,7 @@ Use Registry Explorer’s built-in parsing for `Users` to quickly enumerate acco
 ![Registry Explorer - Invalid login counts](img/user_account_profiling/07_invalid_login_count.png)
 ```
 
-**Interpretation notes**
+**Analysis Tip: Interpretation notes**
 - Elevated invalid counts may indicate:
   - brute force attempts
   - password spraying
