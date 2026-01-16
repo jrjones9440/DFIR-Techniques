@@ -306,11 +306,11 @@ OneDrive for Business (and most business-oriented cloud storage applications) ha
      - Are the files referenced in these logs the same as the ones identified in their OneDrive account?
      - What is the earliest known access to these files?
      - What type of activity did this account have with those files:
-       - Created Folders
-       - Created Files
-       - Uploads
-       - Downloads
-       - File Previews
+         - Created Folders
+         - Created Files
+         - Uploads
+         - Downloads
+         - File Previews
      - What IP Addresses are involved?
 7. Clear your global filter and create a filter on the User column for the email in question. Now create a second filter in the Activity column for all activity related to "Links". Auditing links can help identify how content is being shared and how shared content is being accessed.
 8. Review the data and document any interesting artifacts related to:
