@@ -198,11 +198,11 @@ SOFTWARE\Microsoft\Windows NT\CurrentVersion
 
 ### Task
 Document:
-- Windows Version
-- RegisteredOwner
-- ReleaseID
-- CurrentBuild
-- InstallTime (convert using Data Interpreter)
+   - Windows Version
+   - RegisteredOwner
+   - ReleaseID
+   - CurrentBuild
+   - InstallTime (convert using Data Interpreter)
 
 📸 **Example Screenshot**
 
@@ -211,7 +211,7 @@ Document:
 ```
 
 > ⚠️ **Important Interpretation Note**  
-> Starting with Windows 10, `InstallTime` often reflects the **last major feature update**, not the original OS install.
+>  Be careful with your interpretation of "InstallTime". This value could be the time the OS was first installed, but more commonly represents the last major update of the system. Starting with Windows 10, Microsoft began releasing frequent major version updates and hence this time typically represents the last update.  This information will be very helpful as you will notice many timestamps set to around this time, indicating the update, not user activity was responsible.
 
 ---
 
@@ -224,9 +224,9 @@ SYSTEM\Setup\Source OS
 
 ### Task
 Document:
-- Number of previous OS versions
-- ReleaseID and CurrentBuild of previous OS
-- InstallTime (human-readable)
+   - Number of previous OS versions
+   - ReleaseID and CurrentBuild of previous OS
+   - InstallTime (human-readable)
 
 📸 **Example Screenshot**
 
@@ -248,12 +248,16 @@ SOFTWARE\Microsoft\Windows NT\CurrentVersion\NetworkList
 
 ### Task
 Document:
-- Wireless networks
-- First Connect time
-- Last Connected time
-- Likely **non-managed networks** (home/public)
-- WWAN (VPN) networks
-
+   - Wireless networks
+      - First Connect time
+      - Last Connected time
+   - Likely **non-managed networks** (home/public)
+      - First Connect time
+      - Last Connected time
+   - WWAN (VPN) networks
+      - First Connect time
+      - Last Connected time
+        
 📸 **Example Screenshot**
 
 ```markdown
@@ -270,7 +274,7 @@ SOFTWARE\Microsoft\Windows NT\CurrentVersion\NetworkList\Signatures
 ```
 
 ### Task
-Identify which networks are marked as **Managed** (typically domain/corporate).
+Document which networks are marked as **Managed** (typically domain/corporate).
 
 📸 **Example Screenshot**
 
@@ -289,10 +293,10 @@ SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall
 
 ### Task
 Document:
-- Web browsers
-- Security tools
-- Suspicious software
-- Install paths from `TEMP` or `Downloads`
+   - Web browsers
+   - Security tools
+   - Suspicious software
+   - Install paths from `TEMP` or `Downloads`
 
 📸 **Example Screenshot**
 
@@ -310,7 +314,10 @@ SOFTWARE\WOW6432Node\Microsoft\Windows\CurrentVersion\Uninstall
 ```
 
 ### Task
-Identify suspicious or unexpected software installations.
+Document:
+   - Security tools
+   - Suspicious software
+   - Install paths from `TEMP` or `Downloads`
 
 📸 **Example Screenshot**
 
@@ -377,8 +384,8 @@ RECmd.exe -f "C:\Cases\Hives\SOFTWARE" --csv "C:\Cases\Output\RECmd" --csvf SOFT
 - Many timestamps align with **feature updates**, not user activity
 - Network artifacts persist long after disconnection
 - Always correlate with:
-  - Event Logs
-  - Prefetch
-  - SRUM
-  - Firewall logs
-  - VPN client logs
+     - Event Logs
+     - Prefetch
+     - SRUM
+     - Firewall logs
+     - VPN client logs
