@@ -107,7 +107,7 @@ SYSTEM\<CurrentControlSet>\Control\TimeZoneInformation
 ```
 
 ### Task
-Document the timezone the system was last set to.
+Document the **timezone** the system was last set to.
 
 📸 **Example Screenshot**
 
@@ -150,7 +150,7 @@ SYSTEM\<CurrentControlSet>\Services\Tcpip\Parameters\Interfaces
 ```
 
 ### Task
-Review network interface subkeys and document:
+Review **network interface subkeys** and document:
 - `DhcpDomain`
 - Interfaces associated with unusual or suspicious networks
 
