@@ -210,15 +210,15 @@ OneDrive Explorer supports multiple databases loaded simultaneously.
 **Important:** Ensure Find/search bar is empty before loading additional DBs.
 
 ### Procedure
-1. Load Business database:
-   - **File → OneDrive settings → Load <UserCid>.dat**
-   - Example file:
-     - `E:\C\Users\user1\AppData\Local\Microsoft\OneDrive\settings\Business1\c2b6b128-5267-5cca-abca-c9cd34be2569.dat`
-2. Provide registry hive:
-   - `E:\C\Users\user1\NTUSER.DAT`
-3. Provide $Recycle.Bin:
-   - `E:\C\$Recycle.Bin\S-1-5-21-...-1002`
-4. Expand new folder hierarchy
+1. Use the OneDrive Explorer menu item File -> OneDrive settings -> Load <UserCid>.dat to browse and open the One Drive for Business database file from your mounted triage image:
+     - Example file:
+       - `E:\C\Users\user1\AppData\Local\Microsoft\OneDrive\settings\Business1\c2b6b128-5267-5cca-abca-c9cd34be2569.dat`
+2. When asked to provide a registry hive, select Yes and browse to the user's hive:
+     - `E:\C\Users\user1\NTUSER.DAT`
+3. When asked to provide the path to the user's $Recycle.Bin, select Yes and browse to:
+     - `E:\C\$Recycle.Bin\S-1-5-21-...-1002`
+     - Use the RID you identified to load the correct one
+4. After a brief load time, the new OneDrive folder hierarchy should appear
 
 📸 **Example Screenshot**
 
@@ -230,16 +230,11 @@ OneDrive Explorer supports multiple databases loaded simultaneously.
 
 ## Step 7 — Investigate OneDrive for Business Content
 
-### Tasks
-1. Keyword search for sensitive files (from owner interview)
-2. Identify interesting files and their locations
-3. Visit files in mounted image using Windows File Explorer
-4. Interpret cloud-only files:
-   - cloud symbol / missing content = placeholder
-   - actual file data not stored locally
-5. For interesting files:
-   - open **Properties**
-   - document Created / Modified
+### Procedure
+1. Document any interesting files and their locations (remember to do key word searches for sensitive documents from your Network Owner interview)
+2. If you find any interesting files, use Windows File Explorer to visit them in your mounted drive image.
+3. If you see a cloud symbol next to them in OneDriveExplorer or an X on the file in Windows File Explorer, that means they are "cloud-only", meaning they are only placeholders to them in this folder with no real data stored.
+4. For any interesting files, click on properties and note the Created and Modified times for any sensitive files.
 
 ### Timestamp Interpretation
 If **Modified** is before **Created**:
@@ -259,14 +254,14 @@ If **Modified** is before **Created**:
 ## Step 8 — Analyze OneDrive Explorer CSV Output in Timeline Explorer
 
 ### Goal
-Move from GUI browsing → high speed bulk analysis.
+Move from OneDrive Explorer GUI browsing → high speed bulk analysis using Timeline Explorer.
 
 ### Procedure
-1. Locate exported CSVs (Auto Save Path)
+1. While the OneDriveExplorer GUI is useful for navigating early investigations, if you correctly set the Auto Save Preferences earlier in this workflow, you should also have .csv output available for each OneDrive .dat file parsed.
 2. Open CSV in **Timeline Explorer**
 3. Reset wide columns:
    - Tools → Reset column widths
-4. Apply global searches and filters for:
+4. Perform the same analysis as above concerning:
    - sensitive keywords
    - file names
    - specific directories
@@ -293,83 +288,45 @@ Timeline Explorer provides:
 ## Step 9 — Investigate OneDrive Usage via Unified Audit Logs
 
 ### Why UAL?
-Endpoint artifacts only show what synced locally.
-UAL answers:
-- who accessed files in cloud
-- downloads/uploads
-- anonymous link access
-- external IP usage
-- sharing behavior
+OneDrive for Business (and most business-oriented cloud storage applications) has a log that administrators can use to track user activity. Called the Unified Audit Log, it is available via the Microsoft administrator portal and is an excellent source of evidence.  Endpoint artifacts only show what synced locally. UAL answers:
+    - who accessed files in cloud
+    - downloads/uploads
+    - anonymous link access
+    - external IP usage
+    - sharing behavior
 
 ### Procedure
 1. Obtain UAL CSV export from network owner/admin
 2. Open in **Timeline Explorer**
-3. Reset wide columns:
-   - Tools → Reset column widths
+3. Your columns in Timeline Explorer may be very wide. To shrink everything down to fit on smaller screens:
+     - Tools → Reset column widths
+4. Continue your investigation of suspicious or sensitive files by using the filter/search bar to identify any entries across all of the columns that contain that term.
+5. Document the following for any files of interest:
+     - Did this account have access to the file?
+     - Are the files referenced in these logs the same as the ones identified in their OneDrive account?
+     - What is the earliest known access to these files?
+     - What type of activity did this account have with those files:
+       - Created Folders
+       - Created Files
+       - Uploads
+       - Downloads
+       - File Previews
+     - What IP Addresses are involved?
+7. Clear your global filter and create a filter on the User column for the email in question. Now create a second filter in the Activity column for all activity related to "Links". Auditing links can help identify how content is being shared and how shared content is being accessed.
+8. Review the data and document any interesting artifacts related to:
+     - What files and folders did the account of interest share?
+     - What files and folders did the account of interest access via anonymous (non-authenticated) links?
+     - What IP address(s) predominates for this activity?
+10. Audit downloads conducted by the account of interest. To do this, clear your filter on the Activity column. Then create a new filter on the Activity column for all activity related to "Downloaded files to computer". Keep your User filter for the account of interest.
+     - Document dates of unusual download activity and the IP addresses involved.
+12. Audit files deleted by the account of interest. To do this, clear your filter on the Activity column. Then create a new filter on the Activity column for all activity related to "Deleted File".
+     - Document any files that were deleted that are tied to the timeframe we are focused on or sensitive file deletion.
 
 📸 **Example Screenshot**
 
 ```markdown
 ![Timeline Explorer - Unified Audit Log CSV](img/onedrive_forensics/10_ual_overview.png)
 ```
-
----
-
-### 9A — Investigate Files of Interest (Keyword Search)
-
-Tasks:
-- Search all columns for sensitive terms
-- Document for each file:
-  - did this account access it?
-  - is it referenced in endpoint OneDrive data?
-  - earliest access time
-  - activity type:
-    - Created files/folders
-    - Uploads
-    - Downloads
-    - File preview
-    - Sync events
-  - IP addresses involved
-
----
-
-### 9B — Audit Sharing Links
-
-Procedure:
-1. Clear global filter
-2. Filter **User** column to email of interest
-3. Filter **Activity** column to `Links`
-
-Document:
-- files/folders shared
-- anonymous link access
-- IP addresses predominating
-
----
-
-### 9C — Audit Downloads
-
-Procedure:
-1. Keep **User** filter
-2. Filter Activity for:
-   - `Downloaded files to computer`
-
-Document:
-- unusual download dates
-- IP address clusters
-
----
-
-### 9D — Audit Deletions
-
-Procedure:
-1. Filter Activity for:
-   - `Deleted File`
-
-Document:
-- deleted sensitive files
-- deletion timeframe relevance
-- IP addresses involved
 
 ---
 
