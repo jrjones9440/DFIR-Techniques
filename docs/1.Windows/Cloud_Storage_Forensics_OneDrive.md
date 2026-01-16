@@ -77,29 +77,25 @@ This MKDoc outlines a structured DFIR workflow for investigating OneDrive on Win
 NTUSER.DAT\Software\Microsoft\OneDrive\Accounts
 ```
 
-### Task
-Document OneDrive account(s) present. For each account, record:
-- `UserEmail`
-- `UserFolder`
-- `cid`
-- `SPOResourceID` (if present)
+### Procedure
+1. In **Registry Explorer** navigate to the Accounts Key:
+     - `NTUSER.DAT\Software\Microsoft\OneDrive\Accounts`
+2. Document what accounts have data present.
+3. For each account present, document
+     - `UserEmail`
+     - `UserFolder`
+     - `cid`
+     - `SPOResourceID` (if present)
+4. If there is a OneDrive for Business account present on the system, it may be synchronizing multiple shared folders from Sharepoint / Teams (Microsoft calls these "Tenants").
+5. In **Registry Explorer** navigate to the subkey of the Accounts Key:
+     - `NTUSER.DAT\Software\Microsoft\OneDrive\Accounts\Business1\Tenants`
+6. Document any interesting Share Folders present, this is could be useful information in assessing potential data compromise locations for the damage assessment.
 
 📸 **Example Screenshot**
 
 ```markdown
 ![Registry Explorer - OneDrive Accounts key](img/onedrive_forensics/02_onedrive_accounts.png)
 ```
-
-### Business Tenant Folders (SharePoint/Teams)
-If OneDrive for Business is present:
-```
-NTUSER.DAT\Software\Microsoft\OneDrive\Accounts\Business1\Tenants
-```
-
-Document:
-- tenant folders
-- SharePoint/Teams synchronized libraries (“Tenants”)
-- shared folder names potentially tied to sensitive data exposure
 
 📸 **Example Screenshot**
 
