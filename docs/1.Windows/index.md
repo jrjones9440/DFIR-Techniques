@@ -2,6 +2,7 @@
 - [2. System Profiling](System_Profiling.md)
 - [3. NTUSER.DAT Analysis](NTUSER_DAT_Analysis.md)
 - [4. Application Execution Analysis](Application_Execution_Analysis.md)
+- [5. Cloud Storage Forensics - One Drive](Cloud_Storage_Forensics_OneDrive.md)
 - [Evidence of Execution](Evidence_of_Execution.md)
 - [AutoStart Persistence](AutoStart_Persistence.md)
 - [Windows Services Persistence](Windows_Services_Persistence.md)
