@@ -124,19 +124,20 @@ Before searching, obtain:
 1. Open **OneDrive Explorer**
 2. Select: **Options → Preferences**
 3. Enable automatic CSV export for high efficiency:
-   - ✅ **Auto Save to CSV**
-   - Auto Save Path: `F:\Evidence\CloudStorage` (example)
-4. Click **Save**
-5. Load OneDrive Personal database:
-   - **File → OneDrive settings → Load <UserCid>.dat**
-   - Example file:
+     - **Select Auto Save to CSV**
+     - Auto Save Path: `F:\Evidence\CloudStorage` ((or whatever working evidence directory you are using)
+     - Click **Save**
+4. Load OneDrive Personal database:
+     - **File → OneDrive settings → Load <UserCid>.dat**
+     - Example file:
      - `E:\C\Users\user1\AppData\Local\Microsoft\OneDrive\settings\Personal\a322388cbcb18cb.dat`
-6. When asked for registry hive → **Yes**
-   - Browse to: `E:\C\Users\user1\NTUSER.DAT`
-7. When asked for $Recycle.Bin → **Yes**
-   - Browse to:
-     - `E:\C\$Recycle.Bin\S-1-5-21-...-1002`
-8. After load completes, expand hierarchy in Path pane
+5. When asked for registry hive → **Yes**
+     - Browse to: `E:\C\Users\user1\NTUSER.DAT`
+6. When asked for $Recycle.Bin → **Yes**
+     - Browse to:
+       - `E:\C\$Recycle.Bin\S-1-5-21-...-1002`
+       - Use the RID you identified to load the correct one. Triage images are particularly useful for this step as access to these folders in mounted disk images often have difficulties due to Windows auto-redirection of Recycle Bin folders.
+8. After load completes, the root of the OneDrive folder hierarchy should appear in the Path pane. Click into the Path pane and begin expanding the folder hierarchy. Spend a few minutes looking through the folders and files to become familiar with the information available.
 
 📸 **Example Screenshot**
 
