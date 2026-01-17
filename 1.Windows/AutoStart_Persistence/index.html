@@ -1,0 +1,2773 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+      
+      
+        <link rel="canonical" href="https://jrjones9440.github.io/DFIR-Techniques/1.Windows/AutoStart_Persistence/">
+      
+      
+      
+      
+        
+      
+      
+      <link rel="icon" href="../../assets/favicon.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.1">
+    
+    
+      
+        <title>AutoStart Persistence Locations (Windows) - DFIR Techniques</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../assets/stylesheets/main.484c7ddc.min.css">
+      
+        
+        <link rel="stylesheet" href="../../assets/stylesheets/palette.ab4e12ef.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+    <script>__md_scope=new URL("../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+  
+
+
+  
+  
+
+<script id="__analytics">function __md_analytics(){function e(){dataLayer.push(arguments)}window.dataLayer=window.dataLayer||[],e("js",new Date),e("config",""),document.addEventListener("DOMContentLoaded",(function(){document.forms.search&&document.forms.search.query.addEventListener("blur",(function(){this.value&&e("event","search",{search_term:this.value})}));document$.subscribe((function(){var t=document.forms.feedback;if(void 0!==t)for(var a of t.querySelectorAll("[type=submit]"))a.addEventListener("click",(function(a){a.preventDefault();var n=document.location.pathname,d=this.getAttribute("data-md-value");e("event","feedback",{page:n,data:d}),t.firstElementChild.disabled=!0;var r=t.querySelector(".md-feedback__note [data-md-value='"+d+"']");r&&(r.hidden=!1)})),t.hidden=!1})),location$.subscribe((function(t){e("config","",{page_path:t.pathname})}))}));var t=document.createElement("script");t.async=!0,t.src="https://www.googletagmanager.com/gtag/js?id=",document.getElementById("__analytics").insertAdjacentElement("afterEnd",t)}</script>
+  
+    <script>"undefined"!=typeof __md_analytics&&__md_analytics()</script>
+  
+
+    
+    
+  </head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#autostart-persistence-locations-windows" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+<header class="md-header" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href="../.." title="DFIR Techniques" class="md-header__button md-logo" aria-label="DFIR Techniques" data-md-component="logo">
+      
+  <img src="../../img/CND_LogoTop.jpg" alt="logo">
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            DFIR Techniques
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              AutoStart Persistence Locations (Windows)
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+        <form class="md-header__option" data-md-component="palette">
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo"  aria-label="Switch to dark mode"  type="radio" name="__palette" id="__palette_0">
+    
+      <label class="md-header__button md-icon" title="Switch to dark mode" for="__palette_1" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a4 4 0 0 0-4 4 4 4 0 0 0 4 4 4 4 0 0 0 4-4 4 4 0 0 0-4-4m0 10a6 6 0 0 1-6-6 6 6 0 0 1 6-6 6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"/></svg>
+      </label>
+    
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="" data-md-color-scheme="slate" data-md-color-primary="indigo" data-md-color-accent="indigo"  aria-label="Switch to light mode"  type="radio" name="__palette" id="__palette_1">
+    
+      <label class="md-header__button md-icon" title="Switch to light mode" for="__palette_0" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 18c-.89 0-1.74-.2-2.5-.55C11.56 16.5 13 14.42 13 12s-1.44-4.5-3.5-5.45C10.26 6.2 11.11 6 12 6a6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"/></svg>
+      </label>
+    
+  
+</form>
+      
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+          <a href="javascript:void(0)" class="md-search__icon md-icon" title="Share" aria-label="Share" data-clipboard data-clipboard-text="" data-md-component="search-share" tabindex="-1">
+            
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M18 16.08c-.76 0-1.44.3-1.96.77L8.91 12.7c.05-.23.09-.46.09-.7s-.04-.47-.09-.7l7.05-4.11c.54.5 1.25.81 2.04.81a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3c0 .24.04.47.09.7L8.04 9.81C7.5 9.31 6.79 9 6 9a3 3 0 0 0-3 3 3 3 0 0 0 3 3c.79 0 1.5-.31 2.04-.81l7.12 4.15c-.05.21-.08.43-.08.66 0 1.61 1.31 2.91 2.92 2.91s2.92-1.3 2.92-2.91A2.92 2.92 0 0 0 18 16.08"/></svg>
+          </a>
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+        <div class="md-search__suggest" data-md-component="search-suggest"></div>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+      <div class="md-header__source">
+        <a href="https://github.com/jrjones9440/DFIR-Techniques" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M439.6 236.1 244 40.5c-5.4-5.5-12.8-8.5-20.4-8.5s-15 3-20.4 8.4L162.5 81l51.5 51.5c27.1-9.1 52.7 16.8 43.4 43.7l49.7 49.7c34.2-11.8 61.2 31 35.5 56.7-26.5 26.5-70.2-2.9-56-37.3L240.3 199v121.9c25.3 12.5 22.3 41.8 9.1 55-6.4 6.4-15.2 10.1-24.3 10.1s-17.8-3.6-24.3-10.1c-17.6-17.6-11.1-46.9 11.2-56v-123c-20.8-8.5-24.6-30.7-18.6-45L142.6 101 8.5 235.1C3 240.6 0 247.9 0 255.5s3 15 8.5 20.4l195.6 195.7c5.4 5.4 12.7 8.4 20.4 8.4s15-3 20.4-8.4l194.7-194.7c5.4-5.4 8.4-12.8 8.4-20.4s-3-15-8.4-20.4"/></svg>
+  </div>
+  <div class="md-source__repository">
+    GitHub
+  </div>
+</a>
+      </div>
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+            
+<nav class="md-tabs" aria-label="Tabs" data-md-component="tabs">
+  <div class="md-grid">
+    <ul class="md-tabs__list">
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../.." class="md-tabs__link">
+        
+  
+  
+    
+  
+  Home
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../" class="md-tabs__link">
+          
+  
+  
+    
+  
+  Windows
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../../Linux/" class="md-tabs__link">
+          
+  
+  
+    
+  
+  Linux
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../../Networking/" class="md-tabs__link">
+          
+  
+  
+    
+  
+  Networking
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../../Cloud/" class="md-tabs__link">
+          
+  
+  
+    
+  
+  Cloud
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../../Malware/" class="md-tabs__link">
+          
+  
+  
+    
+  
+  Malware
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../../ICS/" class="md-tabs__link">
+          
+  
+  
+    
+  
+  ICS
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../../Tools/" class="md-tabs__link">
+          
+  
+  
+    
+  
+  Tools
+
+        </a>
+      </li>
+    
+  
+
+      
+    </ul>
+  </div>
+</nav>
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+  
+
+
+<nav class="md-nav md-nav--primary md-nav--lifted" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../.." title="DFIR Techniques" class="md-nav__button md-logo" aria-label="DFIR Techniques" data-md-component="logo">
+      
+  <img src="../../img/CND_LogoTop.jpg" alt="logo">
+
+    </a>
+    DFIR Techniques
+  </label>
+  
+    <div class="md-nav__source">
+      <a href="https://github.com/jrjones9440/DFIR-Techniques" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M439.6 236.1 244 40.5c-5.4-5.5-12.8-8.5-20.4-8.5s-15 3-20.4 8.4L162.5 81l51.5 51.5c27.1-9.1 52.7 16.8 43.4 43.7l49.7 49.7c34.2-11.8 61.2 31 35.5 56.7-26.5 26.5-70.2-2.9-56-37.3L240.3 199v121.9c25.3 12.5 22.3 41.8 9.1 55-6.4 6.4-15.2 10.1-24.3 10.1s-17.8-3.6-24.3-10.1c-17.6-17.6-11.1-46.9 11.2-56v-123c-20.8-8.5-24.6-30.7-18.6-45L142.6 101 8.5 235.1C3 240.6 0 247.9 0 255.5s3 15 8.5 20.4l195.6 195.7c5.4 5.4 12.7 8.4 20.4 8.4s15-3 20.4-8.4l194.7-194.7c5.4-5.4 8.4-12.8 8.4-20.4s-3-15-8.4-20.4"/></svg>
+  </div>
+  <div class="md-source__repository">
+    GitHub
+  </div>
+</a>
+    </div>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../.." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Home
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2" >
+        
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../" class="md-nav__link ">
+              
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Windows
+  
+
+    
+  </span>
+  
+  
+
+            </a>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Windows
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3" >
+        
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../../Linux/" class="md-nav__link ">
+              
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Linux
+  
+
+    
+  </span>
+  
+  
+
+            </a>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Linux
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4" >
+        
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../../Networking/" class="md-nav__link ">
+              
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Networking
+  
+
+    
+  </span>
+  
+  
+
+            </a>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_4_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_4">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Networking
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_5" >
+        
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../../Cloud/" class="md-nav__link ">
+              
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Cloud
+  
+
+    
+  </span>
+  
+  
+
+            </a>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_5_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_5">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Cloud
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_6" >
+        
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../../Malware/" class="md-nav__link ">
+              
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Malware
+  
+
+    
+  </span>
+  
+  
+
+            </a>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_6_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_6">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Malware
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_7" >
+        
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../../ICS/" class="md-nav__link ">
+              
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    ICS
+  
+
+    
+  </span>
+  
+  
+
+            </a>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_7_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_7">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    ICS
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_8" >
+        
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../../Tools/" class="md-nav__link ">
+              
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Tools
+  
+
+    
+  </span>
+  
+  
+
+            </a>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_8_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_8">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Tools
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#table-of-contents" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Table of Contents
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#hkcu-run" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        HKCU Run
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="HKCU Run">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#registry-entry" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Registry Entry
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#what-is-hkcu-run" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        What is HKCU Run?
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#location" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Location
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#forensic-value" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Forensic Value
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#key-data-points" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Key Data Points
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#example-output-registry-explorer" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Example Output (Registry Explorer)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#tools-for-parsing-this-autostart-location" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Tools for parsing this autostart location
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#hkcu-runonce" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        HKCU RunOnce
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="HKCU RunOnce">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#registry-entry_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Registry Entry
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#what-is-hkcu-runonce" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        What is HKCU RunOnce?
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#location_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Location
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#forensic-value_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Forensic Value
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#key-data-points_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Key Data Points
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#example-output-registry-explorer_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Example Output (Registry Explorer)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#tools-for-parsing-this-autostart-location_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Tools for parsing this autostart location
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#hklm-runonce" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        HKLM RunOnce
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="HKLM RunOnce">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#registry-entry_2" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Registry Entry
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#what-is-hklm-runonce" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        What is HKLM RunOnce?
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#location_2" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Location
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#forensic-value_2" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Forensic Value
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#key-data-points_2" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Key Data Points
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#example-output-registry-explorer_2" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Example Output (Registry Explorer)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#tools-for-parsing-this-autostart-location_2" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Tools for parsing this autostart location
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#hklm-policies-explorer-run" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        HKLM Policies Explorer Run
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="HKLM Policies Explorer Run">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#registry-entry_3" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Registry Entry
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#what-is-hklm-policies-explorer-run" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        What is HKLM Policies Explorer Run?
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#location_3" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Location
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#forensic-value_3" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Forensic Value
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#key-data-points_3" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Key Data Points
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#example-output-registry-explorer_3" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Example Output (Registry Explorer)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#tools-for-parsing-this-autostart-location_3" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Tools for parsing this autostart location
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#hklm-run" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        HKLM Run
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="HKLM Run">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#registry-entry_4" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Registry Entry
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#what-is-hklm-run" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        What is HKLM Run?
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#location_4" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Location
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#forensic-value_4" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Forensic Value
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#key-data-points_4" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Key Data Points
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#example-output-registry-explorer_4" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Example Output (Registry Explorer)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#tools-for-parsing-this-autostart-location_4" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Tools for parsing this autostart location
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#winlogon-userinit" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Winlogon Userinit
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Winlogon Userinit">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#registry-entry_5" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Registry Entry
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#what-is-winlogon-userinit" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        What is Winlogon Userinit?
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#location_5" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Location
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#forensic-value_5" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Forensic Value
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#key-data-points_5" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Key Data Points
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#example-output-registry-explorer_5" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Example Output (Registry Explorer)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#tools-for-parsing-this-autostart-location_5" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Tools for parsing this autostart location
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#startup-folder-per-user" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Startup Folder (Per-User)
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Startup Folder (Per-User)">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#file-location" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        File Location
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#what-is-the-startup-folder" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        What is the Startup Folder?
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#location_6" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Location
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#forensic-value_6" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Forensic Value
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#key-data-points_6" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Key Data Points
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#example-output-directory-listing" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Example Output (Directory Listing)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#tools-for-parsing-this-autostart-location_6" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Tools for parsing this autostart location
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#correlation-analyst-tips" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Correlation &amp; Analyst Tips
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Correlation &amp; Analyst Tips">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#common-suspicion-indicators" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Common Suspicion Indicators
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#recommended-correlation-artifacts" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Recommended Correlation Artifacts
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#evasion-techniques" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Evasion Techniques
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#kape-targets-modules-autostart-collection" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        KAPE Targets &amp; Modules (AutoStart Collection)
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="KAPE Targets &amp; Modules (AutoStart Collection)">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#collection-targets" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Collection Targets
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#example-kape-targets" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Example KAPE Targets
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#parsing-modules" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Parsing Modules
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#mitre-attck-mapping-persistence" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        MITRE ATT&amp;CK Mapping (Persistence)
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="MITRE ATT&amp;CK Mapping (Persistence)">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#persistence" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Persistence
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#defense-evasion-related" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Defense Evasion (Related)
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#recmd-batch-template-reb-autoruns-in-one-pass" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        RECmd Batch Template (.reb) — Autoruns in One Pass
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="RECmd Batch Template (.reb) — Autoruns in One Pass">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#recmd-usage-examples" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        RECmd Usage Examples
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#recmd-pivot-batch-reb-high-recall-autoruns" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        RECmd Pivot Batch (.reb) — High Recall Autoruns
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="RECmd Pivot Batch (.reb) — High Recall Autoruns">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#run-the-pivot-batch" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Run the Pivot Batch
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#keyword-search-examples" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Keyword Search Examples
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Keyword Search Examples">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#windows-findstr" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Windows findstr
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#powershell-select-string" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        PowerShell Select-String
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#notes" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Notes
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#recommended-indicator-list-autoruns-hunting" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Recommended Indicator List (Autoruns Hunting)
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Recommended Indicator List (Autoruns Hunting)">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#high-signal-lolbins-living-off-the-land" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        High-Signal LOLBins / Living-off-the-Land
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#suspicious-command-line-patterns" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Suspicious Command Line Patterns
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#common-staging-user-writable-paths" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Common Staging / User-Writable Paths
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#common-masquerading-filenames" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Common Masquerading Filenames
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#quick-pivot-strings" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Quick Pivot Strings
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#tooling-summary" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Tooling Summary
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#references" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        References
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+  
+    <a href="https://github.com/jrjones9440/DFIR-Techniques/edit/master/docs/1.Windows/AutoStart_Persistence.md" title="Edit this page" class="md-content__button md-icon" rel="edit">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M10 20H6V4h7v5h5v3.1l2-2V8l-6-6H6c-1.1 0-2 .9-2 2v16c0 1.1.9 2 2 2h4zm10.2-7c.1 0 .3.1.4.2l1.3 1.3c.2.2.2.6 0 .8l-1 1-2.1-2.1 1-1c.1-.1.2-.2.4-.2m0 3.9L14.1 23H12v-2.1l6.1-6.1z"/></svg>
+    </a>
+  
+  
+    
+      
+    
+    <a href="https://github.com/jrjones9440/DFIR-Techniques/raw/master/docs/1.Windows/AutoStart_Persistence.md" title="View source of this page" class="md-content__button md-icon">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M17 18c.56 0 1 .44 1 1s-.44 1-1 1-1-.44-1-1 .44-1 1-1m0-3c-2.73 0-5.06 1.66-6 4 .94 2.34 3.27 4 6 4s5.06-1.66 6-4c-.94-2.34-3.27-4-6-4m0 6.5a2.5 2.5 0 0 1-2.5-2.5 2.5 2.5 0 0 1 2.5-2.5 2.5 2.5 0 0 1 2.5 2.5 2.5 2.5 0 0 1-2.5 2.5M9.27 20H6V4h7v5h5v4.07c.7.08 1.36.25 2 .49V8l-6-6H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h4.5a8.2 8.2 0 0 1-1.23-2"/></svg>
+    </a>
+  
+
+
+<h1 id="autostart-persistence-locations-windows">AutoStart Persistence Locations (Windows)<a class="headerlink" href="#autostart-persistence-locations-windows" title="Permanent link">&para;</a></h1>
+<p>This section provides a <strong>DFIR-focused</strong> overview of common Windows <strong>AutoStart persistence</strong> locations.</p>
+<p>AutoStart locations (also called autoruns) allow software — including malware — to <strong>execute automatically</strong> during:</p>
+<ul>
+<li>user logon</li>
+<li>system startup</li>
+<li>Winlogon initialization</li>
+</ul>
+<p>These artifacts are critical for:</p>
+<ul>
+<li>confirming persistence mechanisms</li>
+<li>hunting for suspicious binaries/scripts</li>
+<li>understanding how an attacker maintains access</li>
+</ul>
+<hr />
+<h2 id="table-of-contents">Table of Contents<a class="headerlink" href="#table-of-contents" title="Permanent link">&para;</a></h2>
+<ol>
+<li><a href="#hkcu-run">HKCU Run</a></li>
+<li><a href="#hkcu-runonce">HKCU RunOnce</a></li>
+<li><a href="#hklm-runonce">HKLM RunOnce</a></li>
+<li><a href="#hklm-policies-explorer-run">HKLM Policies Explorer Run</a></li>
+<li><a href="#hklm-run">HKLM Run</a></li>
+<li><a href="#winlogon-userinit">Winlogon Userinit</a></li>
+<li><a href="#startup-folder-per-user">Startup Folder (Per-User)</a></li>
+<li><a href="#correlation--analyst-tips">Correlation &amp; Analyst Tips</a></li>
+<li><a href="#evasion-techniques">Evasion Techniques</a></li>
+<li><a href="#tooling-summary">Tooling Summary</a></li>
+</ol>
+<hr />
+<h2 id="hkcu-run">HKCU Run<a class="headerlink" href="#hkcu-run" title="Permanent link">&para;</a></h2>
+<h3 id="registry-entry">Registry Entry<a class="headerlink" href="#registry-entry" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>NTUSER.DAT\Software\Microsoft\Windows\CurrentVersion\Run
+</code></pre></div>
+<h3 id="what-is-hkcu-run">What is HKCU Run?<a class="headerlink" href="#what-is-hkcu-run" title="Permanent link">&para;</a></h3>
+<p>The <strong>HKCU Run</strong> key starts listed programs <strong>automatically when the user logs on</strong>. The key is stored in the user’s <code>NTUSER.DAT</code> hive and applies only to that specific user.</p>
+<p>Attackers frequently use this location because:</p>
+<ul>
+<li>it does <strong>not require admin rights</strong></li>
+<li>it triggers reliably at logon</li>
+<li>it blends in with legitimate software</li>
+</ul>
+<h3 id="location">Location<a class="headerlink" href="#location" title="Permanent link">&para;</a></h3>
+<p>Offline forensics:</p>
+<ul>
+<li>Hive: <code>C:\Users\&lt;User&gt;\NTUSER.DAT</code></li>
+<li>Key Path: <code>Software\Microsoft\Windows\CurrentVersion\Run</code></li>
+</ul>
+<p>Live system:</p>
+<ul>
+<li><code>HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Run</code></li>
+</ul>
+<h3 id="forensic-value">Forensic Value<a class="headerlink" href="#forensic-value" title="Permanent link">&para;</a></h3>
+<p>This key helps answer:</p>
+<ul>
+<li>What programs execute at logon for this user?</li>
+<li>Did malware set persistence without admin rights?</li>
+<li>Are there suspicious commands, scripts, or LOLbins used for persistence?</li>
+</ul>
+<h3 id="key-data-points">Key Data Points<a class="headerlink" href="#key-data-points" title="Permanent link">&para;</a></h3>
+<ul>
+<li>Value Name (often masquerades as legitimate software)</li>
+<li>Command line / executable path</li>
+<li>Arguments (e.g., encoded PowerShell)</li>
+<li>Binary location (user-writable vs system path)</li>
+</ul>
+<h3 id="example-output-registry-explorer">Example Output (Registry Explorer)<a class="headerlink" href="#example-output-registry-explorer" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a>Key: ...\CurrentVersion\Run
+<a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a>
+<a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a>Value Name: OneDrive
+<a id="__codelineno-1-4" name="__codelineno-1-4" href="#__codelineno-1-4"></a>Data: &quot;C:\Program Files\Microsoft OneDrive\OneDrive.exe&quot; /background
+<a id="__codelineno-1-5" name="__codelineno-1-5" href="#__codelineno-1-5"></a>
+<a id="__codelineno-1-6" name="__codelineno-1-6" href="#__codelineno-1-6"></a>Value Name: Windows Update Service
+<a id="__codelineno-1-7" name="__codelineno-1-7" href="#__codelineno-1-7"></a>Data: powershell.exe -WindowStyle Hidden -enc SQBFAFgA...
+</code></pre></div>
+<h3 id="tools-for-parsing-this-autostart-location">Tools for parsing this autostart location<a class="headerlink" href="#tools-for-parsing-this-autostart-location" title="Permanent link">&para;</a></h3>
+<p><strong>Registry Explorer (GUI):</strong></p>
+<ul>
+<li>Load <code>NTUSER.DAT</code></li>
+<li>Navigate to the Run key</li>
+</ul>
+<p><strong>RECmd (CLI):</strong></p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a>RECmd.exe -f NTUSER.DAT --kn &quot;Software\Microsoft\Windows\CurrentVersion\Run&quot; --csv autoruns.csv
+</code></pre></div>
+<hr />
+<h2 id="hkcu-runonce">HKCU RunOnce<a class="headerlink" href="#hkcu-runonce" title="Permanent link">&para;</a></h2>
+<h3 id="registry-entry_1">Registry Entry<a class="headerlink" href="#registry-entry_1" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a>NTUSER.DAT\Software\Microsoft\Windows\CurrentVersion\RunOnce
+</code></pre></div>
+<h3 id="what-is-hkcu-runonce">What is HKCU RunOnce?<a class="headerlink" href="#what-is-hkcu-runonce" title="Permanent link">&para;</a></h3>
+<p><strong>RunOnce</strong> entries execute automatically at the next user logon, then are <strong>removed after execution</strong>.</p>
+<p>This location is often abused for:</p>
+<ul>
+<li>one-time payload execution</li>
+<li>staging secondary persistence elsewhere</li>
+<li>running cleanup tools</li>
+</ul>
+<h3 id="location_1">Location<a class="headerlink" href="#location_1" title="Permanent link">&para;</a></h3>
+<p>Offline:</p>
+<ul>
+<li><code>NTUSER.DAT</code> → <code>Software\Microsoft\Windows\CurrentVersion\RunOnce</code></li>
+</ul>
+<p>Live:</p>
+<ul>
+<li><code>HKCU\Software\Microsoft\Windows\CurrentVersion\RunOnce</code></li>
+</ul>
+<h3 id="forensic-value_1">Forensic Value<a class="headerlink" href="#forensic-value_1" title="Permanent link">&para;</a></h3>
+<ul>
+<li>Indicates one-time execution intent</li>
+<li>Useful for identifying transient attacker activity</li>
+</ul>
+<h3 id="key-data-points_1">Key Data Points<a class="headerlink" href="#key-data-points_1" title="Permanent link">&para;</a></h3>
+<ul>
+<li>Value name</li>
+<li>Command line</li>
+<li>Whether the entry was removed (requires hive analysis / timeline)</li>
+</ul>
+<h3 id="example-output-registry-explorer_1">Example Output (Registry Explorer)<a class="headerlink" href="#example-output-registry-explorer_1" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a>Value Name: AdobeUpdate
+<a id="__codelineno-4-2" name="__codelineno-4-2" href="#__codelineno-4-2"></a>Data: &quot;C:\Users\Public\adobe_update.exe&quot; /silent
+</code></pre></div>
+<h3 id="tools-for-parsing-this-autostart-location_1">Tools for parsing this autostart location<a class="headerlink" href="#tools-for-parsing-this-autostart-location_1" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a>RECmd.exe -f NTUSER.DAT --kn &quot;Software\Microsoft\Windows\CurrentVersion\RunOnce&quot; --csv autoruns.csv
+</code></pre></div>
+<hr />
+<h2 id="hklm-runonce">HKLM RunOnce<a class="headerlink" href="#hklm-runonce" title="Permanent link">&para;</a></h2>
+<h3 id="registry-entry_2">Registry Entry<a class="headerlink" href="#registry-entry_2" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a>SOFTWARE\Microsoft\Windows\CurrentVersion\RunOnce
+</code></pre></div>
+<h3 id="what-is-hklm-runonce">What is HKLM RunOnce?<a class="headerlink" href="#what-is-hklm-runonce" title="Permanent link">&para;</a></h3>
+<p>The <strong>HKLM RunOnce</strong> key triggers one-time execution at startup or logon, depending on the entry.</p>
+<p>Unlike HKCU RunOnce, it applies to:</p>
+<ul>
+<li>all users</li>
+<li>system-wide execution</li>
+</ul>
+<p>This typically requires admin rights to set.</p>
+<h3 id="location_2">Location<a class="headerlink" href="#location_2" title="Permanent link">&para;</a></h3>
+<p>Offline:</p>
+<ul>
+<li>Hive: <code>C:\Windows\System32\config\SOFTWARE</code></li>
+<li>Key path: <code>Microsoft\Windows\CurrentVersion\RunOnce</code></li>
+</ul>
+<p>Live:</p>
+<ul>
+<li><code>HKLM\Software\Microsoft\Windows\CurrentVersion\RunOnce</code></li>
+</ul>
+<h3 id="forensic-value_2">Forensic Value<a class="headerlink" href="#forensic-value_2" title="Permanent link">&para;</a></h3>
+<ul>
+<li>System-wide one-time persistence</li>
+<li>Useful for tracking admin-level attacker persistence</li>
+</ul>
+<h3 id="key-data-points_2">Key Data Points<a class="headerlink" href="#key-data-points_2" title="Permanent link">&para;</a></h3>
+<ul>
+<li>Value name</li>
+<li>Command line</li>
+<li>Whether entry is deleted post-run</li>
+</ul>
+<h3 id="example-output-registry-explorer_2">Example Output (Registry Explorer)<a class="headerlink" href="#example-output-registry-explorer_2" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-7-1" name="__codelineno-7-1" href="#__codelineno-7-1"></a>Value Name: DriverUpdate
+<a id="__codelineno-7-2" name="__codelineno-7-2" href="#__codelineno-7-2"></a>Data: &quot;C:\Windows\Temp\drvupdate.exe&quot;
+</code></pre></div>
+<h3 id="tools-for-parsing-this-autostart-location_2">Tools for parsing this autostart location<a class="headerlink" href="#tools-for-parsing-this-autostart-location_2" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-8-1" name="__codelineno-8-1" href="#__codelineno-8-1"></a>RECmd.exe -f SOFTWARE --kn &quot;Microsoft\Windows\CurrentVersion\RunOnce&quot; --csv autoruns.csv
+</code></pre></div>
+<hr />
+<h2 id="hklm-policies-explorer-run">HKLM Policies Explorer Run<a class="headerlink" href="#hklm-policies-explorer-run" title="Permanent link">&para;</a></h2>
+<h3 id="registry-entry_3">Registry Entry<a class="headerlink" href="#registry-entry_3" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-9-1" name="__codelineno-9-1" href="#__codelineno-9-1"></a>SOFTWARE\Microsoft\Windows\CurrentVersion\policies\Explorer\Run
+</code></pre></div>
+<h3 id="what-is-hklm-policies-explorer-run">What is HKLM Policies Explorer Run?<a class="headerlink" href="#what-is-hklm-policies-explorer-run" title="Permanent link">&para;</a></h3>
+<p>This key is commonly used for:</p>
+<ul>
+<li>enterprise administration</li>
+<li>group policy-driven logon actions</li>
+</ul>
+<p>Because it appears “official,” it is sometimes abused for stealth persistence.</p>
+<h3 id="location_3">Location<a class="headerlink" href="#location_3" title="Permanent link">&para;</a></h3>
+<p>Offline:</p>
+<ul>
+<li>Hive: <code>SOFTWARE</code></li>
+<li>Path: <code>Microsoft\Windows\CurrentVersion\policies\Explorer\Run</code></li>
+</ul>
+<p>Live:</p>
+<ul>
+<li><code>HKLM\Software\Microsoft\Windows\CurrentVersion\Policies\Explorer\Run</code></li>
+</ul>
+<h3 id="forensic-value_3">Forensic Value<a class="headerlink" href="#forensic-value_3" title="Permanent link">&para;</a></h3>
+<ul>
+<li>May indicate policy-based persistence</li>
+<li>Suspicious if environment is not domain-managed</li>
+</ul>
+<h3 id="key-data-points_3">Key Data Points<a class="headerlink" href="#key-data-points_3" title="Permanent link">&para;</a></h3>
+<ul>
+<li>Value names</li>
+<li>Commands</li>
+<li>Script invocation</li>
+</ul>
+<h3 id="example-output-registry-explorer_3">Example Output (Registry Explorer)<a class="headerlink" href="#example-output-registry-explorer_3" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-10-1" name="__codelineno-10-1" href="#__codelineno-10-1"></a>Value Name: LogonScript
+<a id="__codelineno-10-2" name="__codelineno-10-2" href="#__codelineno-10-2"></a>Data: cmd.exe /c &quot;C:\ProgramData\svc.bat&quot;
+</code></pre></div>
+<h3 id="tools-for-parsing-this-autostart-location_3">Tools for parsing this autostart location<a class="headerlink" href="#tools-for-parsing-this-autostart-location_3" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-11-1" name="__codelineno-11-1" href="#__codelineno-11-1"></a>RECmd.exe -f SOFTWARE --kn &quot;Microsoft\Windows\CurrentVersion\policies\Explorer\Run&quot; --csv autoruns.csv
+</code></pre></div>
+<hr />
+<h2 id="hklm-run">HKLM Run<a class="headerlink" href="#hklm-run" title="Permanent link">&para;</a></h2>
+<h3 id="registry-entry_4">Registry Entry<a class="headerlink" href="#registry-entry_4" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-12-1" name="__codelineno-12-1" href="#__codelineno-12-1"></a>SOFTWARE\Microsoft\Windows\CurrentVersion\Run
+</code></pre></div>
+<h3 id="what-is-hklm-run">What is HKLM Run?<a class="headerlink" href="#what-is-hklm-run" title="Permanent link">&para;</a></h3>
+<p>The HKLM Run key launches programs at logon for <strong>all users</strong>.</p>
+<p>Commonly used by:</p>
+<ul>
+<li>legitimate software (AV, sync tools)</li>
+<li>attackers with admin rights to establish persistence</li>
+</ul>
+<h3 id="location_4">Location<a class="headerlink" href="#location_4" title="Permanent link">&para;</a></h3>
+<p>Offline:</p>
+<ul>
+<li>Hive: SOFTWARE</li>
+<li>Path: <code>Microsoft\Windows\CurrentVersion\Run</code></li>
+</ul>
+<p>Live:</p>
+<ul>
+<li><code>HKLM\Software\Microsoft\Windows\CurrentVersion\Run</code></li>
+</ul>
+<h3 id="forensic-value_4">Forensic Value<a class="headerlink" href="#forensic-value_4" title="Permanent link">&para;</a></h3>
+<ul>
+<li>High-confidence persistence location</li>
+<li>Helps identify system-wide attacker footholds</li>
+</ul>
+<h3 id="key-data-points_4">Key Data Points<a class="headerlink" href="#key-data-points_4" title="Permanent link">&para;</a></h3>
+<ul>
+<li>Executable/script path</li>
+<li>Arguments</li>
+<li>Unusual directories (Temp, AppData, Public)</li>
+</ul>
+<h3 id="example-output-registry-explorer_4">Example Output (Registry Explorer)<a class="headerlink" href="#example-output-registry-explorer_4" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-13-1" name="__codelineno-13-1" href="#__codelineno-13-1"></a>Value Name: SecurityHealth
+<a id="__codelineno-13-2" name="__codelineno-13-2" href="#__codelineno-13-2"></a>Data: &quot;C:\Windows\System32\SecurityHealthSystray.exe&quot;
+<a id="__codelineno-13-3" name="__codelineno-13-3" href="#__codelineno-13-3"></a>
+<a id="__codelineno-13-4" name="__codelineno-13-4" href="#__codelineno-13-4"></a>Value Name: Windows Audio Driver
+<a id="__codelineno-13-5" name="__codelineno-13-5" href="#__codelineno-13-5"></a>Data: &quot;C:\Users\Public\audiodrv.exe&quot; --silent
+</code></pre></div>
+<h3 id="tools-for-parsing-this-autostart-location_4">Tools for parsing this autostart location<a class="headerlink" href="#tools-for-parsing-this-autostart-location_4" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-14-1" name="__codelineno-14-1" href="#__codelineno-14-1"></a>RECmd.exe -f SOFTWARE --kn &quot;Microsoft\Windows\CurrentVersion\Run&quot; --csv autoruns.csv
+</code></pre></div>
+<hr />
+<h2 id="winlogon-userinit">Winlogon Userinit<a class="headerlink" href="#winlogon-userinit" title="Permanent link">&para;</a></h2>
+<h3 id="registry-entry_5">Registry Entry<a class="headerlink" href="#registry-entry_5" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-15-1" name="__codelineno-15-1" href="#__codelineno-15-1"></a>SOFTWARE\Microsoft\Windows NT\CurrentVersion\Winlogon\Userinit
+</code></pre></div>
+<h3 id="what-is-winlogon-userinit">What is Winlogon Userinit?<a class="headerlink" href="#what-is-winlogon-userinit" title="Permanent link">&para;</a></h3>
+<p>The <code>Userinit</code> value controls which program runs immediately after a successful logon.</p>
+<p>Default value:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-16-1" name="__codelineno-16-1" href="#__codelineno-16-1"></a>C:\Windows\System32\userinit.exe,
+</code></pre></div>
+<p>Attackers may append an additional executable/script.</p>
+<h3 id="location_5">Location<a class="headerlink" href="#location_5" title="Permanent link">&para;</a></h3>
+<p>Offline:</p>
+<ul>
+<li>Hive: SOFTWARE</li>
+<li>Key: <code>Microsoft\Windows NT\CurrentVersion\Winlogon</code></li>
+<li>Value: <code>Userinit</code></li>
+</ul>
+<p>Live:</p>
+<ul>
+<li><code>HKLM\Software\Microsoft\Windows NT\CurrentVersion\Winlogon</code></li>
+</ul>
+<h3 id="forensic-value_5">Forensic Value<a class="headerlink" href="#forensic-value_5" title="Permanent link">&para;</a></h3>
+<ul>
+<li>Extremely high-value persistence location</li>
+<li>Often indicates sophisticated attacker persistence</li>
+</ul>
+<h3 id="key-data-points_5">Key Data Points<a class="headerlink" href="#key-data-points_5" title="Permanent link">&para;</a></h3>
+<ul>
+<li>Presence of extra entries appended after <code>userinit.exe</code></li>
+<li>Non-standard paths</li>
+</ul>
+<h3 id="example-output-registry-explorer_5">Example Output (Registry Explorer)<a class="headerlink" href="#example-output-registry-explorer_5" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-17-1" name="__codelineno-17-1" href="#__codelineno-17-1"></a>Value Name: Userinit
+<a id="__codelineno-17-2" name="__codelineno-17-2" href="#__codelineno-17-2"></a>Data: C:\Windows\System32\userinit.exe,C:\Users\Public\svchost.exe
+</code></pre></div>
+<h3 id="tools-for-parsing-this-autostart-location_5">Tools for parsing this autostart location<a class="headerlink" href="#tools-for-parsing-this-autostart-location_5" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-18-1" name="__codelineno-18-1" href="#__codelineno-18-1"></a>RECmd.exe -f SOFTWARE --kn &quot;Microsoft\Windows NT\CurrentVersion\Winlogon&quot; --csv autoruns.csv
+</code></pre></div>
+<hr />
+<h2 id="startup-folder-per-user">Startup Folder (Per-User)<a class="headerlink" href="#startup-folder-per-user" title="Permanent link">&para;</a></h2>
+<h3 id="file-location">File Location<a class="headerlink" href="#file-location" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-19-1" name="__codelineno-19-1" href="#__codelineno-19-1"></a>%AppData%\Roaming\Microsoft\Windows\Start Menu\Programs\Startup
+</code></pre></div>
+<h3 id="what-is-the-startup-folder">What is the Startup Folder?<a class="headerlink" href="#what-is-the-startup-folder" title="Permanent link">&para;</a></h3>
+<p>Files placed in the Startup folder automatically execute when the user logs in.</p>
+<p>This is a popular attacker choice because:</p>
+<ul>
+<li>does not require admin rights</li>
+<li>supports <code>.lnk</code>, <code>.bat</code>, <code>.vbs</code>, <code>.ps1</code>, EXEs</li>
+<li>blends in with legitimate shortcuts</li>
+</ul>
+<h3 id="location_6">Location<a class="headerlink" href="#location_6" title="Permanent link">&para;</a></h3>
+<p>Typical path:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-20-1" name="__codelineno-20-1" href="#__codelineno-20-1"></a>C:\Users\&lt;User&gt;\AppData\Roaming\Microsoft\Windows\Start Menu\Programs\Startup
+</code></pre></div>
+<h3 id="forensic-value_6">Forensic Value<a class="headerlink" href="#forensic-value_6" title="Permanent link">&para;</a></h3>
+<ul>
+<li>Strong evidence of user-level persistence</li>
+<li>Useful for detecting dropped scripts and shortcut-based persistence</li>
+</ul>
+<h3 id="key-data-points_6">Key Data Points<a class="headerlink" href="#key-data-points_6" title="Permanent link">&para;</a></h3>
+<ul>
+<li>File name</li>
+<li>Target path (for <code>.lnk</code>)</li>
+<li>Creation/modification timestamps</li>
+</ul>
+<h3 id="example-output-directory-listing">Example Output (Directory Listing)<a class="headerlink" href="#example-output-directory-listing" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-21-1" name="__codelineno-21-1" href="#__codelineno-21-1"></a>2024-11-18  13:40    2,048   OneDrive.lnk
+<a id="__codelineno-21-2" name="__codelineno-21-2" href="#__codelineno-21-2"></a>2024-11-18  13:41    1,200   updater.vbs
+</code></pre></div>
+<h3 id="tools-for-parsing-this-autostart-location_6">Tools for parsing this autostart location<a class="headerlink" href="#tools-for-parsing-this-autostart-location_6" title="Permanent link">&para;</a></h3>
+<ul>
+<li>KAPE collection (Startup folders)</li>
+<li>LECmd.exe for parsing <code>.lnk</code> files</li>
+</ul>
+<p>Example LECmd:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-22-1" name="__codelineno-22-1" href="#__codelineno-22-1"></a>LECmd.exe -d &quot;C:\Users\&lt;User&gt;\AppData\Roaming\Microsoft\Windows\Start Menu\Programs\Startup&quot; --csv startup_links.csv
+</code></pre></div>
+<hr />
+<h2 id="correlation-analyst-tips">Correlation &amp; Analyst Tips<a class="headerlink" href="#correlation-analyst-tips" title="Permanent link">&para;</a></h2>
+<h3 id="common-suspicion-indicators">Common Suspicion Indicators<a class="headerlink" href="#common-suspicion-indicators" title="Permanent link">&para;</a></h3>
+<ul>
+<li>
+<p>Executables launched from:</p>
+</li>
+<li>
+<p><code>C:\Users\Public</code></p>
+</li>
+<li><code>%AppData%</code></li>
+<li><code>%Temp%</code></li>
+<li><code>C:\ProgramData</code></li>
+<li>
+<p>Suspicious command lines:</p>
+</li>
+<li>
+<p><code>powershell.exe -enc</code></p>
+</li>
+<li><code>cmd.exe /c</code></li>
+<li><code>mshta.exe</code></li>
+<li><code>rundll32.exe</code></li>
+<li>Value names designed to blend in (e.g., <code>Windows Update Service</code>)</li>
+</ul>
+<h3 id="recommended-correlation-artifacts">Recommended Correlation Artifacts<a class="headerlink" href="#recommended-correlation-artifacts" title="Permanent link">&para;</a></h3>
+<ul>
+<li>Prefetch</li>
+<li>Amcache</li>
+<li>ShimCache</li>
+<li>BAM/DAM</li>
+<li>SRUM</li>
+<li>Windows Event Logs (4688, 4697, 7045)</li>
+</ul>
+<hr />
+<h2 id="evasion-techniques">Evasion Techniques<a class="headerlink" href="#evasion-techniques" title="Permanent link">&para;</a></h2>
+<p>Attackers may evade AutoStart discovery by:</p>
+<ul>
+<li>using benign-sounding value names</li>
+<li>deleting keys after execution (RunOnce)</li>
+<li>storing payloads in obscure directories</li>
+<li>using fileless persistence (WMI, scheduled tasks)</li>
+<li>replacing hives / timestomping</li>
+</ul>
+<hr />
+<h2 id="kape-targets-modules-autostart-collection">KAPE Targets &amp; Modules (AutoStart Collection)<a class="headerlink" href="#kape-targets-modules-autostart-collection" title="Permanent link">&para;</a></h2>
+<p>KAPE collects <strong>files</strong> relevant to persistence. For these AutoStart locations, the primary items to collect are:</p>
+<ul>
+<li><code>NTUSER.DAT</code> (per user)</li>
+<li>Startup folder contents (per user)</li>
+<li>Optional: <code>UsrClass.dat</code> (useful for shell artifacts / Jump Lists correlation)</li>
+</ul>
+<h3 id="collection-targets">Collection Targets<a class="headerlink" href="#collection-targets" title="Permanent link">&para;</a></h3>
+<table>
+<thead>
+<tr>
+<th>Evidence Needed</th>
+<th>What to Collect</th>
+<th>Typical Paths</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>HKCU Run / RunOnce keys</td>
+<td><code>NTUSER.DAT</code></td>
+<td><code>C:\Users\&lt;User&gt;\NTUSER.DAT</code></td>
+</tr>
+<tr>
+<td>Startup Folder persistence</td>
+<td>Startup folder</td>
+<td><code>C:\Users\&lt;User&gt;\AppData\Roaming\Microsoft\Windows\Start Menu\Programs\Startup</code></td>
+</tr>
+<tr>
+<td>LNK parsing context</td>
+<td><code>.lnk</code> files</td>
+<td>Startup folder + other locations</td>
+</tr>
+</tbody>
+</table>
+<h3 id="example-kape-targets">Example KAPE Targets<a class="headerlink" href="#example-kape-targets" title="Permanent link">&para;</a></h3>
+<p>Depending on the version of KAPETargets in your environment, the target names vary. Common targets include:</p>
+<ul>
+<li><code>NTUSER</code> / <code>UserHives</code></li>
+<li><code>StartupFolders</code></li>
+<li><code>LNKFiles</code></li>
+</ul>
+<p>Example collection:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-23-1" name="__codelineno-23-1" href="#__codelineno-23-1"></a>kape.exe --tsource C: --tdest E:\KAPE --target NTUSER,StartupFolders
+</code></pre></div>
+<p>If you want to collect and immediately parse <code>.lnk</code> files:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-24-1" name="__codelineno-24-1" href="#__codelineno-24-1"></a>kape.exe --tsource C: --tdest E:\KAPE --target NTUSER,StartupFolders --module LECmd
+</code></pre></div>
+<h3 id="parsing-modules">Parsing Modules<a class="headerlink" href="#parsing-modules" title="Permanent link">&para;</a></h3>
+<table>
+<thead>
+<tr>
+<th>Artifact</th>
+<th>Parser</th>
+<th>Typical Module</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>NTUSER autoruns</td>
+<td>RECmd</td>
+<td><code>RECmd.mkape</code></td>
+</tr>
+<tr>
+<td>Startup <code>.lnk</code></td>
+<td>LECmd</td>
+<td><code>LECmd.mkape</code></td>
+</tr>
+</tbody>
+</table>
+<p>Example:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-25-1" name="__codelineno-25-1" href="#__codelineno-25-1"></a>kape.exe --tsource C: --tdest E:\KAPE --target NTUSER,StartupFolders --module RECmd,LECmd
+</code></pre></div>
+<hr />
+<h2 id="mitre-attck-mapping-persistence">MITRE ATT&amp;CK Mapping (Persistence)<a class="headerlink" href="#mitre-attck-mapping-persistence" title="Permanent link">&para;</a></h2>
+<p>These AutoStart locations map directly to MITRE ATT&amp;CK persistence mechanisms.</p>
+<h3 id="persistence">Persistence<a class="headerlink" href="#persistence" title="Permanent link">&para;</a></h3>
+<ul>
+<li>
+<p><strong>T1547.001 – Registry Run Keys / Startup Folder</strong></p>
+</li>
+<li>
+<p>Covers:</p>
+<ul>
+<li><code>HKCU\...\Run</code></li>
+<li><code>HKCU\...\RunOnce</code></li>
+<li><code>HKLM\...\Run</code></li>
+<li><code>HKLM\...\RunOnce</code></li>
+<li>Startup folder</li>
+</ul>
+</li>
+<li>
+<p><strong>T1547.004 – Winlogon Helper DLL / Winlogon Userinit</strong></p>
+</li>
+<li>
+<p>Covers:</p>
+<ul>
+<li><code>Winlogon\Userinit</code></li>
+</ul>
+</li>
+</ul>
+<h3 id="defense-evasion-related">Defense Evasion (Related)<a class="headerlink" href="#defense-evasion-related" title="Permanent link">&para;</a></h3>
+<ul>
+<li>
+<p><strong>T1036 – Masquerading</strong></p>
+</li>
+<li>
+<p>Value names designed to look legitimate</p>
+</li>
+<li>
+<p><strong>T1070 – Indicator Removal on Host</strong></p>
+</li>
+<li>
+<p>Deleting Run/RunOnce values</p>
+</li>
+<li>Removing startup folder payloads</li>
+</ul>
+<hr />
+<h2 id="recmd-batch-template-reb-autoruns-in-one-pass">RECmd Batch Template (.reb) — Autoruns in One Pass<a class="headerlink" href="#recmd-batch-template-reb-autoruns-in-one-pass" title="Permanent link">&para;</a></h2>
+<p>Below is a cohesive RECmd batch file you can save as:</p>
+<ul>
+<li><code>Autoruns_AutoStart_Persistence.reb</code></li>
+</ul>
+<p>It extracts <strong>all autorun-related keys</strong> referenced in this document.</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-26-1" name="__codelineno-26-1" href="#__codelineno-26-1"></a><span class="nt">Description</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">AutoStart Persistence (Registry Run Keys)</span>
+<a id="__codelineno-26-2" name="__codelineno-26-2" href="#__codelineno-26-2"></a><span class="nt">Author</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">DFIR Team</span>
+<a id="__codelineno-26-3" name="__codelineno-26-3" href="#__codelineno-26-3"></a><span class="nt">Version</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">1</span>
+<a id="__codelineno-26-4" name="__codelineno-26-4" href="#__codelineno-26-4"></a><span class="nt">Id</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">8b0c0e7e-3c8e-4d62-a1cf-000000000010</span>
+<a id="__codelineno-26-5" name="__codelineno-26-5" href="#__codelineno-26-5"></a><span class="nt">Keys</span><span class="p">:</span>
+<a id="__codelineno-26-6" name="__codelineno-26-6" href="#__codelineno-26-6"></a><span class="w">  </span><span class="c1"># -----------------------------</span>
+<a id="__codelineno-26-7" name="__codelineno-26-7" href="#__codelineno-26-7"></a><span class="w">  </span><span class="c1"># NTUSER.DAT (HKCU)</span>
+<a id="__codelineno-26-8" name="__codelineno-26-8" href="#__codelineno-26-8"></a><span class="w">  </span><span class="c1"># -----------------------------</span>
+<a id="__codelineno-26-9" name="__codelineno-26-9" href="#__codelineno-26-9"></a>
+<a id="__codelineno-26-10" name="__codelineno-26-10" href="#__codelineno-26-10"></a><span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">Description</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">HKCU Run</span>
+<a id="__codelineno-26-11" name="__codelineno-26-11" href="#__codelineno-26-11"></a><span class="w">    </span><span class="nt">HiveType</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">NTUSER</span>
+<a id="__codelineno-26-12" name="__codelineno-26-12" href="#__codelineno-26-12"></a><span class="w">    </span><span class="nt">Category</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Persistence</span>
+<a id="__codelineno-26-13" name="__codelineno-26-13" href="#__codelineno-26-13"></a><span class="w">    </span><span class="nt">KeyPath</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Software\Microsoft\Windows\CurrentVersion\Run</span>
+<a id="__codelineno-26-14" name="__codelineno-26-14" href="#__codelineno-26-14"></a><span class="w">    </span><span class="nt">Recursive</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">false</span>
+<a id="__codelineno-26-15" name="__codelineno-26-15" href="#__codelineno-26-15"></a>
+<a id="__codelineno-26-16" name="__codelineno-26-16" href="#__codelineno-26-16"></a><span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">Description</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">HKCU RunOnce</span>
+<a id="__codelineno-26-17" name="__codelineno-26-17" href="#__codelineno-26-17"></a><span class="w">    </span><span class="nt">HiveType</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">NTUSER</span>
+<a id="__codelineno-26-18" name="__codelineno-26-18" href="#__codelineno-26-18"></a><span class="w">    </span><span class="nt">Category</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Persistence</span>
+<a id="__codelineno-26-19" name="__codelineno-26-19" href="#__codelineno-26-19"></a><span class="w">    </span><span class="nt">KeyPath</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Software\Microsoft\Windows\CurrentVersion\RunOnce</span>
+<a id="__codelineno-26-20" name="__codelineno-26-20" href="#__codelineno-26-20"></a><span class="w">    </span><span class="nt">Recursive</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">false</span>
+<a id="__codelineno-26-21" name="__codelineno-26-21" href="#__codelineno-26-21"></a>
+<a id="__codelineno-26-22" name="__codelineno-26-22" href="#__codelineno-26-22"></a><span class="w">  </span><span class="c1"># -----------------------------</span>
+<a id="__codelineno-26-23" name="__codelineno-26-23" href="#__codelineno-26-23"></a><span class="w">  </span><span class="c1"># SOFTWARE (HKLM)</span>
+<a id="__codelineno-26-24" name="__codelineno-26-24" href="#__codelineno-26-24"></a><span class="w">  </span><span class="c1"># -----------------------------</span>
+<a id="__codelineno-26-25" name="__codelineno-26-25" href="#__codelineno-26-25"></a>
+<a id="__codelineno-26-26" name="__codelineno-26-26" href="#__codelineno-26-26"></a><span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">Description</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">HKLM Run</span>
+<a id="__codelineno-26-27" name="__codelineno-26-27" href="#__codelineno-26-27"></a><span class="w">    </span><span class="nt">HiveType</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">SOFTWARE</span>
+<a id="__codelineno-26-28" name="__codelineno-26-28" href="#__codelineno-26-28"></a><span class="w">    </span><span class="nt">Category</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Persistence</span>
+<a id="__codelineno-26-29" name="__codelineno-26-29" href="#__codelineno-26-29"></a><span class="w">    </span><span class="nt">KeyPath</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Microsoft\Windows\CurrentVersion\Run</span>
+<a id="__codelineno-26-30" name="__codelineno-26-30" href="#__codelineno-26-30"></a><span class="w">    </span><span class="nt">Recursive</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">false</span>
+<a id="__codelineno-26-31" name="__codelineno-26-31" href="#__codelineno-26-31"></a>
+<a id="__codelineno-26-32" name="__codelineno-26-32" href="#__codelineno-26-32"></a><span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">Description</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">HKLM RunOnce</span>
+<a id="__codelineno-26-33" name="__codelineno-26-33" href="#__codelineno-26-33"></a><span class="w">    </span><span class="nt">HiveType</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">SOFTWARE</span>
+<a id="__codelineno-26-34" name="__codelineno-26-34" href="#__codelineno-26-34"></a><span class="w">    </span><span class="nt">Category</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Persistence</span>
+<a id="__codelineno-26-35" name="__codelineno-26-35" href="#__codelineno-26-35"></a><span class="w">    </span><span class="nt">KeyPath</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Microsoft\Windows\CurrentVersion\RunOnce</span>
+<a id="__codelineno-26-36" name="__codelineno-26-36" href="#__codelineno-26-36"></a><span class="w">    </span><span class="nt">Recursive</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">false</span>
+<a id="__codelineno-26-37" name="__codelineno-26-37" href="#__codelineno-26-37"></a>
+<a id="__codelineno-26-38" name="__codelineno-26-38" href="#__codelineno-26-38"></a><span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">Description</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">HKLM Policies Explorer Run</span>
+<a id="__codelineno-26-39" name="__codelineno-26-39" href="#__codelineno-26-39"></a><span class="w">    </span><span class="nt">HiveType</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">SOFTWARE</span>
+<a id="__codelineno-26-40" name="__codelineno-26-40" href="#__codelineno-26-40"></a><span class="w">    </span><span class="nt">Category</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Persistence</span>
+<a id="__codelineno-26-41" name="__codelineno-26-41" href="#__codelineno-26-41"></a><span class="w">    </span><span class="nt">KeyPath</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Microsoft\Windows\CurrentVersion\policies\Explorer\Run</span>
+<a id="__codelineno-26-42" name="__codelineno-26-42" href="#__codelineno-26-42"></a><span class="w">    </span><span class="nt">Recursive</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">false</span>
+<a id="__codelineno-26-43" name="__codelineno-26-43" href="#__codelineno-26-43"></a>
+<a id="__codelineno-26-44" name="__codelineno-26-44" href="#__codelineno-26-44"></a><span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">Description</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Winlogon (Userinit)</span>
+<a id="__codelineno-26-45" name="__codelineno-26-45" href="#__codelineno-26-45"></a><span class="w">    </span><span class="nt">HiveType</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">SOFTWARE</span>
+<a id="__codelineno-26-46" name="__codelineno-26-46" href="#__codelineno-26-46"></a><span class="w">    </span><span class="nt">Category</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Persistence</span>
+<a id="__codelineno-26-47" name="__codelineno-26-47" href="#__codelineno-26-47"></a><span class="w">    </span><span class="nt">KeyPath</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Microsoft\Windows NT\CurrentVersion\Winlogon</span>
+<a id="__codelineno-26-48" name="__codelineno-26-48" href="#__codelineno-26-48"></a><span class="w">    </span><span class="nt">Recursive</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">false</span>
+</code></pre></div>
+<h3 id="recmd-usage-examples">RECmd Usage Examples<a class="headerlink" href="#recmd-usage-examples" title="Permanent link">&para;</a></h3>
+<p>Parse individual hives:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-27-1" name="__codelineno-27-1" href="#__codelineno-27-1"></a>RECmd.exe -f NTUSER.DAT --bn Autoruns_AutoStart_Persistence.reb --csv E:\out
+<a id="__codelineno-27-2" name="__codelineno-27-2" href="#__codelineno-27-2"></a>RECmd.exe -f SOFTWARE --bn Autoruns_AutoStart_Persistence.reb --csv E:\out
+</code></pre></div>
+<p>Parse a directory (typical after KAPE acquisition):</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-28-1" name="__codelineno-28-1" href="#__codelineno-28-1"></a>RECmd.exe -d E:\KAPE\Files --bn Autoruns_AutoStart_Persistence.reb --csv E:\out
+</code></pre></div>
+<hr />
+<h2 id="recmd-pivot-batch-reb-high-recall-autoruns">RECmd Pivot Batch (.reb) — High Recall Autoruns<a class="headerlink" href="#recmd-pivot-batch-reb-high-recall-autoruns" title="Permanent link">&para;</a></h2>
+<p>When you have an indicator (filename, directory, LOLbin) but you’re not sure which persistence key it lives under, use a <strong>high-recall pivot batch</strong>, then keyword search the output.</p>
+<p>Save the following as:</p>
+<ul>
+<li><code>Autoruns_Pivot.reb</code></li>
+</ul>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-29-1" name="__codelineno-29-1" href="#__codelineno-29-1"></a><span class="nt">Description</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Autoruns Pivot (High Recall)</span>
+<a id="__codelineno-29-2" name="__codelineno-29-2" href="#__codelineno-29-2"></a><span class="nt">Author</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">DFIR Team</span>
+<a id="__codelineno-29-3" name="__codelineno-29-3" href="#__codelineno-29-3"></a><span class="nt">Version</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">1</span>
+<a id="__codelineno-29-4" name="__codelineno-29-4" href="#__codelineno-29-4"></a><span class="nt">Id</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">8b0c0e7e-3c8e-4d62-a1cf-000000000011</span>
+<a id="__codelineno-29-5" name="__codelineno-29-5" href="#__codelineno-29-5"></a><span class="nt">Keys</span><span class="p">:</span>
+<a id="__codelineno-29-6" name="__codelineno-29-6" href="#__codelineno-29-6"></a><span class="w">  </span><span class="c1"># -----------------------------</span>
+<a id="__codelineno-29-7" name="__codelineno-29-7" href="#__codelineno-29-7"></a><span class="w">  </span><span class="c1"># NTUSER.DAT (HKCU)</span>
+<a id="__codelineno-29-8" name="__codelineno-29-8" href="#__codelineno-29-8"></a><span class="w">  </span><span class="c1"># -----------------------------</span>
+<a id="__codelineno-29-9" name="__codelineno-29-9" href="#__codelineno-29-9"></a>
+<a id="__codelineno-29-10" name="__codelineno-29-10" href="#__codelineno-29-10"></a><span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">Description</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">HKCU CurrentVersion (broad)</span>
+<a id="__codelineno-29-11" name="__codelineno-29-11" href="#__codelineno-29-11"></a><span class="w">    </span><span class="nt">HiveType</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">NTUSER</span>
+<a id="__codelineno-29-12" name="__codelineno-29-12" href="#__codelineno-29-12"></a><span class="w">    </span><span class="nt">Category</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Persistence</span>
+<a id="__codelineno-29-13" name="__codelineno-29-13" href="#__codelineno-29-13"></a><span class="w">    </span><span class="nt">KeyPath</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Software\Microsoft\Windows\CurrentVersion</span>
+<a id="__codelineno-29-14" name="__codelineno-29-14" href="#__codelineno-29-14"></a><span class="w">    </span><span class="nt">Recursive</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span>
+<a id="__codelineno-29-15" name="__codelineno-29-15" href="#__codelineno-29-15"></a>
+<a id="__codelineno-29-16" name="__codelineno-29-16" href="#__codelineno-29-16"></a><span class="w">  </span><span class="c1"># -----------------------------</span>
+<a id="__codelineno-29-17" name="__codelineno-29-17" href="#__codelineno-29-17"></a><span class="w">  </span><span class="c1"># SOFTWARE (HKLM)</span>
+<a id="__codelineno-29-18" name="__codelineno-29-18" href="#__codelineno-29-18"></a><span class="w">  </span><span class="c1"># -----------------------------</span>
+<a id="__codelineno-29-19" name="__codelineno-29-19" href="#__codelineno-29-19"></a>
+<a id="__codelineno-29-20" name="__codelineno-29-20" href="#__codelineno-29-20"></a><span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">Description</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">HKLM CurrentVersion (broad)</span>
+<a id="__codelineno-29-21" name="__codelineno-29-21" href="#__codelineno-29-21"></a><span class="w">    </span><span class="nt">HiveType</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">SOFTWARE</span>
+<a id="__codelineno-29-22" name="__codelineno-29-22" href="#__codelineno-29-22"></a><span class="w">    </span><span class="nt">Category</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Persistence</span>
+<a id="__codelineno-29-23" name="__codelineno-29-23" href="#__codelineno-29-23"></a><span class="w">    </span><span class="nt">KeyPath</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Microsoft\Windows\CurrentVersion</span>
+<a id="__codelineno-29-24" name="__codelineno-29-24" href="#__codelineno-29-24"></a><span class="w">    </span><span class="nt">Recursive</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span>
+<a id="__codelineno-29-25" name="__codelineno-29-25" href="#__codelineno-29-25"></a>
+<a id="__codelineno-29-26" name="__codelineno-29-26" href="#__codelineno-29-26"></a><span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">Description</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">HKLM Winlogon (broad)</span>
+<a id="__codelineno-29-27" name="__codelineno-29-27" href="#__codelineno-29-27"></a><span class="w">    </span><span class="nt">HiveType</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">SOFTWARE</span>
+<a id="__codelineno-29-28" name="__codelineno-29-28" href="#__codelineno-29-28"></a><span class="w">    </span><span class="nt">Category</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Persistence</span>
+<a id="__codelineno-29-29" name="__codelineno-29-29" href="#__codelineno-29-29"></a><span class="w">    </span><span class="nt">KeyPath</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Microsoft\Windows NT\CurrentVersion\Winlogon</span>
+<a id="__codelineno-29-30" name="__codelineno-29-30" href="#__codelineno-29-30"></a><span class="w">    </span><span class="nt">Recursive</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span>
+</code></pre></div>
+<h3 id="run-the-pivot-batch">Run the Pivot Batch<a class="headerlink" href="#run-the-pivot-batch" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-30-1" name="__codelineno-30-1" href="#__codelineno-30-1"></a>RECmd.exe -f NTUSER.DAT --bn Autoruns_Pivot.reb --csv E:\pivot_out
+<a id="__codelineno-30-2" name="__codelineno-30-2" href="#__codelineno-30-2"></a>RECmd.exe -f SOFTWARE --bn Autoruns_Pivot.reb --csv E:\pivot_out
+</code></pre></div>
+<h3 id="keyword-search-examples">Keyword Search Examples<a class="headerlink" href="#keyword-search-examples" title="Permanent link">&para;</a></h3>
+<h4 id="windows-findstr">Windows <code>findstr</code><a class="headerlink" href="#windows-findstr" title="Permanent link">&para;</a></h4>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-31-1" name="__codelineno-31-1" href="#__codelineno-31-1"></a>findstr /S /I &quot;powershell.exe rundll32.exe mshta.exe C:\Users\Public&quot; E:\pivot_out\*.csv
+</code></pre></div>
+<h4 id="powershell-select-string">PowerShell <code>Select-String</code><a class="headerlink" href="#powershell-select-string" title="Permanent link">&para;</a></h4>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-32-1" name="__codelineno-32-1" href="#__codelineno-32-1"></a>Get-ChildItem E:\pivot_out\*.csv | Select-String -Pattern &quot;powershell.exe&quot;,&quot;rundll32.exe&quot;,&quot;mshta.exe&quot;,&quot;C:\Users\Public&quot; -CaseSensitive:$false
+</code></pre></div>
+<h3 id="notes">Notes<a class="headerlink" href="#notes" title="Permanent link">&para;</a></h3>
+<ul>
+<li>This pivot batch is intentionally broad and may generate large output.</li>
+<li>Use it for <strong>hunting</strong> and <strong>triage</strong>, then confirm findings with the precise batch (<code>Autoruns_AutoStart_Persistence.reb</code>) and additional execution artifacts.</li>
+</ul>
+<hr />
+<h2 id="recommended-indicator-list-autoruns-hunting">Recommended Indicator List (Autoruns Hunting)<a class="headerlink" href="#recommended-indicator-list-autoruns-hunting" title="Permanent link">&para;</a></h2>
+<p>Use the following indicator list to quickly pivot through autorun output (CSV/JSON). These are common attacker tradecraft patterns.</p>
+<h3 id="high-signal-lolbins-living-off-the-land">High-Signal LOLBins / Living-off-the-Land<a class="headerlink" href="#high-signal-lolbins-living-off-the-land" title="Permanent link">&para;</a></h3>
+<p>Search for these executables in autorun values:</p>
+<ul>
+<li><code>powershell.exe</code></li>
+<li><code>pwsh.exe</code></li>
+<li><code>cmd.exe</code></li>
+<li><code>wscript.exe</code> / <code>cscript.exe</code></li>
+<li><code>mshta.exe</code></li>
+<li><code>rundll32.exe</code></li>
+<li><code>regsvr32.exe</code></li>
+<li><code>schtasks.exe</code></li>
+<li><code>wmic.exe</code></li>
+<li><code>bitsadmin.exe</code></li>
+<li><code>certutil.exe</code></li>
+<li><code>installutil.exe</code></li>
+</ul>
+<h3 id="suspicious-command-line-patterns">Suspicious Command Line Patterns<a class="headerlink" href="#suspicious-command-line-patterns" title="Permanent link">&para;</a></h3>
+<ul>
+<li><code>-enc</code> / <code>-encodedcommand</code></li>
+<li><code>IEX</code> / <code>Invoke-Expression</code></li>
+<li><code>FromBase64String</code></li>
+<li><code>DownloadString</code></li>
+<li><code>WebClient</code></li>
+<li><code>Start-Process</code></li>
+<li><code>Hidden</code> / <code>WindowStyle Hidden</code></li>
+</ul>
+<h3 id="common-staging-user-writable-paths">Common Staging / User-Writable Paths<a class="headerlink" href="#common-staging-user-writable-paths" title="Permanent link">&para;</a></h3>
+<ul>
+<li><code>C:\Users\Public</code></li>
+<li><code>%AppData%</code> / <code>\AppData\Roaming</code></li>
+<li><code>%LocalAppData%</code> / <code>\AppData\Local</code></li>
+<li><code>%Temp%</code> / <code>\AppData\Local\Temp</code></li>
+<li><code>C:\ProgramData</code></li>
+<li><code>C:\Windows\Temp</code></li>
+</ul>
+<h3 id="common-masquerading-filenames">Common Masquerading Filenames<a class="headerlink" href="#common-masquerading-filenames" title="Permanent link">&para;</a></h3>
+<ul>
+<li><code>svchost.exe</code></li>
+<li><code>lsass.exe</code></li>
+<li><code>explorer.exe</code></li>
+<li><code>taskhostw.exe</code></li>
+<li><code>services.exe</code></li>
+<li><code>spoolsv.exe</code></li>
+</ul>
+<blockquote>
+<p>These names are suspicious when found outside <code>C:\Windows\System32</code>.</p>
+</blockquote>
+<h3 id="quick-pivot-strings">Quick Pivot Strings<a class="headerlink" href="#quick-pivot-strings" title="Permanent link">&para;</a></h3>
+<p>Use these directly in <code>findstr</code> / <code>Select-String</code>:</p>
+<ul>
+<li><code>powershell.exe -enc</code></li>
+<li><code>rundll32.exe</code></li>
+<li><code>mshta.exe</code></li>
+<li><code>wscript.exe</code></li>
+<li><code>c:\users\public</code></li>
+<li><code>\appdata\roaming</code></li>
+<li><code>\appdata\local\temp</code></li>
+<li><code>c:\programdata</code></li>
+</ul>
+<hr />
+<h2 id="tooling-summary">Tooling Summary<a class="headerlink" href="#tooling-summary" title="Permanent link">&para;</a></h2>
+<p>Recommended tools for AutoStart persistence analysis:</p>
+<ul>
+<li><strong>Sysinternals Autoruns</strong> (excellent triage)</li>
+<li><strong>Eric Zimmerman Registry Explorer</strong> (manual review)</li>
+<li><strong>RECmd.exe</strong> (batch parsing of hives)</li>
+<li><strong>KAPE</strong> (collection + processing)</li>
+<li><strong>LECmd.exe</strong> (Startup folder <code>.lnk</code> parsing)</li>
+</ul>
+<hr />
+<h2 id="references">References<a class="headerlink" href="#references" title="Permanent link">&para;</a></h2>
+<ul>
+<li>Sysinternals Autoruns</li>
+<li>Eric Zimmerman Tools</li>
+<li>MITRE ATT&amp;CK Persistence Techniques</li>
+</ul>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+          <button type="button" class="md-top md-icon" data-md-component="top" hidden>
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8z"/></svg>
+  Back to top
+</button>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+    
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      
+      <script id="__config" type="application/json">{"annotate": null, "base": "../..", "features": ["content.action.edit", "content.action.view", "content.code.annotate", "content.code.copy", "content.tooltips", "navigation.footer", "navigation.indexes", "navigation.sections", "navigation.tabs", "navigation.top", "navigation.tracking", "search.highlight", "search.share", "search.suggest", "toc.follow"], "search": "../../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
+    
+    
+      <script src="../../assets/javascripts/bundle.79ae519e.min.js"></script>
+      
+    
+  </body>
+</html>

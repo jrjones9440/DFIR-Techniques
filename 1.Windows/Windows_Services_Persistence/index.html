@@ -1,0 +1,2418 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+      
+      
+        <link rel="canonical" href="https://jrjones9440.github.io/DFIR-Techniques/1.Windows/Windows_Services_Persistence/">
+      
+      
+      
+      
+        
+      
+      
+      <link rel="icon" href="../../assets/favicon.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.1">
+    
+    
+      
+        <title>Windows Services Persistence (DFIR) - DFIR Techniques</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../assets/stylesheets/main.484c7ddc.min.css">
+      
+        
+        <link rel="stylesheet" href="../../assets/stylesheets/palette.ab4e12ef.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+    <script>__md_scope=new URL("../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+  
+
+
+  
+  
+
+<script id="__analytics">function __md_analytics(){function e(){dataLayer.push(arguments)}window.dataLayer=window.dataLayer||[],e("js",new Date),e("config",""),document.addEventListener("DOMContentLoaded",(function(){document.forms.search&&document.forms.search.query.addEventListener("blur",(function(){this.value&&e("event","search",{search_term:this.value})}));document$.subscribe((function(){var t=document.forms.feedback;if(void 0!==t)for(var a of t.querySelectorAll("[type=submit]"))a.addEventListener("click",(function(a){a.preventDefault();var n=document.location.pathname,d=this.getAttribute("data-md-value");e("event","feedback",{page:n,data:d}),t.firstElementChild.disabled=!0;var r=t.querySelector(".md-feedback__note [data-md-value='"+d+"']");r&&(r.hidden=!1)})),t.hidden=!1})),location$.subscribe((function(t){e("config","",{page_path:t.pathname})}))}));var t=document.createElement("script");t.async=!0,t.src="https://www.googletagmanager.com/gtag/js?id=",document.getElementById("__analytics").insertAdjacentElement("afterEnd",t)}</script>
+  
+    <script>"undefined"!=typeof __md_analytics&&__md_analytics()</script>
+  
+
+    
+    
+  </head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#windows-services-persistence-dfir" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+<header class="md-header" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href="../.." title="DFIR Techniques" class="md-header__button md-logo" aria-label="DFIR Techniques" data-md-component="logo">
+      
+  <img src="../../img/CND_LogoTop.jpg" alt="logo">
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            DFIR Techniques
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Windows Services Persistence (DFIR)
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+        <form class="md-header__option" data-md-component="palette">
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo"  aria-label="Switch to dark mode"  type="radio" name="__palette" id="__palette_0">
+    
+      <label class="md-header__button md-icon" title="Switch to dark mode" for="__palette_1" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a4 4 0 0 0-4 4 4 4 0 0 0 4 4 4 4 0 0 0 4-4 4 4 0 0 0-4-4m0 10a6 6 0 0 1-6-6 6 6 0 0 1 6-6 6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"/></svg>
+      </label>
+    
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="" data-md-color-scheme="slate" data-md-color-primary="indigo" data-md-color-accent="indigo"  aria-label="Switch to light mode"  type="radio" name="__palette" id="__palette_1">
+    
+      <label class="md-header__button md-icon" title="Switch to light mode" for="__palette_0" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 18c-.89 0-1.74-.2-2.5-.55C11.56 16.5 13 14.42 13 12s-1.44-4.5-3.5-5.45C10.26 6.2 11.11 6 12 6a6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"/></svg>
+      </label>
+    
+  
+</form>
+      
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+          <a href="javascript:void(0)" class="md-search__icon md-icon" title="Share" aria-label="Share" data-clipboard data-clipboard-text="" data-md-component="search-share" tabindex="-1">
+            
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M18 16.08c-.76 0-1.44.3-1.96.77L8.91 12.7c.05-.23.09-.46.09-.7s-.04-.47-.09-.7l7.05-4.11c.54.5 1.25.81 2.04.81a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3c0 .24.04.47.09.7L8.04 9.81C7.5 9.31 6.79 9 6 9a3 3 0 0 0-3 3 3 3 0 0 0 3 3c.79 0 1.5-.31 2.04-.81l7.12 4.15c-.05.21-.08.43-.08.66 0 1.61 1.31 2.91 2.92 2.91s2.92-1.3 2.92-2.91A2.92 2.92 0 0 0 18 16.08"/></svg>
+          </a>
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+        <div class="md-search__suggest" data-md-component="search-suggest"></div>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+      <div class="md-header__source">
+        <a href="https://github.com/jrjones9440/DFIR-Techniques" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M439.6 236.1 244 40.5c-5.4-5.5-12.8-8.5-20.4-8.5s-15 3-20.4 8.4L162.5 81l51.5 51.5c27.1-9.1 52.7 16.8 43.4 43.7l49.7 49.7c34.2-11.8 61.2 31 35.5 56.7-26.5 26.5-70.2-2.9-56-37.3L240.3 199v121.9c25.3 12.5 22.3 41.8 9.1 55-6.4 6.4-15.2 10.1-24.3 10.1s-17.8-3.6-24.3-10.1c-17.6-17.6-11.1-46.9 11.2-56v-123c-20.8-8.5-24.6-30.7-18.6-45L142.6 101 8.5 235.1C3 240.6 0 247.9 0 255.5s3 15 8.5 20.4l195.6 195.7c5.4 5.4 12.7 8.4 20.4 8.4s15-3 20.4-8.4l194.7-194.7c5.4-5.4 8.4-12.8 8.4-20.4s-3-15-8.4-20.4"/></svg>
+  </div>
+  <div class="md-source__repository">
+    GitHub
+  </div>
+</a>
+      </div>
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+            
+<nav class="md-tabs" aria-label="Tabs" data-md-component="tabs">
+  <div class="md-grid">
+    <ul class="md-tabs__list">
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../.." class="md-tabs__link">
+        
+  
+  
+    
+  
+  Home
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../" class="md-tabs__link">
+          
+  
+  
+    
+  
+  Windows
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../../Linux/" class="md-tabs__link">
+          
+  
+  
+    
+  
+  Linux
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../../Networking/" class="md-tabs__link">
+          
+  
+  
+    
+  
+  Networking
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../../Cloud/" class="md-tabs__link">
+          
+  
+  
+    
+  
+  Cloud
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../../Malware/" class="md-tabs__link">
+          
+  
+  
+    
+  
+  Malware
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../../ICS/" class="md-tabs__link">
+          
+  
+  
+    
+  
+  ICS
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../../Tools/" class="md-tabs__link">
+          
+  
+  
+    
+  
+  Tools
+
+        </a>
+      </li>
+    
+  
+
+      
+    </ul>
+  </div>
+</nav>
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+  
+
+
+<nav class="md-nav md-nav--primary md-nav--lifted" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../.." title="DFIR Techniques" class="md-nav__button md-logo" aria-label="DFIR Techniques" data-md-component="logo">
+      
+  <img src="../../img/CND_LogoTop.jpg" alt="logo">
+
+    </a>
+    DFIR Techniques
+  </label>
+  
+    <div class="md-nav__source">
+      <a href="https://github.com/jrjones9440/DFIR-Techniques" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M439.6 236.1 244 40.5c-5.4-5.5-12.8-8.5-20.4-8.5s-15 3-20.4 8.4L162.5 81l51.5 51.5c27.1-9.1 52.7 16.8 43.4 43.7l49.7 49.7c34.2-11.8 61.2 31 35.5 56.7-26.5 26.5-70.2-2.9-56-37.3L240.3 199v121.9c25.3 12.5 22.3 41.8 9.1 55-6.4 6.4-15.2 10.1-24.3 10.1s-17.8-3.6-24.3-10.1c-17.6-17.6-11.1-46.9 11.2-56v-123c-20.8-8.5-24.6-30.7-18.6-45L142.6 101 8.5 235.1C3 240.6 0 247.9 0 255.5s3 15 8.5 20.4l195.6 195.7c5.4 5.4 12.7 8.4 20.4 8.4s15-3 20.4-8.4l194.7-194.7c5.4-5.4 8.4-12.8 8.4-20.4s-3-15-8.4-20.4"/></svg>
+  </div>
+  <div class="md-source__repository">
+    GitHub
+  </div>
+</a>
+    </div>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../.." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Home
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2" >
+        
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../" class="md-nav__link ">
+              
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Windows
+  
+
+    
+  </span>
+  
+  
+
+            </a>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Windows
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3" >
+        
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../../Linux/" class="md-nav__link ">
+              
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Linux
+  
+
+    
+  </span>
+  
+  
+
+            </a>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Linux
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4" >
+        
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../../Networking/" class="md-nav__link ">
+              
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Networking
+  
+
+    
+  </span>
+  
+  
+
+            </a>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_4_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_4">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Networking
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_5" >
+        
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../../Cloud/" class="md-nav__link ">
+              
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Cloud
+  
+
+    
+  </span>
+  
+  
+
+            </a>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_5_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_5">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Cloud
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_6" >
+        
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../../Malware/" class="md-nav__link ">
+              
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Malware
+  
+
+    
+  </span>
+  
+  
+
+            </a>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_6_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_6">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Malware
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_7" >
+        
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../../ICS/" class="md-nav__link ">
+              
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    ICS
+  
+
+    
+  </span>
+  
+  
+
+            </a>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_7_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_7">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    ICS
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_8" >
+        
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../../Tools/" class="md-nav__link ">
+              
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Tools
+  
+
+    
+  </span>
+  
+  
+
+            </a>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_8_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_8">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Tools
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#table-of-contents" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Table of Contents
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#windows-services-overview" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Windows Services Overview
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#service-registry-location" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Service Registry Location
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Service Registry Location">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#persistence-location" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Persistence Location
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#how-services-work" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        How Services Work
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#service-accounts" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Service Accounts
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Service Accounts">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#localsystem" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        LocalSystem
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#localservice" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        LocalService
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#networkservice" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        NetworkService
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#custom-service-accounts" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Custom Service Accounts
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#persistence-relevant-settings" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Persistence-Relevant Settings
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#start-values-and-persistence" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Start Values and Persistence
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Start Values and Persistence">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#why-0x02-and-0x00-matter" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Why 0x02 and 0x00 Matter
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#forensic-value" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Forensic Value
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#key-data-points" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Key Data Points
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#examples-of-malicious-service-tradecraft" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Examples of Malicious Service Tradecraft
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Examples of Malicious Service Tradecraft">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#1-new-service-creation-apt1-example" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1) New Service Creation (APT1 Example)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#2-service-replacement-glassrat-example" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2) Service Replacement (GlassRAT Example)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#3-service-failure-recovery-abuse" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3) Service Failure Recovery Abuse
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#how-to-investigate-services" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        How to Investigate Services
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="How to Investigate Services">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#services-persistence-triage-checklist" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Services Persistence Triage Checklist
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Services Persistence Triage Checklist">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#1-identify-high-risk-services-first" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1) Identify High-Risk Services First
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#2-validate-service-identity" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2) Validate Service Identity
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#3-inspect-imagepath-parameters" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3) Inspect ImagePath &amp; Parameters
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#4-accountprivilege-context-objectname" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4) Account/Privilege Context (ObjectName)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#5-startup-behavior" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5) Startup Behavior
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#6-failure-recovery-failureactions-abuse" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        6) Failure Recovery / FailureActions Abuse
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#7-correlate-with-logs" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        7) Correlate With Logs
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#8-correlate-with-execution-artifacts" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        8) Correlate With Execution Artifacts
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#9-containment-evidence" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        9) Containment &amp; Evidence
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#quick-triage-questions" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Quick Triage Questions
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#recommended-indicator-list-services-persistence-hunting" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Recommended Indicator List (Services Persistence Hunting)
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Recommended Indicator List (Services Persistence Hunting)">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#high-signal-lolbins-service-abuse-targets" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        High-Signal LOLBins / Service Abuse Targets
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#suspicious-command-line-patterns" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Suspicious Command-Line Patterns
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#high-risk-paths-for-service-binaries" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        High-Risk Paths for Service Binaries
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#common-masquerading-filenames" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Common Masquerading Filenames
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#naming-patterns-that-deserve-scrutiny" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Naming Patterns That Deserve Scrutiny
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#quick-pivot-strings" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Quick Pivot Strings
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#tools-and-commands" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Tools and Commands
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Tools and Commands">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#sysinternals-autoruns" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Sysinternals Autoruns
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#built-in-commands-sc" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Built-in Commands (sc)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#registry-explorer-recmd" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Registry Explorer + RECmd
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#kansa-framework-get-svcfailps1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Kansa Framework — Get-SvcFail.ps1
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#recmd-batch-template-reb-services-including-failureactions" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        RECmd Batch Template (.reb) — Services (Including FailureActions)
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="RECmd Batch Template (.reb) — Services (Including FailureActions)">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#recmd-usage-examples" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        RECmd Usage Examples
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#kape-targets-modules-services-event-logs" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        KAPE Targets &amp; Modules (Services + Event Logs)
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="KAPE Targets &amp; Modules (Services + Event Logs)">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#what-to-collect" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        What to Collect
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#kape-targets" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        KAPE Targets
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#kape-modules-optional-parsing" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        KAPE Modules (Optional Parsing)
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#mitre-attck-mapping-services" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        MITRE ATT&amp;CK Mapping (Services)
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="MITRE ATT&amp;CK Mapping (Services)">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#persistence" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Persistence
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#privilege-escalation-related" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Privilege Escalation (Related)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#defense-evasion-related" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Defense Evasion (Related)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#execution-related" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Execution (Related)
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#evasion-techniques" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Evasion Techniques
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#references" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        References
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+  
+    <a href="https://github.com/jrjones9440/DFIR-Techniques/edit/master/docs/1.Windows/Windows_Services_Persistence.md" title="Edit this page" class="md-content__button md-icon" rel="edit">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M10 20H6V4h7v5h5v3.1l2-2V8l-6-6H6c-1.1 0-2 .9-2 2v16c0 1.1.9 2 2 2h4zm10.2-7c.1 0 .3.1.4.2l1.3 1.3c.2.2.2.6 0 .8l-1 1-2.1-2.1 1-1c.1-.1.2-.2.4-.2m0 3.9L14.1 23H12v-2.1l6.1-6.1z"/></svg>
+    </a>
+  
+  
+    
+      
+    
+    <a href="https://github.com/jrjones9440/DFIR-Techniques/raw/master/docs/1.Windows/Windows_Services_Persistence.md" title="View source of this page" class="md-content__button md-icon">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M17 18c.56 0 1 .44 1 1s-.44 1-1 1-1-.44-1-1 .44-1 1-1m0-3c-2.73 0-5.06 1.66-6 4 .94 2.34 3.27 4 6 4s5.06-1.66 6-4c-.94-2.34-3.27-4-6-4m0 6.5a2.5 2.5 0 0 1-2.5-2.5 2.5 2.5 0 0 1 2.5-2.5 2.5 2.5 0 0 1 2.5 2.5 2.5 2.5 0 0 1-2.5 2.5M9.27 20H6V4h7v5h5v4.07c.7.08 1.36.25 2 .49V8l-6-6H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h4.5a8.2 8.2 0 0 1-1.23-2"/></svg>
+    </a>
+  
+
+
+<h1 id="windows-services-persistence-dfir">Windows Services Persistence (DFIR)<a class="headerlink" href="#windows-services-persistence-dfir" title="Permanent link">&para;</a></h1>
+<p>This document provides a <strong>Digital Forensics &amp; Incident Response (DFIR)</strong>–focused overview of <strong>Windows Services</strong> as a persistence mechanism.</p>
+<p>Windows services are one of the most common and resilient ways attackers maintain access because they:</p>
+<ul>
+<li>execute with elevated privileges</li>
+<li>can start automatically at boot or logon</li>
+<li>may run without user interaction</li>
+<li>blend in with legitimate system services</li>
+</ul>
+<hr />
+<h2 id="table-of-contents">Table of Contents<a class="headerlink" href="#table-of-contents" title="Permanent link">&para;</a></h2>
+<ol>
+<li><a href="#windows-services-overview">Windows Services Overview</a></li>
+<li><a href="#service-registry-location">Service Registry Location</a></li>
+<li><a href="#how-services-work">How Services Work</a></li>
+<li><a href="#service-accounts">Service Accounts</a></li>
+<li><a href="#persistence-relevant-settings">Persistence-Relevant Settings</a></li>
+<li><a href="#start-values-and-persistence">Start Values and Persistence</a></li>
+<li><a href="#forensic-value">Forensic Value</a></li>
+<li><a href="#key-data-points">Key Data Points</a></li>
+<li><a href="#examples-of-malicious-service-tradecraft">Examples of Malicious Service Tradecraft</a></li>
+<li><a href="#how-to-investigate-services">How to Investigate Services</a></li>
+<li><a href="#tools-and-commands">Tools and Commands</a></li>
+<li><a href="#evasion-techniques">Evasion Techniques</a></li>
+</ol>
+<hr />
+<h2 id="windows-services-overview">Windows Services Overview<a class="headerlink" href="#windows-services-overview" title="Permanent link">&para;</a></h2>
+<p>A <strong>Windows Service</strong> is a long-running executable (or driver) managed by the <strong>Service Control Manager (SCM)</strong>. Services can:</p>
+<ul>
+<li>start during system boot</li>
+<li>start automatically at logon</li>
+<li>start on demand</li>
+<li>restart on failure</li>
+</ul>
+<p>Services are frequently used by:</p>
+<ul>
+<li>operating system components</li>
+<li>device drivers</li>
+<li>enterprise security tooling</li>
+<li>endpoint management platforms</li>
+</ul>
+<p>Attackers abuse services because they provide:</p>
+<ul>
+<li><strong>privileged persistence</strong></li>
+<li><strong>reliable execution</strong></li>
+<li>a mechanism that can survive reboots</li>
+</ul>
+<hr />
+<h2 id="service-registry-location">Service Registry Location<a class="headerlink" href="#service-registry-location" title="Permanent link">&para;</a></h2>
+<h3 id="persistence-location">Persistence Location<a class="headerlink" href="#persistence-location" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>HKLM\SYSTEM\CurrentControlSet\Services
+</code></pre></div>
+<p>This key contains:</p>
+<ul>
+<li>service configurations</li>
+<li>device driver configurations</li>
+<li>parameters for each service/driver</li>
+<li>executable path and launch settings</li>
+</ul>
+<p>Offline path:</p>
+<ul>
+<li>Hive: <code>SYSTEM</code></li>
+<li>File location: <code>C:\Windows\System32\config\SYSTEM</code></li>
+</ul>
+<hr />
+<h2 id="how-services-work">How Services Work<a class="headerlink" href="#how-services-work" title="Permanent link">&para;</a></h2>
+<p>Services are controlled by the <strong>Service Control Manager (SCM)</strong>.</p>
+<p>Key concepts:</p>
+<ul>
+<li>SCM loads service configuration from registry</li>
+<li>SCM starts services based on the <code>Start</code> value</li>
+<li>Services can be configured to restart on failure</li>
+<li>Many services run without interactive desktops</li>
+</ul>
+<p>Services can be:</p>
+<ul>
+<li>user-mode services (<code>.exe</code>)</li>
+<li>kernel-mode drivers (<code>.sys</code>)</li>
+</ul>
+<hr />
+<h2 id="service-accounts">Service Accounts<a class="headerlink" href="#service-accounts" title="Permanent link">&para;</a></h2>
+<p>Services typically run under one of these built-in accounts:</p>
+<h3 id="localsystem">LocalSystem<a class="headerlink" href="#localsystem" title="Permanent link">&para;</a></h3>
+<ul>
+<li>Highest default privilege on the local machine</li>
+<li>Has extensive local rights</li>
+<li>Can access network as the computer account (<code>DOMAIN\\HOSTNAME$</code>)</li>
+</ul>
+<h3 id="localservice">LocalService<a class="headerlink" href="#localservice" title="Permanent link">&para;</a></h3>
+<ul>
+<li>Limited local privileges</li>
+<li>Uses anonymous credentials on the network</li>
+</ul>
+<h3 id="networkservice">NetworkService<a class="headerlink" href="#networkservice" title="Permanent link">&para;</a></h3>
+<ul>
+<li>Limited local privileges</li>
+<li>Uses the computer account on the network</li>
+</ul>
+<h3 id="custom-service-accounts">Custom Service Accounts<a class="headerlink" href="#custom-service-accounts" title="Permanent link">&para;</a></h3>
+<ul>
+<li>Domain user accounts</li>
+<li>Managed Service Accounts (MSA/gMSA)</li>
+</ul>
+<p><strong>DFIR Tip:</strong> Persistence is more suspicious when:</p>
+<ul>
+<li>a service runs as LocalSystem but does not need to</li>
+<li>a service uses an unexpected domain account</li>
+</ul>
+<hr />
+<h2 id="persistence-relevant-settings">Persistence-Relevant Settings<a class="headerlink" href="#persistence-relevant-settings" title="Permanent link">&para;</a></h2>
+<p>Each service has a registry subkey:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a>HKLM\SYSTEM\CurrentControlSet\Services\&lt;ServiceName&gt;
+</code></pre></div>
+<p>Common values include:</p>
+<ul>
+<li><code>ImagePath</code> – binary path or driver path</li>
+<li><code>Start</code> – startup type</li>
+<li><code>Type</code> – service vs driver</li>
+<li><code>ObjectName</code> – the account used to run the service</li>
+<li><code>Description</code></li>
+<li><code>DisplayName</code></li>
+</ul>
+<hr />
+<h2 id="start-values-and-persistence">Start Values and Persistence<a class="headerlink" href="#start-values-and-persistence" title="Permanent link">&para;</a></h2>
+<p>The <code>Start</code> value determines when the service/driver loads.</p>
+<table>
+<thead>
+<tr>
+<th>Start Value (Hex)</th>
+<th>Meaning</th>
+<th>Persistence Impact</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>0x00</code></td>
+<td>Boot (driver)</td>
+<td><strong>Very high</strong> – loads during boot (drivers)</td>
+</tr>
+<tr>
+<td><code>0x01</code></td>
+<td>System</td>
+<td>High – loads early</td>
+</tr>
+<tr>
+<td><code>0x02</code></td>
+<td>Automatic</td>
+<td>High – starts automatically</td>
+</tr>
+<tr>
+<td><code>0x03</code></td>
+<td>Manual</td>
+<td>Medium – requires trigger</td>
+</tr>
+<tr>
+<td><code>0x04</code></td>
+<td>Disabled</td>
+<td>None (unless modified)</td>
+</tr>
+</tbody>
+</table>
+<h3 id="why-0x02-and-0x00-matter">Why <code>0x02</code> and <code>0x00</code> Matter<a class="headerlink" href="#why-0x02-and-0x00-matter" title="Permanent link">&para;</a></h3>
+<ul>
+<li><code>0x02</code> services ensure malware runs after reboot</li>
+<li><code>0x00</code> boot-start drivers can run before many security controls initialize</li>
+</ul>
+<hr />
+<h2 id="forensic-value">Forensic Value<a class="headerlink" href="#forensic-value" title="Permanent link">&para;</a></h2>
+<p>Services help answer:</p>
+<ul>
+<li>How did persistence occur?</li>
+<li>Was a new service created or an existing service modified?</li>
+<li>What binary executed and where is it located?</li>
+<li>What account/privilege context is used?</li>
+<li>Was failure recovery configured to execute malware?</li>
+</ul>
+<hr />
+<h2 id="key-data-points">Key Data Points<a class="headerlink" href="#key-data-points" title="Permanent link">&para;</a></h2>
+<p>When analyzing a suspicious service, extract:</p>
+<ul>
+<li><code>ServiceName</code> (registry key name)</li>
+<li><code>DisplayName</code> and <code>Description</code></li>
+<li><code>ImagePath</code> (target binary)</li>
+<li><code>Start</code> type</li>
+<li><code>Type</code> (service vs driver)</li>
+<li><code>ObjectName</code> (account)</li>
+<li>service DLL / parameters if present</li>
+<li>timestamps (registry key last write)</li>
+</ul>
+<hr />
+<h2 id="examples-of-malicious-service-tradecraft">Examples of Malicious Service Tradecraft<a class="headerlink" href="#examples-of-malicious-service-tradecraft" title="Permanent link">&para;</a></h2>
+<h3 id="1-new-service-creation-apt1-example">1) New Service Creation (APT1 Example)<a class="headerlink" href="#1-new-service-creation-apt1-example" title="Permanent link">&para;</a></h3>
+<p><strong>Technique:</strong> Create a new service pointing to a malicious binary.</p>
+<p>Example:</p>
+<ul>
+<li>Service name: <code>IPRIP</code></li>
+<li>Display name: <code>RIP Listener Service</code></li>
+</ul>
+<p>Registry Example (Registry Explorer):</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a>Key: ...\Services\IPRIP
+<a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a>ImagePath: &quot;C:\Windows\Temp\iprip.exe&quot;
+<a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a>Start: 0x02
+<a id="__codelineno-2-4" name="__codelineno-2-4" href="#__codelineno-2-4"></a>ObjectName: LocalSystem
+<a id="__codelineno-2-5" name="__codelineno-2-5" href="#__codelineno-2-5"></a>DisplayName: RIP Listener Service
+</code></pre></div>
+<p>Forensic indicators:</p>
+<ul>
+<li>Service name not aligned with vendor</li>
+<li>Binary in <code>Temp</code> / user-writable path</li>
+</ul>
+<hr />
+<h3 id="2-service-replacement-glassrat-example">2) Service Replacement (GlassRAT Example)<a class="headerlink" href="#2-service-replacement-glassrat-example" title="Permanent link">&para;</a></h3>
+<p><strong>Technique:</strong> Replace a legitimate but disabled service with a malicious payload.</p>
+<p>Known example:</p>
+<ul>
+<li>Service: <code>RasAuto</code> (Remote Access Auto Connection Manager)</li>
+<li>Attacker replaces <code>ImagePath</code> to point to malicious executable</li>
+</ul>
+<p>Registry Example:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a>Key: ...\Services\RasAuto
+<a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a>ImagePath: &quot;C:\ProgramData\rasauto.exe&quot;
+<a id="__codelineno-3-3" name="__codelineno-3-3" href="#__codelineno-3-3"></a>Start: 0x02
+</code></pre></div>
+<p>Forensic indicators:</p>
+<ul>
+<li>Service name is legitimate</li>
+<li>Binary path is not</li>
+</ul>
+<hr />
+<h3 id="3-service-failure-recovery-abuse">3) Service Failure Recovery Abuse<a class="headerlink" href="#3-service-failure-recovery-abuse" title="Permanent link">&para;</a></h3>
+<p><strong>Technique:</strong> Configure failure actions to launch malware.</p>
+<p>Attacker approach:</p>
+<ul>
+<li>Force service to crash</li>
+<li>Configure failure recovery to execute malicious binary</li>
+</ul>
+<p>Evidence may include:</p>
+<ul>
+<li>unusual <code>FailureActions</code></li>
+<li>unexpected <code>sc failure</code> configuration</li>
+</ul>
+<p>Example Behavior:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a>sc failure &quot;Spooler&quot; reset= 0 actions= restart/5000/run/5000
+<a id="__codelineno-4-2" name="__codelineno-4-2" href="#__codelineno-4-2"></a>sc failureflag &quot;Spooler&quot; 1
+</code></pre></div>
+<p>Forensic indicators:</p>
+<ul>
+<li>critical service failure actions running unknown executables</li>
+</ul>
+<hr />
+<h2 id="how-to-investigate-services">How to Investigate Services<a class="headerlink" href="#how-to-investigate-services" title="Permanent link">&para;</a></h2>
+<h3 id="services-persistence-triage-checklist">Services Persistence Triage Checklist<a class="headerlink" href="#services-persistence-triage-checklist" title="Permanent link">&para;</a></h3>
+<p>Use this checklist during incident response to quickly assess whether a service is likely malicious.</p>
+<h4 id="1-identify-high-risk-services-first">1) Identify High-Risk Services First<a class="headerlink" href="#1-identify-high-risk-services-first" title="Permanent link">&para;</a></h4>
+<ul class="task-list">
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> Newly created service names (not present in baseline)</li>
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> Recently modified service keys (LastWrite time on <code>...\Services\&lt;Name&gt;</code>)</li>
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> Services with <strong>Start = 0x02 (Automatic)</strong> unexpectedly</li>
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> Drivers with <strong>Start = 0x00 (Boot)</strong> or <code>0x01 (System)</code> that are unknown</li>
+</ul>
+<h4 id="2-validate-service-identity">2) Validate Service Identity<a class="headerlink" href="#2-validate-service-identity" title="Permanent link">&para;</a></h4>
+<ul class="task-list">
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> Does <code>DisplayName</code> / <code>Description</code> match expected vendor/software?</li>
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> Does the service name masquerade as Windows (e.g., <code>Windows Audio Driver</code>, <code>Update Service</code>)?</li>
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> Is the service name similar to legitimate service names (typosquatting)?</li>
+</ul>
+<h4 id="3-inspect-imagepath-parameters">3) Inspect ImagePath &amp; Parameters<a class="headerlink" href="#3-inspect-imagepath-parameters" title="Permanent link">&para;</a></h4>
+<ul class="task-list">
+<li class="task-list-item">
+<p><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> Does <code>ImagePath</code> point to <strong>user-writable locations</strong>?</p>
+</li>
+<li>
+<p><code>C:\Users\Public</code></p>
+</li>
+<li><code>%AppData%</code> / <code>%LocalAppData%</code></li>
+<li><code>%Temp%</code></li>
+<li><code>C:\ProgramData</code></li>
+<li><code>C:\Windows\Temp</code></li>
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> Is the binary signed and from an expected publisher?</li>
+<li class="task-list-item">
+<p><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> Are there suspicious command line patterns?</p>
+</li>
+<li>
+<p><code>powershell.exe -enc</code></p>
+</li>
+<li><code>cmd.exe /c</code></li>
+<li><code>rundll32.exe</code></li>
+<li><code>mshta.exe</code></li>
+<li><code>.vbs</code>, <code>.js</code>, <code>.ps1</code></li>
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> Is there unusual quoting or spacing in the path (common evasion)?</li>
+</ul>
+<h4 id="4-accountprivilege-context-objectname">4) Account/Privilege Context (ObjectName)<a class="headerlink" href="#4-accountprivilege-context-objectname" title="Permanent link">&para;</a></h4>
+<ul class="task-list">
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> Runs as <strong>LocalSystem</strong> when not expected</li>
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> Runs as <strong>NetworkService/LocalService</strong> but points to suspicious binary</li>
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> Runs as a domain user or custom account unexpectedly</li>
+</ul>
+<h4 id="5-startup-behavior">5) Startup Behavior<a class="headerlink" href="#5-startup-behavior" title="Permanent link">&para;</a></h4>
+<ul class="task-list">
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> <code>Start</code> type appears inconsistent with service function</li>
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> Service set to auto-start but should be manual</li>
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> Disabled service (<code>0x04</code>) was changed to auto-start</li>
+</ul>
+<h4 id="6-failure-recovery-failureactions-abuse">6) Failure Recovery / FailureActions Abuse<a class="headerlink" href="#6-failure-recovery-failureactions-abuse" title="Permanent link">&para;</a></h4>
+<ul class="task-list">
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> Failure actions configured unusually (restart loops)</li>
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> Failure actions set to execute programs (launch malware)</li>
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> Service appears intentionally crashing to trigger failure recovery</li>
+</ul>
+<p>Use:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a>sc qfailure &lt;ServiceName&gt;
+</code></pre></div>
+<h4 id="7-correlate-with-logs">7) Correlate With Logs<a class="headerlink" href="#7-correlate-with-logs" title="Permanent link">&para;</a></h4>
+<ul class="task-list">
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> System log: <strong>7045</strong> (service installed)</li>
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> System log: <strong>7036</strong> (service state changed)</li>
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> Security log: <strong>4697</strong> (service installed — if enabled)</li>
+</ul>
+<h4 id="8-correlate-with-execution-artifacts">8) Correlate With Execution Artifacts<a class="headerlink" href="#8-correlate-with-execution-artifacts" title="Permanent link">&para;</a></h4>
+<ul class="task-list">
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> Prefetch shows service executable execution</li>
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> Amcache records dropped service binary hash</li>
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> ShimCache indicates presence of service payload</li>
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> BAM/DAM corroborates user-context execution (if applicable)</li>
+</ul>
+<h4 id="9-containment-evidence">9) Containment &amp; Evidence<a class="headerlink" href="#9-containment-evidence" title="Permanent link">&para;</a></h4>
+<ul class="task-list">
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> Preserve SYSTEM hive + EVTX logs</li>
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> Collect the service binary and compute hashes</li>
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> Capture service configuration output:</li>
+</ul>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a>sc qc &lt;ServiceName&gt;
+<a id="__codelineno-6-2" name="__codelineno-6-2" href="#__codelineno-6-2"></a>sc qfailure &lt;ServiceName&gt;
+</code></pre></div>
+<hr />
+<h3 id="quick-triage-questions">Quick Triage Questions<a class="headerlink" href="#quick-triage-questions" title="Permanent link">&para;</a></h3>
+<ul>
+<li>Is this service <strong>new</strong> or recently modified?</li>
+<li>Does <code>ImagePath</code> point to a legitimate signed binary?</li>
+<li>Is the binary located in a <strong>user-writable directory</strong>?</li>
+<li>Is <code>Start</code> set to <code>0x02</code> (Automatic) unexpectedly?</li>
+<li>Is the service running as <strong>LocalSystem</strong>?</li>
+<li>Are failure actions configured unusually?</li>
+</ul>
+<hr />
+<h2 id="recommended-indicator-list-services-persistence-hunting">Recommended Indicator List (Services Persistence Hunting)<a class="headerlink" href="#recommended-indicator-list-services-persistence-hunting" title="Permanent link">&para;</a></h2>
+<p>Use this list to pivot quickly when reviewing services via <strong>Autoruns</strong>, <code>sc</code>, Registry Explorer/RECmd output, or EVTX parsing.</p>
+<h3 id="high-signal-lolbins-service-abuse-targets">High-Signal LOLBins / Service Abuse Targets<a class="headerlink" href="#high-signal-lolbins-service-abuse-targets" title="Permanent link">&para;</a></h3>
+<p>Search for these executables appearing in <code>ImagePath</code> or parameters:</p>
+<ul>
+<li><code>powershell.exe</code> / <code>pwsh.exe</code></li>
+<li><code>cmd.exe</code></li>
+<li><code>rundll32.exe</code></li>
+<li><code>regsvr32.exe</code></li>
+<li><code>mshta.exe</code></li>
+<li><code>wscript.exe</code> / <code>cscript.exe</code></li>
+<li><code>bitsadmin.exe</code></li>
+<li><code>certutil.exe</code></li>
+<li><code>schtasks.exe</code> (often used alongside services)</li>
+</ul>
+<h3 id="suspicious-command-line-patterns">Suspicious Command-Line Patterns<a class="headerlink" href="#suspicious-command-line-patterns" title="Permanent link">&para;</a></h3>
+<ul>
+<li><code>-enc</code> / <code>-encodedcommand</code></li>
+<li><code>IEX</code> / <code>Invoke-Expression</code></li>
+<li><code>FromBase64String</code></li>
+<li><code>DownloadString</code></li>
+<li><code>WebClient</code></li>
+<li><code>Start-Process</code></li>
+<li><code>Hidden</code> / <code>WindowStyle Hidden</code></li>
+<li>
+<p>DLL execution patterns:</p>
+</li>
+<li>
+<p><code>rundll32.exe &lt;dll&gt;,&lt;export&gt;</code></p>
+</li>
+</ul>
+<h3 id="high-risk-paths-for-service-binaries">High-Risk Paths for Service Binaries<a class="headerlink" href="#high-risk-paths-for-service-binaries" title="Permanent link">&para;</a></h3>
+<p>These paths are suspicious as service targets (especially for auto-start services):</p>
+<ul>
+<li><code>C:\ProgramData</code></li>
+<li><code>C:\Users\Public</code></li>
+<li><code>%AppData%</code> / <code>\AppData\Roaming</code></li>
+<li><code>%LocalAppData%</code> / <code>\AppData\Local</code></li>
+<li><code>%Temp%</code> / <code>\AppData\Local\Temp</code></li>
+<li><code>C:\Windows\Temp</code></li>
+</ul>
+<h3 id="common-masquerading-filenames">Common Masquerading Filenames<a class="headerlink" href="#common-masquerading-filenames" title="Permanent link">&para;</a></h3>
+<p>Look for these names when they appear outside <code>C:\Windows\System32</code>:</p>
+<ul>
+<li><code>svchost.exe</code></li>
+<li><code>lsass.exe</code></li>
+<li><code>services.exe</code></li>
+<li><code>spoolsv.exe</code></li>
+<li><code>taskhostw.exe</code></li>
+<li><code>winlogon.exe</code></li>
+<li><code>explorer.exe</code></li>
+</ul>
+<h3 id="naming-patterns-that-deserve-scrutiny">Naming Patterns That Deserve Scrutiny<a class="headerlink" href="#naming-patterns-that-deserve-scrutiny" title="Permanent link">&para;</a></h3>
+<ul>
+<li>
+<p>Services with vague names:</p>
+</li>
+<li>
+<p><code>Update Service</code>, <code>Windows Update Helper</code>, <code>Security Service</code></p>
+</li>
+<li>
+<p>Random-looking names:</p>
+</li>
+<li>
+<p><code>svc123</code>, <code>a1b2c3</code>, <code>WinSysHost</code></p>
+</li>
+<li>
+<p>Typosquatting:</p>
+</li>
+<li>
+<p><code>WindiwsUpdate</code>, <code>Micros0ft</code></p>
+</li>
+</ul>
+<h3 id="quick-pivot-strings">Quick Pivot Strings<a class="headerlink" href="#quick-pivot-strings" title="Permanent link">&para;</a></h3>
+<p>Use these directly in <code>findstr</code> / PowerShell searches:</p>
+<ul>
+<li><code>powershell.exe -enc</code></li>
+<li><code>rundll32.exe</code></li>
+<li><code>mshta.exe</code></li>
+<li><code>\programdata\</code></li>
+<li><code>\users\public\</code></li>
+<li><code>\appdata\</code></li>
+<li><code>\temp\</code></li>
+</ul>
+<hr />
+<h2 id="tools-and-commands">Tools and Commands<a class="headerlink" href="#tools-and-commands" title="Permanent link">&para;</a></h2>
+<h3 id="sysinternals-autoruns">Sysinternals Autoruns<a class="headerlink" href="#sysinternals-autoruns" title="Permanent link">&para;</a></h3>
+<p>Autoruns highlights:</p>
+<ul>
+<li>Services tab shows auto-start services</li>
+<li>detects unsigned binaries</li>
+<li>provides quick triage of persistence locations</li>
+</ul>
+<hr />
+<h3 id="built-in-commands-sc">Built-in Commands (<code>sc</code>)<a class="headerlink" href="#built-in-commands-sc" title="Permanent link">&para;</a></h3>
+<p>List all services:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-7-1" name="__codelineno-7-1" href="#__codelineno-7-1"></a>sc query state= all
+</code></pre></div>
+<p>Query a specific service:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-8-1" name="__codelineno-8-1" href="#__codelineno-8-1"></a>sc qc &lt;ServiceName&gt;
+</code></pre></div>
+<p>Query failure actions:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-9-1" name="__codelineno-9-1" href="#__codelineno-9-1"></a>sc qfailure &lt;ServiceName&gt;
+</code></pre></div>
+<hr />
+<h3 id="registry-explorer-recmd">Registry Explorer + RECmd<a class="headerlink" href="#registry-explorer-recmd" title="Permanent link">&para;</a></h3>
+<p><strong>Registry Explorer</strong>:</p>
+<ul>
+<li>Load <code>SYSTEM</code> hive</li>
+<li>
+<p>Navigate to:</p>
+</li>
+<li>
+<p><code>ControlSet001\\Services</code></p>
+</li>
+<li><code>CurrentControlSet\\Services</code></li>
+</ul>
+<p>RECmd batch parsing example:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-10-1" name="__codelineno-10-1" href="#__codelineno-10-1"></a>RECmd.exe -f SYSTEM --kn &quot;ControlSet*\\Services&quot; --csv services.csv
+</code></pre></div>
+<hr />
+<h3 id="kansa-framework-get-svcfailps1">Kansa Framework — Get-SvcFail.ps1<a class="headerlink" href="#kansa-framework-get-svcfailps1" title="Permanent link">&para;</a></h3>
+<p>Kansa includes scripts for service misconfiguration and failure actions.</p>
+<p>Example:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-11-1" name="__codelineno-11-1" href="#__codelineno-11-1"></a>.\\Get-SvcFail.ps1
+</code></pre></div>
+<p>DFIR Use:</p>
+<ul>
+<li>quickly enumerates suspicious failure recovery</li>
+<li>highlights services launching binaries on failure</li>
+</ul>
+<hr />
+<h2 id="recmd-batch-template-reb-services-including-failureactions">RECmd Batch Template (.reb) — Services (Including FailureActions)<a class="headerlink" href="#recmd-batch-template-reb-services-including-failureactions" title="Permanent link">&para;</a></h2>
+<p>Below is a cohesive RECmd batch file you can save as:</p>
+<ul>
+<li><code>Services_Persistence.reb</code></li>
+</ul>
+<p>It targets common service persistence indicators under <code>CurrentControlSet\Services</code> and also extracts the <code>Control</code> keys commonly used to store service <strong>FailureActions</strong>.</p>
+<blockquote>
+<p>Note: Service configuration can exist under <code>ControlSet00x</code> and <code>CurrentControlSet</code>. Using <code>ControlSet*</code> maximizes recall for offline hives.</p>
+</blockquote>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-12-1" name="__codelineno-12-1" href="#__codelineno-12-1"></a><span class="nt">Description</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Windows Services Persistence (Services + FailureActions)</span>
+<a id="__codelineno-12-2" name="__codelineno-12-2" href="#__codelineno-12-2"></a><span class="nt">Author</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">DFIR Team</span>
+<a id="__codelineno-12-3" name="__codelineno-12-3" href="#__codelineno-12-3"></a><span class="nt">Version</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">1</span>
+<a id="__codelineno-12-4" name="__codelineno-12-4" href="#__codelineno-12-4"></a><span class="nt">Id</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">8b0c0e7e-3c8e-4d62-a1cf-000000000020</span>
+<a id="__codelineno-12-5" name="__codelineno-12-5" href="#__codelineno-12-5"></a><span class="nt">Keys</span><span class="p">:</span>
+<a id="__codelineno-12-6" name="__codelineno-12-6" href="#__codelineno-12-6"></a><span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">Description</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Services (All) — Current/ControlSets</span>
+<a id="__codelineno-12-7" name="__codelineno-12-7" href="#__codelineno-12-7"></a><span class="w">    </span><span class="nt">HiveType</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">SYSTEM</span>
+<a id="__codelineno-12-8" name="__codelineno-12-8" href="#__codelineno-12-8"></a><span class="w">    </span><span class="nt">Category</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Persistence</span>
+<a id="__codelineno-12-9" name="__codelineno-12-9" href="#__codelineno-12-9"></a><span class="w">    </span><span class="nt">KeyPath</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">ControlSet*\Services</span>
+<a id="__codelineno-12-10" name="__codelineno-12-10" href="#__codelineno-12-10"></a><span class="w">    </span><span class="nt">Recursive</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span>
+<a id="__codelineno-12-11" name="__codelineno-12-11" href="#__codelineno-12-11"></a>
+<a id="__codelineno-12-12" name="__codelineno-12-12" href="#__codelineno-12-12"></a><span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">Description</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Service Control (FailureActions / FailureActionsOnNonCrashFailures)</span>
+<a id="__codelineno-12-13" name="__codelineno-12-13" href="#__codelineno-12-13"></a><span class="w">    </span><span class="nt">HiveType</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">SYSTEM</span>
+<a id="__codelineno-12-14" name="__codelineno-12-14" href="#__codelineno-12-14"></a><span class="w">    </span><span class="nt">Category</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Persistence</span>
+<a id="__codelineno-12-15" name="__codelineno-12-15" href="#__codelineno-12-15"></a><span class="w">    </span><span class="nt">KeyPath</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">ControlSet*\Control</span>
+<a id="__codelineno-12-16" name="__codelineno-12-16" href="#__codelineno-12-16"></a><span class="w">    </span><span class="nt">Recursive</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span>
+</code></pre></div>
+<h3 id="recmd-usage-examples">RECmd Usage Examples<a class="headerlink" href="#recmd-usage-examples" title="Permanent link">&para;</a></h3>
+<p>Single hive:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-13-1" name="__codelineno-13-1" href="#__codelineno-13-1"></a>RECmd.exe -f SYSTEM --bn Services_Persistence.reb --csv E:\out
+</code></pre></div>
+<p>Directory of hives (post-KAPE):</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-14-1" name="__codelineno-14-1" href="#__codelineno-14-1"></a>RECmd.exe -d E:\KAPE\Files --bn Services_Persistence.reb --csv E:\out
+</code></pre></div>
+<p><strong>Pivot Tip:</strong> After export, search for:</p>
+<ul>
+<li>suspicious paths (<code>C:\ProgramData</code>, <code>C:\Users\Public</code>, <code>\Temp</code>)</li>
+<li>LOLbins (<code>rundll32.exe</code>, <code>powershell.exe</code>, <code>mshta.exe</code>)</li>
+<li>unexpected drivers (<code>.sys</code> under non-standard directories)</li>
+</ul>
+<hr />
+<h2 id="kape-targets-modules-services-event-logs">KAPE Targets &amp; Modules (Services + Event Logs)<a class="headerlink" href="#kape-targets-modules-services-event-logs" title="Permanent link">&para;</a></h2>
+<p>To investigate service persistence, collect:</p>
+<ul>
+<li><code>SYSTEM</code> hive (service configuration)</li>
+<li>Windows Event Logs containing service creation/start/stop evidence</li>
+</ul>
+<h3 id="what-to-collect">What to Collect<a class="headerlink" href="#what-to-collect" title="Permanent link">&para;</a></h3>
+<table>
+<thead>
+<tr>
+<th>Evidence</th>
+<th>Where</th>
+<th>Notes</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Service configs</td>
+<td><code>SYSTEM</code> hive</td>
+<td><code>C:\Windows\System32\config\SYSTEM</code></td>
+</tr>
+<tr>
+<td>Service install events</td>
+<td>Security log</td>
+<td>Event ID <strong>4697</strong> (if auditing enabled)</td>
+</tr>
+<tr>
+<td>Service creation (SCM)</td>
+<td>System log</td>
+<td>Event ID <strong>7045</strong></td>
+</tr>
+<tr>
+<td>Service state changes</td>
+<td>System log</td>
+<td>Event ID <strong>7036</strong></td>
+</tr>
+</tbody>
+</table>
+<h3 id="kape-targets">KAPE Targets<a class="headerlink" href="#kape-targets" title="Permanent link">&para;</a></h3>
+<p>Target names vary by your KAPETargets pack, but commonly include:</p>
+<ul>
+<li><code>SYSTEM</code> or <code>RegistryHives</code></li>
+<li><code>EventLogs</code> or <code>EVTX</code></li>
+</ul>
+<p>Example collection:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-15-1" name="__codelineno-15-1" href="#__codelineno-15-1"></a>kape.exe --tsource C: --tdest E:\KAPE --target SYSTEM,EventLogs
+</code></pre></div>
+<h3 id="kape-modules-optional-parsing">KAPE Modules (Optional Parsing)<a class="headerlink" href="#kape-modules-optional-parsing" title="Permanent link">&para;</a></h3>
+<ul>
+<li><code>RECmd</code> (parse SYSTEM hive)</li>
+<li><code>EvtxECmd</code> (parse EVTX)</li>
+</ul>
+<p>Example collect + parse:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-16-1" name="__codelineno-16-1" href="#__codelineno-16-1"></a>kape.exe --tsource C: --tdest E:\KAPE --target SYSTEM,EventLogs --module RECmd,EvtxECmd
+</code></pre></div>
+<blockquote>
+<p>Tip: If you have a custom RECmd module/batch, point the module to <code>Services_Persistence.reb</code>.</p>
+</blockquote>
+<hr />
+<h2 id="mitre-attck-mapping-services">MITRE ATT&amp;CK Mapping (Services)<a class="headerlink" href="#mitre-attck-mapping-services" title="Permanent link">&para;</a></h2>
+<h3 id="persistence">Persistence<a class="headerlink" href="#persistence" title="Permanent link">&para;</a></h3>
+<ul>
+<li>
+<p><strong>T1543.003 – Create or Modify System Process: Windows Service</strong></p>
+</li>
+<li>
+<p>Creating a new service (e.g., <code>sc create</code>)</p>
+</li>
+<li>Modifying an existing service (<code>ImagePath</code>, <code>Start</code>, <code>ObjectName</code>)</li>
+<li>Service replacement (legitimate service name, malicious binary)</li>
+</ul>
+<h3 id="privilege-escalation-related">Privilege Escalation (Related)<a class="headerlink" href="#privilege-escalation-related" title="Permanent link">&para;</a></h3>
+<ul>
+<li><strong>T1543.003</strong> often results in execution under high privilege (LocalSystem)</li>
+</ul>
+<h3 id="defense-evasion-related">Defense Evasion (Related)<a class="headerlink" href="#defense-evasion-related" title="Permanent link">&para;</a></h3>
+<ul>
+<li>
+<p><strong>T1036 – Masquerading</strong></p>
+</li>
+<li>
+<p>Legitimate-sounding service names/descriptions</p>
+</li>
+<li>
+<p>Reusing real service names</p>
+</li>
+<li>
+<p><strong>T1070 – Indicator Removal on Host</strong></p>
+</li>
+<li>
+<p>Removing service keys</p>
+</li>
+<li>
+<p>Clearing System/Security logs</p>
+</li>
+<li>
+<p><strong>T1562 – Impair Defenses</strong></p>
+</li>
+<li>
+<p>Disabling logging/auditing needed for 4697</p>
+</li>
+</ul>
+<h3 id="execution-related">Execution (Related)<a class="headerlink" href="#execution-related" title="Permanent link">&para;</a></h3>
+<ul>
+<li>
+<p><strong>T1059 – Command and Scripting Interpreter</strong></p>
+</li>
+<li>
+<p>Services that execute <code>cmd.exe</code>, <code>powershell.exe</code>, scripts</p>
+</li>
+</ul>
+<hr />
+<h2 id="evasion-techniques">Evasion Techniques<a class="headerlink" href="#evasion-techniques" title="Permanent link">&para;</a></h2>
+<p>Attackers may:</p>
+<ul>
+<li>masquerade service names/descriptions</li>
+<li>use legitimate service names (service replacement)</li>
+<li>
+<p>point <code>ImagePath</code> to:</p>
+</li>
+<li>
+<p><code>C:\ProgramData</code></p>
+</li>
+<li><code>C:\Users\Public</code></li>
+<li><code>%AppData%</code></li>
+<li>use signed LOLbins as service targets</li>
+<li>disable logging or clear event logs</li>
+<li>revert registry hives / timestomp binaries</li>
+</ul>
+<hr />
+<h2 id="references">References<a class="headerlink" href="#references" title="Permanent link">&para;</a></h2>
+<ul>
+<li>Microsoft Service Control Manager documentation</li>
+<li>Sysinternals Autoruns</li>
+<li>MITRE ATT&amp;CK T1543.003 (Windows Service)</li>
+<li>Kansa Framework</li>
+</ul>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+          <button type="button" class="md-top md-icon" data-md-component="top" hidden>
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8z"/></svg>
+  Back to top
+</button>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+    
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      
+      <script id="__config" type="application/json">{"annotate": null, "base": "../..", "features": ["content.action.edit", "content.action.view", "content.code.annotate", "content.code.copy", "content.tooltips", "navigation.footer", "navigation.indexes", "navigation.sections", "navigation.tabs", "navigation.top", "navigation.tracking", "search.highlight", "search.share", "search.suggest", "toc.follow"], "search": "../../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
+    
+    
+      <script src="../../assets/javascripts/bundle.79ae519e.min.js"></script>
+      
+    
+  </body>
+</html>

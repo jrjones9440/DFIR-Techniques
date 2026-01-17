@@ -1,0 +1,2471 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+      
+      
+        <link rel="canonical" href="https://jrjones9440.github.io/DFIR-Techniques/Tools/DFIR_Command_Line_Tools/">
+      
+      
+      
+      
+        
+      
+      
+      <link rel="icon" href="../../assets/favicon.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.1">
+    
+    
+      
+        <title>DFIR Eric Zimmerman Tools (SANS EZ Tools) - DFIR Techniques</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../assets/stylesheets/main.484c7ddc.min.css">
+      
+        
+        <link rel="stylesheet" href="../../assets/stylesheets/palette.ab4e12ef.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+    <script>__md_scope=new URL("../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+  
+
+
+  
+  
+
+<script id="__analytics">function __md_analytics(){function e(){dataLayer.push(arguments)}window.dataLayer=window.dataLayer||[],e("js",new Date),e("config",""),document.addEventListener("DOMContentLoaded",(function(){document.forms.search&&document.forms.search.query.addEventListener("blur",(function(){this.value&&e("event","search",{search_term:this.value})}));document$.subscribe((function(){var t=document.forms.feedback;if(void 0!==t)for(var a of t.querySelectorAll("[type=submit]"))a.addEventListener("click",(function(a){a.preventDefault();var n=document.location.pathname,d=this.getAttribute("data-md-value");e("event","feedback",{page:n,data:d}),t.firstElementChild.disabled=!0;var r=t.querySelector(".md-feedback__note [data-md-value='"+d+"']");r&&(r.hidden=!1)})),t.hidden=!1})),location$.subscribe((function(t){e("config","",{page_path:t.pathname})}))}));var t=document.createElement("script");t.async=!0,t.src="https://www.googletagmanager.com/gtag/js?id=",document.getElementById("__analytics").insertAdjacentElement("afterEnd",t)}</script>
+  
+    <script>"undefined"!=typeof __md_analytics&&__md_analytics()</script>
+  
+
+    
+    
+  </head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#dfir-eric-zimmerman-tools-sans-ez-tools" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+<header class="md-header" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href="../.." title="DFIR Techniques" class="md-header__button md-logo" aria-label="DFIR Techniques" data-md-component="logo">
+      
+  <img src="../../img/CND_LogoTop.jpg" alt="logo">
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            DFIR Techniques
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              DFIR Eric Zimmerman Tools (SANS EZ Tools)
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+        <form class="md-header__option" data-md-component="palette">
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo"  aria-label="Switch to dark mode"  type="radio" name="__palette" id="__palette_0">
+    
+      <label class="md-header__button md-icon" title="Switch to dark mode" for="__palette_1" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a4 4 0 0 0-4 4 4 4 0 0 0 4 4 4 4 0 0 0 4-4 4 4 0 0 0-4-4m0 10a6 6 0 0 1-6-6 6 6 0 0 1 6-6 6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"/></svg>
+      </label>
+    
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="" data-md-color-scheme="slate" data-md-color-primary="indigo" data-md-color-accent="indigo"  aria-label="Switch to light mode"  type="radio" name="__palette" id="__palette_1">
+    
+      <label class="md-header__button md-icon" title="Switch to light mode" for="__palette_0" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 18c-.89 0-1.74-.2-2.5-.55C11.56 16.5 13 14.42 13 12s-1.44-4.5-3.5-5.45C10.26 6.2 11.11 6 12 6a6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"/></svg>
+      </label>
+    
+  
+</form>
+      
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+          <a href="javascript:void(0)" class="md-search__icon md-icon" title="Share" aria-label="Share" data-clipboard data-clipboard-text="" data-md-component="search-share" tabindex="-1">
+            
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M18 16.08c-.76 0-1.44.3-1.96.77L8.91 12.7c.05-.23.09-.46.09-.7s-.04-.47-.09-.7l7.05-4.11c.54.5 1.25.81 2.04.81a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3c0 .24.04.47.09.7L8.04 9.81C7.5 9.31 6.79 9 6 9a3 3 0 0 0-3 3 3 3 0 0 0 3 3c.79 0 1.5-.31 2.04-.81l7.12 4.15c-.05.21-.08.43-.08.66 0 1.61 1.31 2.91 2.92 2.91s2.92-1.3 2.92-2.91A2.92 2.92 0 0 0 18 16.08"/></svg>
+          </a>
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+        <div class="md-search__suggest" data-md-component="search-suggest"></div>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+      <div class="md-header__source">
+        <a href="https://github.com/jrjones9440/DFIR-Techniques" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M439.6 236.1 244 40.5c-5.4-5.5-12.8-8.5-20.4-8.5s-15 3-20.4 8.4L162.5 81l51.5 51.5c27.1-9.1 52.7 16.8 43.4 43.7l49.7 49.7c34.2-11.8 61.2 31 35.5 56.7-26.5 26.5-70.2-2.9-56-37.3L240.3 199v121.9c25.3 12.5 22.3 41.8 9.1 55-6.4 6.4-15.2 10.1-24.3 10.1s-17.8-3.6-24.3-10.1c-17.6-17.6-11.1-46.9 11.2-56v-123c-20.8-8.5-24.6-30.7-18.6-45L142.6 101 8.5 235.1C3 240.6 0 247.9 0 255.5s3 15 8.5 20.4l195.6 195.7c5.4 5.4 12.7 8.4 20.4 8.4s15-3 20.4-8.4l194.7-194.7c5.4-5.4 8.4-12.8 8.4-20.4s-3-15-8.4-20.4"/></svg>
+  </div>
+  <div class="md-source__repository">
+    GitHub
+  </div>
+</a>
+      </div>
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+            
+<nav class="md-tabs" aria-label="Tabs" data-md-component="tabs">
+  <div class="md-grid">
+    <ul class="md-tabs__list">
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../.." class="md-tabs__link">
+        
+  
+  
+    
+  
+  Home
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../../1.Windows/" class="md-tabs__link">
+          
+  
+  
+    
+  
+  Windows
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../../Linux/" class="md-tabs__link">
+          
+  
+  
+    
+  
+  Linux
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../../Networking/" class="md-tabs__link">
+          
+  
+  
+    
+  
+  Networking
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../../Cloud/" class="md-tabs__link">
+          
+  
+  
+    
+  
+  Cloud
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../../Malware/" class="md-tabs__link">
+          
+  
+  
+    
+  
+  Malware
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../../ICS/" class="md-tabs__link">
+          
+  
+  
+    
+  
+  ICS
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../" class="md-tabs__link">
+          
+  
+  
+    
+  
+  Tools
+
+        </a>
+      </li>
+    
+  
+
+      
+    </ul>
+  </div>
+</nav>
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+  
+
+
+<nav class="md-nav md-nav--primary md-nav--lifted" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../.." title="DFIR Techniques" class="md-nav__button md-logo" aria-label="DFIR Techniques" data-md-component="logo">
+      
+  <img src="../../img/CND_LogoTop.jpg" alt="logo">
+
+    </a>
+    DFIR Techniques
+  </label>
+  
+    <div class="md-nav__source">
+      <a href="https://github.com/jrjones9440/DFIR-Techniques" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M439.6 236.1 244 40.5c-5.4-5.5-12.8-8.5-20.4-8.5s-15 3-20.4 8.4L162.5 81l51.5 51.5c27.1-9.1 52.7 16.8 43.4 43.7l49.7 49.7c34.2-11.8 61.2 31 35.5 56.7-26.5 26.5-70.2-2.9-56-37.3L240.3 199v121.9c25.3 12.5 22.3 41.8 9.1 55-6.4 6.4-15.2 10.1-24.3 10.1s-17.8-3.6-24.3-10.1c-17.6-17.6-11.1-46.9 11.2-56v-123c-20.8-8.5-24.6-30.7-18.6-45L142.6 101 8.5 235.1C3 240.6 0 247.9 0 255.5s3 15 8.5 20.4l195.6 195.7c5.4 5.4 12.7 8.4 20.4 8.4s15-3 20.4-8.4l194.7-194.7c5.4-5.4 8.4-12.8 8.4-20.4s-3-15-8.4-20.4"/></svg>
+  </div>
+  <div class="md-source__repository">
+    GitHub
+  </div>
+</a>
+    </div>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../.." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Home
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2" >
+        
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../../1.Windows/" class="md-nav__link ">
+              
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Windows
+  
+
+    
+  </span>
+  
+  
+
+            </a>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Windows
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3" >
+        
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../../Linux/" class="md-nav__link ">
+              
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Linux
+  
+
+    
+  </span>
+  
+  
+
+            </a>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Linux
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4" >
+        
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../../Networking/" class="md-nav__link ">
+              
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Networking
+  
+
+    
+  </span>
+  
+  
+
+            </a>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_4_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_4">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Networking
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_5" >
+        
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../../Cloud/" class="md-nav__link ">
+              
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Cloud
+  
+
+    
+  </span>
+  
+  
+
+            </a>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_5_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_5">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Cloud
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_6" >
+        
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../../Malware/" class="md-nav__link ">
+              
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Malware
+  
+
+    
+  </span>
+  
+  
+
+            </a>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_6_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_6">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Malware
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_7" >
+        
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../../ICS/" class="md-nav__link ">
+              
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    ICS
+  
+
+    
+  </span>
+  
+  
+
+            </a>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_7_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_7">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    ICS
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_8" >
+        
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../" class="md-nav__link ">
+              
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Tools
+  
+
+    
+  </span>
+  
+  
+
+            </a>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_8_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_8">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Tools
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#common-ez-tools-cli-conventions" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Common EZ Tools CLI Conventions
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Common EZ Tools CLI Conventions">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#common-input-options" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Common input options
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#common-output-options" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Common output options
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#time-format-verbosity" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Time format + verbosity
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#volume-shadow-copy-processing" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Volume Shadow Copy processing
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#vscmount-volume-shadow-copy-mounter" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        VSCMount — Volume Shadow Copy Mounter
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="VSCMount — Volume Shadow Copy Mounter">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#what-it-is" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        What it is
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#artifact-type" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Artifact type
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#basic-usage" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Basic usage
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#advanced-usage" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Advanced usage
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#what-to-look-for" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        What to look for
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#sqlecmd-sqlite-parser" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        SQLECmd — SQLite Parser
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="SQLECmd — SQLite Parser">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#what-it-is_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        What it is
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#artifact-type_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Artifact type
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#basic-usage_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Basic usage
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#key-output" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Key output
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#advanced-notes" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Advanced notes
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#sumecmd-user-access-log-parser-windows-server" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        SumECmd — User Access Log Parser (Windows Server)
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="SumECmd — User Access Log Parser (Windows Server)">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#what-it-is_2" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        What it is
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#artifact-type_2" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Artifact type
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#inputs" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Inputs
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#pre-processing-required" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Pre-processing (REQUIRED)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#basic-usage_2" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Basic usage
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#key-output_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Key output
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#hunt-tip" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Hunt tip
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#bstrings-extract-text-from-binary-files" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        bstrings — Extract Text From Binary Files
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="bstrings — Extract Text From Binary Files">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#what-it-is_3" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        What it is
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#artifact-type_3" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Artifact type
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#basic-usage_3" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Basic usage
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#useful-switches" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Useful switches
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#regex-hunting" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Regex hunting
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#evtx-note-important" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        EVTX note (important)
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#appcompatcacheparser-shimcache-parser" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        AppCompatCacheParser — ShimCache Parser
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="AppCompatCacheParser — ShimCache Parser">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#what-it-is_4" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        What it is
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#artifact-type_4" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Artifact type
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#basic-usage_4" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Basic usage
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#key-output-fields" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Key output fields
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#investigation-tip" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Investigation tip
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#rbcmd-recycle-bin-artifact-parser" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        RBCmd — Recycle Bin Artifact Parser
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="RBCmd — Recycle Bin Artifact Parser">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#what-it-is_5" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        What it is
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#artifact-type_5" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Artifact type
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#basic-usage_5" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Basic usage
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#pro-tip" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Pro tip
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#jlecmd-jump-list-explorer-cli" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        JLECmd — Jump List Explorer (CLI)
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="JLECmd — Jump List Explorer (CLI)">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#what-it-is_6" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        What it is
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#artifact-type_6" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Artifact type
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#basic-usage_6" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Basic usage
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#advanced-hunting-poster-tip" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Advanced hunting (poster tip)
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#srumecmd-srum-parser" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        SRUMECmd — SRUM Parser
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="SRUMECmd — SRUM Parser">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#what-it-is_7" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        What it is
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#artifact-type_7" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Artifact type
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#required-repair-step" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Required repair step
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#basic-usage_7" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Basic usage
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#key-output_2" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Key output
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#reporting-tip" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Reporting tip
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#wxtcmd-timeline-explorer" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        WxTCmd — Timeline Explorer
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="WxTCmd — Timeline Explorer">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#what-it-is_8" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        What it is
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#artifact-type_8" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Artifact type
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#basic-usage_8" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Basic usage
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#key-fields" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Key fields
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#advanced-tip" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Advanced tip
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#lecmd-lnk-file-explorer" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        LECmd — LNK File Explorer
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="LECmd — LNK File Explorer">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#what-it-is_9" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        What it is
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#artifact-type_9" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Artifact type
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#basic-usage_9" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Basic usage
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#forensic-interpretations-poster-highlights" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Forensic interpretations (poster highlights)
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#amcacheparser-amcache-parser" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        AmcacheParser — Amcache Parser
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="AmcacheParser — Amcache Parser">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#what-it-is_10" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        What it is
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#artifact-type_10" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Artifact type
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#basic-usage_10" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Basic usage
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#key-output-fields_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Key output fields
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#advanced-usage-blacklistwhitelist-by-hash" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Advanced usage: blacklist/whitelist by hash
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#mftecmd-mft-explorer" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        MFTECmd — MFT Explorer
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="MFTECmd — MFT Explorer">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#what-it-is_11" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        What it is
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#artifact-type_11" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Artifact type
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#basic-usage_11" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Basic usage
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#vss-processing" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        VSS processing
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#key-interpretations" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Key interpretations
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#recmd-registry-explorer-cli" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        RECmd — Registry Explorer (CLI)
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="RECmd — Registry Explorer (CLI)">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#what-it-is_12" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        What it is
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#artifact-type_12" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Artifact type
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#search-examples" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Search examples
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#search-notes-poster" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Search notes (poster)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#batch-mode-reb" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Batch mode (REB)
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#quick-start-standardized-output-folder-layout" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Quick Start: Standardized Output Folder Layout
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+  
+    <a href="https://github.com/jrjones9440/DFIR-Techniques/edit/master/docs/Tools/DFIR_Command_Line_Tools.md" title="Edit this page" class="md-content__button md-icon" rel="edit">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M10 20H6V4h7v5h5v3.1l2-2V8l-6-6H6c-1.1 0-2 .9-2 2v16c0 1.1.9 2 2 2h4zm10.2-7c.1 0 .3.1.4.2l1.3 1.3c.2.2.2.6 0 .8l-1 1-2.1-2.1 1-1c.1-.1.2-.2.4-.2m0 3.9L14.1 23H12v-2.1l6.1-6.1z"/></svg>
+    </a>
+  
+  
+    
+      
+    
+    <a href="https://github.com/jrjones9440/DFIR-Techniques/raw/master/docs/Tools/DFIR_Command_Line_Tools.md" title="View source of this page" class="md-content__button md-icon">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M17 18c.56 0 1 .44 1 1s-.44 1-1 1-1-.44-1-1 .44-1 1-1m0-3c-2.73 0-5.06 1.66-6 4 .94 2.34 3.27 4 6 4s5.06-1.66 6-4c-.94-2.34-3.27-4-6-4m0 6.5a2.5 2.5 0 0 1-2.5-2.5 2.5 2.5 0 0 1 2.5-2.5 2.5 2.5 0 0 1 2.5 2.5 2.5 2.5 0 0 1-2.5 2.5M9.27 20H6V4h7v5h5v4.07c.7.08 1.36.25 2 .49V8l-6-6H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h4.5a8.2 8.2 0 0 1-1.23-2"/></svg>
+    </a>
+  
+
+
+<h1 id="dfir-eric-zimmerman-tools-sans-ez-tools">DFIR Eric Zimmerman Tools (SANS EZ Tools)<a class="headerlink" href="#dfir-eric-zimmerman-tools-sans-ez-tools" title="Permanent link">&para;</a></h1>
+<blockquote>
+<p><strong>Purpose:</strong> This page documents the <strong>common DFIR command-line tools</strong> highlighted in the <strong>SANS “Forensics the EZ Way – Results in Seconds at the Command Line” poster</strong>, including what each tool is for, what artifacts it processes, and copy/paste-ready usage examples. <br />
+Recommended use: bake these into <strong>repeatable triage scripts</strong> and standardize output formats (CSV/JSON/HTML) across investigations. </p>
+</blockquote>
+<hr />
+<h2 id="common-ez-tools-cli-conventions">Common EZ Tools CLI Conventions<a class="headerlink" href="#common-ez-tools-cli-conventions" title="Permanent link">&para;</a></h2>
+<p>The poster highlights common switches shared across many EZ tools: </p>
+<h3 id="common-input-options">Common input options<a class="headerlink" href="#common-input-options" title="Permanent link">&para;</a></h3>
+<ul>
+<li><code>-d</code> : directory to process</li>
+<li><code>-f</code> : file to process</li>
+<li><code>-q</code> : quiet mode</li>
+</ul>
+<h3 id="common-output-options">Common output options<a class="headerlink" href="#common-output-options" title="Permanent link">&para;</a></h3>
+<ul>
+<li><code>--csv &lt;dir&gt;</code> : export CSV</li>
+<li><code>--json &lt;dir&gt;</code> : export JSON</li>
+<li><code>--html &lt;dir&gt;</code> : export HTML</li>
+<li>Multiple export formats can be specified at once (ex: <code>--csv ... --json ...</code>). </li>
+</ul>
+<h3 id="time-format-verbosity">Time format + verbosity<a class="headerlink" href="#time-format-verbosity" title="Permanent link">&para;</a></h3>
+<ul>
+<li><code>--dt &lt;format&gt;</code> : custom date/time format</li>
+<li><code>--debug</code> : debug output</li>
+<li><code>--trace</code> : trace output (usually with <code>--debug</code>)</li>
+<li><code>--sync</code> : sync updates from GitHub (ex: KAPE targets/modules updates; evtxecmd map updates). </li>
+</ul>
+<h3 id="volume-shadow-copy-processing">Volume Shadow Copy processing<a class="headerlink" href="#volume-shadow-copy-processing" title="Permanent link">&para;</a></h3>
+<ul>
+<li><code>--vss</code> : process Volume Shadow Copies<br />
+  Supported in <strong>EvtxECmd, MFTECmd, PECmd, and RECmd</strong>. </li>
+</ul>
+<hr />
+<h2 id="vscmount-volume-shadow-copy-mounter">VSCMount — Volume Shadow Copy Mounter<a class="headerlink" href="#vscmount-volume-shadow-copy-mounter" title="Permanent link">&para;</a></h2>
+<h3 id="what-it-is">What it is<a class="headerlink" href="#what-it-is" title="Permanent link">&para;</a></h3>
+<p><strong>VSCMount</strong> mounts each <strong>Volume Shadow Copy</strong> from a mounted evidence disk to a folder so you can browse historical versions of the filesystem and recover deleted/older files. </p>
+<h3 id="artifact-type">Artifact type<a class="headerlink" href="#artifact-type" title="Permanent link">&para;</a></h3>
+<ul>
+<li>Volume Shadow Copies (VSS)</li>
+</ul>
+<h3 id="basic-usage">Basic usage<a class="headerlink" href="#basic-usage" title="Permanent link">&para;</a></h3>
+<blockquote>
+<p>Evidence must be mounted as a physical drive first (example uses drive <code>E:</code>). </p>
+</blockquote>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="p">.\</span><span class="n">VSCMount</span><span class="p">.</span><span class="n">exe</span> <span class="p">-</span><span class="n">-dl</span> <span class="n">E</span> <span class="p">-</span><span class="n">-mp</span> <span class="n">C</span><span class="p">:\</span><span class="n">VSCs</span>
+</code></pre></div>
+<h3 id="advanced-usage">Advanced usage<a class="headerlink" href="#advanced-usage" title="Permanent link">&para;</a></h3>
+<p>Add creation date to each mapped VSC folder (<code>--ud</code>). </p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a><span class="p">.\</span><span class="n">VSCMount</span><span class="p">.</span><span class="n">exe</span> <span class="p">-</span><span class="n">-dl</span> <span class="n">E</span> <span class="p">-</span><span class="n">-mp</span> <span class="n">C</span><span class="p">:\</span><span class="n">VSCs</span> <span class="p">-</span><span class="n">-ud</span>
+</code></pre></div>
+<h3 id="what-to-look-for">What to look for<a class="headerlink" href="#what-to-look-for" title="Permanent link">&para;</a></h3>
+<ul>
+<li>Prior versions of:</li>
+<li>registry hives</li>
+<li>event logs</li>
+<li>malware that was deleted/wiped</li>
+<li>renamed payloads</li>
+<li>Compare attacker-modified timestamps against older copies for tampering.</li>
+</ul>
+<hr />
+<h2 id="sqlecmd-sqlite-parser">SQLECmd — SQLite Parser<a class="headerlink" href="#sqlecmd-sqlite-parser" title="Permanent link">&para;</a></h2>
+<h3 id="what-it-is_1">What it is<a class="headerlink" href="#what-it-is_1" title="Permanent link">&para;</a></h3>
+<p>Parses <strong>SQLite databases</strong> using schema-specific <strong>map files</strong> (e.g., Chrome History). </p>
+<h3 id="artifact-type_1">Artifact type<a class="headerlink" href="#artifact-type_1" title="Permanent link">&para;</a></h3>
+<ul>
+<li>SQLite DBs (browsers, cloud tools, chat apps, phone backups, etc.) </li>
+</ul>
+<h3 id="basic-usage_1">Basic usage<a class="headerlink" href="#basic-usage_1" title="Permanent link">&para;</a></h3>
+<p>Single DB:
+<div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a><span class="n">SQLECmd</span><span class="p">.</span><span class="n">exe</span> <span class="o">-f</span> <span class="n">G</span><span class="p">:\</span><span class="n">databases</span><span class="p">\</span><span class="n">database</span><span class="p">.</span><span class="n">db</span> <span class="p">-</span><span class="n">-csv</span> <span class="n">G</span><span class="p">:\</span><span class="n">SQLECmd_output</span>
+</code></pre></div></p>
+<p>Folder of DBs:
+<div class="highlight"><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a><span class="n">SQLECmd</span><span class="p">.</span><span class="n">exe</span> <span class="n">-d</span> <span class="n">G</span><span class="p">:\</span><span class="n">databases</span><span class="p">\</span> <span class="p">-</span><span class="n">-csv</span> <span class="n">G</span><span class="p">:\</span><span class="n">SQLECmd_output</span>
+</code></pre></div></p>
+<h3 id="key-output">Key output<a class="headerlink" href="#key-output" title="Permanent link">&para;</a></h3>
+<ul>
+<li>Multiple CSVs depending on DB schema (for Chrome History: history, downloads, keyword searches, etc.). </li>
+</ul>
+<h3 id="advanced-notes">Advanced notes<a class="headerlink" href="#advanced-notes" title="Permanent link">&para;</a></h3>
+<ul>
+<li>SQLECmd only parses schemas that have map files; custom maps can be made by adding SQL queries. </li>
+</ul>
+<hr />
+<h2 id="sumecmd-user-access-log-parser-windows-server">SumECmd — User Access Log Parser (Windows Server)<a class="headerlink" href="#sumecmd-user-access-log-parser-windows-server" title="Permanent link">&para;</a></h2>
+<h3 id="what-it-is_2">What it is<a class="headerlink" href="#what-it-is_2" title="Permanent link">&para;</a></h3>
+<p>Parses <strong>User Access Logs</strong> from Windows Servers (tracks user requests, connections, usernames, client IPs; useful for lateral movement). </p>
+<h3 id="artifact-type_2">Artifact type<a class="headerlink" href="#artifact-type_2" title="Permanent link">&para;</a></h3>
+<ul>
+<li>User Access Logging databases (SUM) on Windows Server </li>
+</ul>
+<h3 id="inputs">Inputs<a class="headerlink" href="#inputs" title="Permanent link">&para;</a></h3>
+<ul>
+<li><code>C:\Windows\System32\LogFiles\SUM</code></li>
+</ul>
+<h3 id="pre-processing-required">Pre-processing (REQUIRED)<a class="headerlink" href="#pre-processing-required" title="Permanent link">&para;</a></h3>
+<p>Poster recommends repairing the copied SUM ESE databases before parsing:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a><span class="n">esentutl</span><span class="p">.</span><span class="n">exe</span> <span class="p">/</span><span class="nb">r </span><span class="n">svc</span> <span class="p">/</span><span class="n">i</span> <span class="p">/</span><span class="n">o</span>
+<a id="__codelineno-4-2" name="__codelineno-4-2" href="#__codelineno-4-2"></a><span class="n">esentutl</span><span class="p">.</span><span class="n">exe</span> <span class="p">/</span><span class="n">p</span> <span class="n">Current</span><span class="p">.</span><span class="n">mdb</span>
+<a id="__codelineno-4-3" name="__codelineno-4-3" href="#__codelineno-4-3"></a><span class="n">esentutl</span><span class="p">.</span><span class="n">exe</span> <span class="p">/</span><span class="n">p</span> <span class="n">SystemIdentity</span><span class="p">.</span><span class="n">mdb</span>
+<a id="__codelineno-4-4" name="__codelineno-4-4" href="#__codelineno-4-4"></a><span class="n">esentutl</span><span class="p">.</span><span class="n">exe</span> <span class="p">/</span><span class="n">p</span> <span class="p">&lt;</span><span class="n">GUID</span><span class="p">&gt;.</span><span class="n">mdb</span>
+</code></pre></div>
+<h3 id="basic-usage_2">Basic usage<a class="headerlink" href="#basic-usage_2" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a><span class="n">SumECmd</span><span class="p">.</span><span class="n">exe</span> <span class="n">-d</span> <span class="n">G</span><span class="p">:\</span><span class="n">sum_fixed</span><span class="p">\</span> <span class="p">-</span><span class="n">-csv</span> <span class="n">G</span><span class="p">:\</span><span class="n">sum_output</span>
+</code></pre></div>
+<h3 id="key-output_1">Key output<a class="headerlink" href="#key-output_1" title="Permanent link">&para;</a></h3>
+<ul>
+<li><code>ClientDetail</code> (dates/times, role/service accessed, domain, username, source IP). </li>
+</ul>
+<h3 id="hunt-tip">Hunt tip<a class="headerlink" href="#hunt-tip" title="Permanent link">&para;</a></h3>
+<ul>
+<li>Look for domains/users/IPs not part of the org (anomalous access). </li>
+</ul>
+<hr />
+<h2 id="bstrings-extract-text-from-binary-files">bstrings — Extract Text From Binary Files<a class="headerlink" href="#bstrings-extract-text-from-binary-files" title="Permanent link">&para;</a></h2>
+<h3 id="what-it-is_3">What it is<a class="headerlink" href="#what-it-is_3" title="Permanent link">&para;</a></h3>
+<p>Searches <em>any file type</em> for interesting strings (including Unicode and selected ANSI code pages). </p>
+<h3 id="artifact-type_3">Artifact type<a class="headerlink" href="#artifact-type_3" title="Permanent link">&para;</a></h3>
+<ul>
+<li>Any binary file, including EVTX, EXE, DLL, memory dumps, etc.</li>
+</ul>
+<h3 id="basic-usage_3">Basic usage<a class="headerlink" href="#basic-usage_3" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a><span class="n">bstrings</span><span class="p">.</span><span class="n">exe</span> <span class="o">-f</span> <span class="p">&lt;</span><span class="n">file</span><span class="p">&gt;</span>
+</code></pre></div>
+<p>Search for a string:
+<div class="highlight"><pre><span></span><code><a id="__codelineno-7-1" name="__codelineno-7-1" href="#__codelineno-7-1"></a><span class="n">bstrings</span><span class="p">.</span><span class="n">exe</span> <span class="o">-f</span> <span class="p">&lt;</span><span class="n">file</span><span class="p">&gt;</span> <span class="p">-</span><span class="n">-ls</span> <span class="s2">&quot;password&quot;</span>
+</code></pre></div></p>
+<h3 id="useful-switches">Useful switches<a class="headerlink" href="#useful-switches" title="Permanent link">&para;</a></h3>
+<ul>
+<li><code>-x</code> / <code>-m</code> : set maximum/minimum string lengths</li>
+<li><code>--off</code> : show offset for each hit </li>
+</ul>
+<h3 id="regex-hunting">Regex hunting<a class="headerlink" href="#regex-hunting" title="Permanent link">&para;</a></h3>
+<p>List built-in regex patterns:
+<div class="highlight"><pre><span></span><code><a id="__codelineno-8-1" name="__codelineno-8-1" href="#__codelineno-8-1"></a><span class="n">bstrings</span><span class="p">.</span><span class="n">exe</span> <span class="n">-p</span>
+</code></pre></div></p>
+<p>Use a built-in regex (example: email):
+<div class="highlight"><pre><span></span><code><a id="__codelineno-9-1" name="__codelineno-9-1" href="#__codelineno-9-1"></a><span class="n">bstrings</span><span class="p">.</span><span class="n">exe</span> <span class="o">-f</span> <span class="n">suspect</span><span class="p">.</span><span class="n">exe</span> <span class="p">-</span><span class="n">-lr</span> <span class="n">email</span>
+</code></pre></div></p>
+<p>Multiple regexes from a file:
+<div class="highlight"><pre><span></span><code><a id="__codelineno-10-1" name="__codelineno-10-1" href="#__codelineno-10-1"></a><span class="n">bstrings</span><span class="p">.</span><span class="n">exe</span> <span class="o">-f</span> <span class="n">suspect</span><span class="p">.</span><span class="n">exe</span> <span class="n">-fr</span> <span class="n">DFIR_RegExs</span><span class="p">.</span><span class="n">txt</span>
+</code></pre></div></p>
+<h3 id="evtx-note-important">EVTX note (important)<a class="headerlink" href="#evtx-note-important" title="Permanent link">&para;</a></h3>
+<p>Windows Event Logs require code page <strong>1201</strong> to find strings: </p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-11-1" name="__codelineno-11-1" href="#__codelineno-11-1"></a><span class="n">bstrings</span><span class="p">.</span><span class="n">exe</span> <span class="o">-f</span> <span class="n">Powershell</span><span class="p">.</span><span class="n">evtx</span> <span class="p">-</span><span class="n">-ls</span> <span class="n">download</span> <span class="p">-</span><span class="n">-cp</span> <span class="n">1201</span>
+</code></pre></div>
+<hr />
+<h2 id="appcompatcacheparser-shimcache-parser">AppCompatCacheParser — ShimCache Parser<a class="headerlink" href="#appcompatcacheparser-shimcache-parser" title="Permanent link">&para;</a></h2>
+<h3 id="what-it-is_4">What it is<a class="headerlink" href="#what-it-is_4" title="Permanent link">&para;</a></h3>
+<p>Parses <strong>Application Compatibility Cache</strong> (ShimCache) from a SYSTEM hive. </p>
+<h3 id="artifact-type_4">Artifact type<a class="headerlink" href="#artifact-type_4" title="Permanent link">&para;</a></h3>
+<ul>
+<li>AppCompatCache / ShimCache (registry-derived execution-ish evidence)</li>
+</ul>
+<h3 id="basic-usage_4">Basic usage<a class="headerlink" href="#basic-usage_4" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-12-1" name="__codelineno-12-1" href="#__codelineno-12-1"></a><span class="n">AppCompatCacheParser</span><span class="p">.</span><span class="n">exe</span> <span class="o">-f</span> <span class="n">E</span><span class="p">:\</span><span class="n">Windows</span><span class="p">\</span><span class="n">System32</span><span class="p">\</span><span class="n">config</span><span class="p">\</span><span class="n">SYSTEM</span> <span class="p">-</span><span class="n">-csv</span> <span class="n">G</span><span class="p">:\</span><span class="n">AppCompatCache</span>
+</code></pre></div>
+<h3 id="key-output-fields">Key output fields<a class="headerlink" href="#key-output-fields" title="Permanent link">&para;</a></h3>
+<ul>
+<li><code>Path</code></li>
+<li><code>LastModifiedTimeUTC</code> (file last modified; <strong>NOT execution time</strong>)</li>
+<li><code>Executed</code> (flag/indicator) </li>
+</ul>
+<h3 id="investigation-tip">Investigation tip<a class="headerlink" href="#investigation-tip" title="Permanent link">&para;</a></h3>
+<ul>
+<li>Watch <code>Path</code> prefix (e.g., <code>SYSVOL\...</code> indicates OS volume). </li>
+</ul>
+<hr />
+<h2 id="rbcmd-recycle-bin-artifact-parser">RBCmd — Recycle Bin Artifact Parser<a class="headerlink" href="#rbcmd-recycle-bin-artifact-parser" title="Permanent link">&para;</a></h2>
+<h3 id="what-it-is_5">What it is<a class="headerlink" href="#what-it-is_5" title="Permanent link">&para;</a></h3>
+<p>Parses <code>$I</code> files in Recycle Bin to identify original path/name and deletion timestamps. </p>
+<h3 id="artifact-type_5">Artifact type<a class="headerlink" href="#artifact-type_5" title="Permanent link">&para;</a></h3>
+<ul>
+<li>Recycle Bin <code>$I</code> metadata files</li>
+</ul>
+<h3 id="basic-usage_5">Basic usage<a class="headerlink" href="#basic-usage_5" title="Permanent link">&para;</a></h3>
+<p>Single <code>$I</code> file:
+<div class="highlight"><pre><span></span><code><a id="__codelineno-13-1" name="__codelineno-13-1" href="#__codelineno-13-1"></a><span class="n">RBCmd</span><span class="p">.</span><span class="n">exe</span> <span class="o">-f</span> <span class="n">E</span><span class="p">:\</span><span class="nv">$Recycle</span><span class="p">.</span><span class="n">Bin</span><span class="p">\&lt;</span><span class="n">SID</span><span class="p">&gt;\</span><span class="nv">$I7YQ28P</span><span class="p">.</span><span class="n">jpg</span>
+</code></pre></div></p>
+<p>Folder mode:
+<div class="highlight"><pre><span></span><code><a id="__codelineno-14-1" name="__codelineno-14-1" href="#__codelineno-14-1"></a><span class="n">RBCmd</span><span class="p">.</span><span class="n">exe</span> <span class="n">-d</span> <span class="n">F</span><span class="p">:\</span><span class="nv">$Recycle</span><span class="p">.</span><span class="n">Bin</span><span class="p">\&lt;</span><span class="n">SID</span><span class="p">&gt;</span> <span class="p">-</span><span class="n">-csv</span> <span class="n">G</span><span class="p">:\</span><span class="n">RBFiles</span> <span class="n">-q</span>
+</code></pre></div></p>
+<h3 id="pro-tip">Pro tip<a class="headerlink" href="#pro-tip" title="Permanent link">&para;</a></h3>
+<p>On mounted drives Windows may not expose deleted files; recover <code>$I</code> files first, then parse. </p>
+<hr />
+<h2 id="jlecmd-jump-list-explorer-cli">JLECmd — Jump List Explorer (CLI)<a class="headerlink" href="#jlecmd-jump-list-explorer-cli" title="Permanent link">&para;</a></h2>
+<h3 id="what-it-is_6">What it is<a class="headerlink" href="#what-it-is_6" title="Permanent link">&para;</a></h3>
+<p>Parses Windows <strong>Jump Lists</strong> (AutoDestinations) for evidence of file knowledge and execution context. </p>
+<h3 id="artifact-type_6">Artifact type<a class="headerlink" href="#artifact-type_6" title="Permanent link">&para;</a></h3>
+<ul>
+<li>Jump Lists (AutomaticDestinations)</li>
+</ul>
+<h3 id="basic-usage_6">Basic usage<a class="headerlink" href="#basic-usage_6" title="Permanent link">&para;</a></h3>
+<p>Single Jump List:
+<div class="highlight"><pre><span></span><code><a id="__codelineno-15-1" name="__codelineno-15-1" href="#__codelineno-15-1"></a><span class="n">JLECmd</span><span class="p">.</span><span class="n">exe</span> <span class="o">-f</span> <span class="n">E</span><span class="p">:\</span><span class="n">Users</span><span class="p">\</span><span class="n">Donald</span><span class="p">\</span><span class="n">AppData</span><span class="p">\</span><span class="n">Microsoft</span><span class="p">\</span><span class="n">Windows</span><span class="p">\</span><span class="n">Recent</span><span class="p">\</span><span class="n">AutomaticDestinations</span><span class="p">\&lt;</span><span class="n">appid</span><span class="p">&gt;.</span><span class="n">automaticDestinations-ms</span> <span class="p">-</span><span class="n">-csv</span> <span class="n">G</span><span class="p">:\</span><span class="n">Jumplists</span> <span class="n">-q</span>
+</code></pre></div></p>
+<p>Folder mode:
+<div class="highlight"><pre><span></span><code><a id="__codelineno-16-1" name="__codelineno-16-1" href="#__codelineno-16-1"></a><span class="n">JLECmd</span><span class="p">.</span><span class="n">exe</span> <span class="n">-d</span> <span class="n">E</span><span class="p">:\</span><span class="n">Users</span><span class="p">\</span><span class="n">Donald</span><span class="p">\</span><span class="n">AppData</span><span class="p">\</span><span class="n">Microsoft</span><span class="p">\</span><span class="n">Windows</span><span class="p">\</span><span class="n">Recent</span><span class="p">\</span><span class="n">AutomaticDestinations</span> <span class="p">-</span><span class="n">-csv</span> <span class="n">G</span><span class="p">:\</span><span class="n">Jumplists</span> <span class="n">-q</span>
+</code></pre></div></p>
+<h3 id="advanced-hunting-poster-tip">Advanced hunting (poster tip)<a class="headerlink" href="#advanced-hunting-poster-tip" title="Permanent link">&para;</a></h3>
+<p>Look for changes in:
+- <code>DriveType</code>
+- <code>VolumeSerialNumber</code>
+- <code>VolumeLabel</code><br />
+These indicate files opened from external devices. </p>
+<hr />
+<h2 id="srumecmd-srum-parser">SRUMECmd — SRUM Parser<a class="headerlink" href="#srumecmd-srum-parser" title="Permanent link">&para;</a></h2>
+<h3 id="what-it-is_7">What it is<a class="headerlink" href="#what-it-is_7" title="Permanent link">&para;</a></h3>
+<p>Parses SRUM to understand app usage, network usage, power usage, and wireless network context. </p>
+<h3 id="artifact-type_7">Artifact type<a class="headerlink" href="#artifact-type_7" title="Permanent link">&para;</a></h3>
+<ul>
+<li><code>SRUDB.dat</code> (ESE database) + SOFTWARE hive</li>
+</ul>
+<h3 id="required-repair-step">Required repair step<a class="headerlink" href="#required-repair-step" title="Permanent link">&para;</a></h3>
+<p>Poster recommends repairing SRUDB after copying the folder: </p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-17-1" name="__codelineno-17-1" href="#__codelineno-17-1"></a><span class="n">esentutl</span><span class="p">.</span><span class="n">exe</span> <span class="p">/</span><span class="nb">r </span><span class="n">sru</span> <span class="p">/</span><span class="n">i</span> <span class="p">/</span><span class="n">o</span>
+<a id="__codelineno-17-2" name="__codelineno-17-2" href="#__codelineno-17-2"></a><span class="n">esentutl</span><span class="p">.</span><span class="n">exe</span> <span class="p">/</span><span class="n">p</span> <span class="n">SRUDB</span><span class="p">.</span><span class="n">dat</span> <span class="p">/</span><span class="n">o</span>
+</code></pre></div>
+<h3 id="basic-usage_7">Basic usage<a class="headerlink" href="#basic-usage_7" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-18-1" name="__codelineno-18-1" href="#__codelineno-18-1"></a><span class="n">SRUMECmd</span><span class="p">.</span><span class="n">exe</span> <span class="o">-f</span> <span class="n">G</span><span class="p">:\</span><span class="n">sru_fixed</span><span class="p">\</span><span class="n">SRUDB</span><span class="p">.</span><span class="n">dat</span> <span class="n">-r</span> <span class="n">E</span><span class="p">:\</span><span class="n">Windows</span><span class="p">\</span><span class="n">System32</span><span class="p">\</span><span class="n">config</span><span class="p">\</span><span class="n">SOFTWARE</span> <span class="p">-</span><span class="n">-csv</span> <span class="n">G</span><span class="p">:\</span><span class="n">SRUM_output</span>
+</code></pre></div>
+<h3 id="key-output_2">Key output<a class="headerlink" href="#key-output_2" title="Permanent link">&para;</a></h3>
+<p>Multiple CSVs (application usage, energy, network usage/connectivity). Data is recorded in <strong>30–60 minute segments</strong>. </p>
+<h3 id="reporting-tip">Reporting tip<a class="headerlink" href="#reporting-tip" title="Permanent link">&para;</a></h3>
+<p>Plot bandwidth/application usage over time in Excel for report visuals. </p>
+<hr />
+<h2 id="wxtcmd-timeline-explorer">WxTCmd — Timeline Explorer<a class="headerlink" href="#wxtcmd-timeline-explorer" title="Permanent link">&para;</a></h2>
+<h3 id="what-it-is_8">What it is<a class="headerlink" href="#what-it-is_8" title="Permanent link">&para;</a></h3>
+<p>Parses Windows 10 Timeline (<strong>ActivitiesCache.db</strong>) tracking last ~30 days of apps/files opened by user and synced devices. </p>
+<h3 id="artifact-type_8">Artifact type<a class="headerlink" href="#artifact-type_8" title="Permanent link">&para;</a></h3>
+<ul>
+<li>ActivitiesCache.db (Windows Timeline)</li>
+</ul>
+<h3 id="basic-usage_8">Basic usage<a class="headerlink" href="#basic-usage_8" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-19-1" name="__codelineno-19-1" href="#__codelineno-19-1"></a><span class="n">WxTCmd</span><span class="p">.</span><span class="n">exe</span> <span class="o">-f</span> <span class="n">E</span><span class="p">:\</span><span class="n">Users</span><span class="p">\</span><span class="n">srogers</span><span class="p">\</span><span class="n">AppData</span><span class="p">\</span><span class="n">Local</span><span class="p">\</span><span class="n">ConnectedDevicesPlatform</span><span class="p">\&lt;</span><span class="n">varies</span><span class="p">&gt;\</span><span class="n">ActivitiesCache</span><span class="p">.</span><span class="n">db</span> <span class="p">-</span><span class="n">-csv</span> <span class="n">G</span><span class="p">:\</span><span class="n">WxT_output</span>
+</code></pre></div>
+<h3 id="key-fields">Key fields<a class="headerlink" href="#key-fields" title="Permanent link">&para;</a></h3>
+<ul>
+<li><code>Executable</code> (path)</li>
+<li><code>Display Text</code> (content opened + app)</li>
+<li><code>Content Info</code> (location/resource)</li>
+<li><code>Start Time</code> (first time this activity occurred in last 30 days) </li>
+</ul>
+<h3 id="advanced-tip">Advanced tip<a class="headerlink" href="#advanced-tip" title="Permanent link">&para;</a></h3>
+<p><code>Content Info</code> can include a <strong>Volume GUID</strong>, enabling correlation to a specific device/volume. </p>
+<hr />
+<h2 id="lecmd-lnk-file-explorer">LECmd — LNK File Explorer<a class="headerlink" href="#lecmd-lnk-file-explorer" title="Permanent link">&para;</a></h2>
+<h3 id="what-it-is_9">What it is<a class="headerlink" href="#what-it-is_9" title="Permanent link">&para;</a></h3>
+<p>Parses Windows <strong>shortcut (.lnk)</strong> files (target path, drive type, volume serial/label, timestamps, etc.). </p>
+<h3 id="artifact-type_9">Artifact type<a class="headerlink" href="#artifact-type_9" title="Permanent link">&para;</a></h3>
+<ul>
+<li><code>*.lnk</code> shortcut files</li>
+</ul>
+<h3 id="basic-usage_9">Basic usage<a class="headerlink" href="#basic-usage_9" title="Permanent link">&para;</a></h3>
+<p>Single file:
+<div class="highlight"><pre><span></span><code><a id="__codelineno-20-1" name="__codelineno-20-1" href="#__codelineno-20-1"></a><span class="n">LECmd</span><span class="p">.</span><span class="n">exe</span> <span class="o">-f</span> <span class="n">E</span><span class="p">:\</span><span class="n">Users</span><span class="p">\</span><span class="n">srogers</span><span class="p">\</span><span class="n">AppData</span><span class="p">\</span><span class="n">Microsoft</span><span class="p">\</span><span class="n">Windows</span><span class="p">\</span><span class="n">Recent</span><span class="p">\</span><span class="n">Peggy</span><span class="p">.</span><span class="n">jpg</span><span class="p">.</span><span class="n">lnk</span>
+</code></pre></div></p>
+<p>Folder mode:
+<div class="highlight"><pre><span></span><code><a id="__codelineno-21-1" name="__codelineno-21-1" href="#__codelineno-21-1"></a><span class="n">LECmd</span><span class="p">.</span><span class="n">exe</span> <span class="n">-d</span> <span class="n">E</span><span class="p">:\</span><span class="n">Users</span><span class="p">\</span><span class="n">srogers</span><span class="p">\</span><span class="n">AppData</span><span class="p">\</span><span class="n">Microsoft</span><span class="p">\</span><span class="n">Windows</span><span class="p">\</span><span class="n">Recent</span> <span class="p">-</span><span class="n">-csv</span> <span class="n">G</span><span class="p">:\</span><span class="n">LnkFiles</span> <span class="n">-q</span>
+</code></pre></div></p>
+<h3 id="forensic-interpretations-poster-highlights">Forensic interpretations (poster highlights)<a class="headerlink" href="#forensic-interpretations-poster-highlights" title="Permanent link">&para;</a></h3>
+<ul>
+<li>If <code>TargetModified</code> precedes <code>TargetCreated</code>, file likely copied from another volume.</li>
+<li>Multiple opens may be inferred by differences in source created/modified fields. </li>
+</ul>
+<hr />
+<h2 id="amcacheparser-amcache-parser">AmcacheParser — Amcache Parser<a class="headerlink" href="#amcacheparser-amcache-parser" title="Permanent link">&para;</a></h2>
+<h3 id="what-it-is_10">What it is<a class="headerlink" href="#what-it-is_10" title="Permanent link">&para;</a></h3>
+<p>Parses <code>Amcache.hve</code> hive to identify programs present/run and extract SHA1 hashes. </p>
+<h3 id="artifact-type_10">Artifact type<a class="headerlink" href="#artifact-type_10" title="Permanent link">&para;</a></h3>
+<ul>
+<li><code>Amcache.hve</code></li>
+</ul>
+<h3 id="basic-usage_10">Basic usage<a class="headerlink" href="#basic-usage_10" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-22-1" name="__codelineno-22-1" href="#__codelineno-22-1"></a><span class="n">AmcacheParser</span><span class="p">.</span><span class="n">exe</span> <span class="o">-f</span> <span class="n">E</span><span class="p">:\</span><span class="n">Windows</span><span class="p">\</span><span class="n">AppCompat</span><span class="p">\</span><span class="n">Programs</span><span class="p">\</span><span class="n">Amcache</span><span class="p">.</span><span class="n">hve</span> <span class="p">-</span><span class="n">-csv</span> <span class="n">G</span><span class="p">:\</span><span class="n">Amcache</span>
+</code></pre></div>
+<h3 id="key-output-fields_1">Key output fields<a class="headerlink" href="#key-output-fields_1" title="Permanent link">&para;</a></h3>
+<ul>
+<li><code>FileIDLastWriteTimestamp</code> (first time executable was run)</li>
+<li><code>SHA1</code></li>
+<li><code>FullPath</code></li>
+<li>Volume/MFT identifiers for NTFS correlation </li>
+</ul>
+<h3 id="advanced-usage-blacklistwhitelist-by-hash">Advanced usage: blacklist/whitelist by hash<a class="headerlink" href="#advanced-usage-blacklistwhitelist-by-hash" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-23-1" name="__codelineno-23-1" href="#__codelineno-23-1"></a><span class="n">AmcacheParser</span><span class="p">.</span><span class="n">exe</span> <span class="o">-f</span> <span class="n">E</span><span class="p">:\</span><span class="n">Windows</span><span class="p">\</span><span class="n">AppCompat</span><span class="p">\</span><span class="n">Programs</span><span class="p">\</span><span class="n">Amcache</span><span class="p">.</span><span class="n">hve</span> <span class="n">-b</span> <span class="n">G</span><span class="p">:\</span><span class="n">Blacklist</span><span class="p">.</span><span class="n">txt</span> <span class="p">-</span><span class="n">-csv</span> <span class="n">G</span><span class="p">:\</span><span class="n">Amcache</span>
+</code></pre></div>
+<hr />
+<h2 id="mftecmd-mft-explorer">MFTECmd — MFT Explorer<a class="headerlink" href="#mftecmd-mft-explorer" title="Permanent link">&para;</a></h2>
+<h3 id="what-it-is_11">What it is<a class="headerlink" href="#what-it-is_11" title="Permanent link">&para;</a></h3>
+<p>Parses NTFS internal files:
+- <code>$MFT</code>, <code>$J</code> (USN Journal), <code>$SDS</code>, <code>$LogFile</code>, <code>$Boot</code> </p>
+<h3 id="artifact-type_11">Artifact type<a class="headerlink" href="#artifact-type_11" title="Permanent link">&para;</a></h3>
+<ul>
+<li>NTFS metadata artifacts</li>
+</ul>
+<h3 id="basic-usage_11">Basic usage<a class="headerlink" href="#basic-usage_11" title="Permanent link">&para;</a></h3>
+<p>Exported MFT:
+<div class="highlight"><pre><span></span><code><a id="__codelineno-24-1" name="__codelineno-24-1" href="#__codelineno-24-1"></a><span class="n">MFTECmd</span><span class="p">.</span><span class="n">exe</span> <span class="o">-f</span> <span class="s2">&quot;G:\Exports\$MFT&quot;</span> <span class="p">-</span><span class="n">-csv</span> <span class="n">G</span><span class="p">:\</span><span class="n">MFT_Output</span>
+</code></pre></div></p>
+<p>Directly from mounted evidence:
+<div class="highlight"><pre><span></span><code><a id="__codelineno-25-1" name="__codelineno-25-1" href="#__codelineno-25-1"></a><span class="n">MFTECmd</span><span class="p">.</span><span class="n">exe</span> <span class="o">-f</span> <span class="s2">&quot;E:\$MFT&quot;</span> <span class="p">-</span><span class="n">-csv</span> <span class="n">G</span><span class="p">:\</span><span class="n">MFT_Output</span>
+</code></pre></div></p>
+<p>Alternate data streams for USN + Secure:
+<div class="highlight"><pre><span></span><code><a id="__codelineno-26-1" name="__codelineno-26-1" href="#__codelineno-26-1"></a><span class="n">MFTECmd</span><span class="p">.</span><span class="n">exe</span> <span class="o">-f</span> <span class="s2">&quot;E:\$Extend\$UsnJrnl:$MFT&quot;</span> <span class="p">-</span><span class="n">-csv</span> <span class="n">G</span><span class="p">:\</span><span class="n">USN_Output</span>
+<a id="__codelineno-26-2" name="__codelineno-26-2" href="#__codelineno-26-2"></a><span class="n">MFTECmd</span><span class="p">.</span><span class="n">exe</span> <span class="o">-f</span> <span class="s2">&quot;E:\$Secure:$SDS&quot;</span> <span class="p">-</span><span class="n">-csv</span> <span class="n">G</span><span class="p">:\</span><span class="n">SDS_Output</span>
+</code></pre></div></p>
+<h3 id="vss-processing">VSS processing<a class="headerlink" href="#vss-processing" title="Permanent link">&para;</a></h3>
+<p>Poster highlights MFTECmd can pull older versions via VSS using <code>--vss</code> and avoid duplicates with <code>--dedupe</code>: </p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-27-1" name="__codelineno-27-1" href="#__codelineno-27-1"></a><span class="n">MFTECmd</span><span class="p">.</span><span class="n">exe</span> <span class="o">-f</span> <span class="s2">&quot;E:\$Extend\$UsnJrnl:$J&quot;</span> <span class="p">-</span><span class="n">-csv</span> <span class="n">G</span><span class="p">:\</span><span class="n">MFT_Output</span> <span class="p">-</span><span class="n">-vss</span> <span class="p">-</span><span class="n">-dedupe</span>
+</code></pre></div>
+<h3 id="key-interpretations">Key interpretations<a class="headerlink" href="#key-interpretations" title="Permanent link">&para;</a></h3>
+<ul>
+<li><code>Modified &lt; Created</code> strongly suggests a file was copied from another volume. </li>
+</ul>
+<hr />
+<h2 id="recmd-registry-explorer-cli">RECmd — Registry Explorer (CLI)<a class="headerlink" href="#recmd-registry-explorer-cli" title="Permanent link">&para;</a></h2>
+<h3 id="what-it-is_12">What it is<a class="headerlink" href="#what-it-is_12" title="Permanent link">&para;</a></h3>
+<p>Command-line Registry parsing/search/export at scale (consistent output across many hosts). </p>
+<h3 id="artifact-type_12">Artifact type<a class="headerlink" href="#artifact-type_12" title="Permanent link">&para;</a></h3>
+<ul>
+<li>Registry hives (NTUSER/SAM/SECURITY/SOFTWARE/SYSTEM/USRCLASS/AMCACHE/etc.) </li>
+</ul>
+<h3 id="search-examples">Search examples<a class="headerlink" href="#search-examples" title="Permanent link">&para;</a></h3>
+<p>Search NTUSER key names:
+<div class="highlight"><pre><span></span><code><a id="__codelineno-28-1" name="__codelineno-28-1" href="#__codelineno-28-1"></a><span class="n">RECmd</span><span class="p">.</span><span class="n">exe</span> <span class="o">-f</span> <span class="s2">&quot;C:\Temp\NTUSER.dat&quot;</span> <span class="p">-</span><span class="n">-sk</span> <span class="n">Dropbox</span>
+</code></pre></div></p>
+<p>Search USRCLASS value data:
+<div class="highlight"><pre><span></span><code><a id="__codelineno-29-1" name="__codelineno-29-1" href="#__codelineno-29-1"></a><span class="n">RECmd</span><span class="p">.</span><span class="n">exe</span> <span class="o">-f</span> <span class="s2">&quot;C:\Temp\UsrClass.dat&quot;</span> <span class="p">-</span><span class="n">-sd</span> <span class="n">Dropbox</span>
+</code></pre></div></p>
+<p>Search directory of hives with filters:
+<div class="highlight"><pre><span></span><code><a id="__codelineno-30-1" name="__codelineno-30-1" href="#__codelineno-30-1"></a><span class="n">RECmd</span><span class="p">.</span><span class="n">exe</span> <span class="p">-</span><span class="n">-d</span> <span class="s2">&quot;C:\Temp\registry_files&quot;</span> <span class="p">-</span><span class="n">-sk</span> <span class="s2">&quot;Dropbox&quot;</span> <span class="p">-</span><span class="n">-StartDate</span> <span class="s2">&quot;11/13/2014 15:35:01&quot;</span> <span class="p">-</span><span class="o">-RegEx</span> <span class="p">-</span><span class="n">-sv</span> <span class="s2">&quot;(App|Display)Name&quot;</span> <span class="p">-</span><span class="n">-recover</span> <span class="n">false</span> <span class="p">-</span><span class="n">-nl</span>
+</code></pre></div></p>
+<h3 id="search-notes-poster">Search notes (poster)<a class="headerlink" href="#search-notes-poster" title="Permanent link">&para;</a></h3>
+<ul>
+<li>Start/EndDate filter uses <strong>LastWrite timestamps (UTC)</strong></li>
+<li><code>--minsize</code> can find very large values (often used for malware)</li>
+<li><code>--Base64</code> decodes Base64-encoded registry values</li>
+<li><code>--recover true</code> retrieves deleted keys/values (when supported) </li>
+</ul>
+<p>Example large/base64 hunting:
+<div class="highlight"><pre><span></span><code><a id="__codelineno-31-1" name="__codelineno-31-1" href="#__codelineno-31-1"></a><span class="n">RECmd</span><span class="p">.</span><span class="n">exe</span> <span class="n">-d</span> <span class="s2">&quot;C:\Temp\registry_files&quot;</span> <span class="p">-</span><span class="n">-minsize</span> <span class="n">1M</span> <span class="p">-</span><span class="n">-Base64</span> <span class="p">-</span><span class="n">-recover</span> <span class="n">true</span>
+</code></pre></div></p>
+<h3 id="batch-mode-reb">Batch mode (REB)<a class="headerlink" href="#batch-mode-reb" title="Permanent link">&para;</a></h3>
+<p>RECmd supports batch mode with <code>.reb</code> bundles, using <code>HiveType</code> to target only relevant hives. </p>
+<p>Example:
+<div class="highlight"><pre><span></span><code><a id="__codelineno-32-1" name="__codelineno-32-1" href="#__codelineno-32-1"></a><span class="n">RECmd</span><span class="p">.</span><span class="n">exe</span> <span class="p">-</span><span class="n">-bn</span> <span class="p">.\</span><span class="n">BatchExamples</span><span class="p">\</span><span class="n">BatchExampleUserAssist</span><span class="p">.</span><span class="n">reb</span> <span class="o">-f</span> <span class="n">C</span><span class="p">:\</span><span class="n">Temp</span><span class="p">\</span><span class="n">NTUSER_dblake</span><span class="p">.</span><span class="n">DAT</span> <span class="p">-</span><span class="n">-nl</span> <span class="p">-</span><span class="n">-csv</span> <span class="n">C</span><span class="p">:\</span><span class="n">Temp</span>
+</code></pre></div></p>
+<hr />
+<h2 id="quick-start-standardized-output-folder-layout">Quick Start: Standardized Output Folder Layout<a class="headerlink" href="#quick-start-standardized-output-folder-layout" title="Permanent link">&para;</a></h2>
+<p>Recommended standard run folder (repeatable across cases/hosts):</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-33-1" name="__codelineno-33-1" href="#__codelineno-33-1"></a>Case_&lt;ID&gt;\
+<a id="__codelineno-33-2" name="__codelineno-33-2" href="#__codelineno-33-2"></a>  Host_&lt;HOSTNAME&gt;\
+<a id="__codelineno-33-3" name="__codelineno-33-3" href="#__codelineno-33-3"></a>    EZTools\
+<a id="__codelineno-33-4" name="__codelineno-33-4" href="#__codelineno-33-4"></a>      VSCMount\
+<a id="__codelineno-33-5" name="__codelineno-33-5" href="#__codelineno-33-5"></a>      SQLECmd\
+<a id="__codelineno-33-6" name="__codelineno-33-6" href="#__codelineno-33-6"></a>      SumECmd\
+<a id="__codelineno-33-7" name="__codelineno-33-7" href="#__codelineno-33-7"></a>      bstrings\
+<a id="__codelineno-33-8" name="__codelineno-33-8" href="#__codelineno-33-8"></a>      AppCompatCache\
+<a id="__codelineno-33-9" name="__codelineno-33-9" href="#__codelineno-33-9"></a>      RecycleBin\
+<a id="__codelineno-33-10" name="__codelineno-33-10" href="#__codelineno-33-10"></a>      JumpLists\
+<a id="__codelineno-33-11" name="__codelineno-33-11" href="#__codelineno-33-11"></a>      SRUM\
+<a id="__codelineno-33-12" name="__codelineno-33-12" href="#__codelineno-33-12"></a>      Timeline\
+<a id="__codelineno-33-13" name="__codelineno-33-13" href="#__codelineno-33-13"></a>      LNK\
+<a id="__codelineno-33-14" name="__codelineno-33-14" href="#__codelineno-33-14"></a>      Amcache\
+<a id="__codelineno-33-15" name="__codelineno-33-15" href="#__codelineno-33-15"></a>      MFT\
+<a id="__codelineno-33-16" name="__codelineno-33-16" href="#__codelineno-33-16"></a>      Registry\
+</code></pre></div>
+<hr />
+<p><em>End of file.</em><br />
+Poster reference: SANS EZ Tools Poster </p>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+          <button type="button" class="md-top md-icon" data-md-component="top" hidden>
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8z"/></svg>
+  Back to top
+</button>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+    
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      
+      <script id="__config" type="application/json">{"annotate": null, "base": "../..", "features": ["content.action.edit", "content.action.view", "content.code.annotate", "content.code.copy", "content.tooltips", "navigation.footer", "navigation.indexes", "navigation.sections", "navigation.tabs", "navigation.top", "navigation.tracking", "search.highlight", "search.share", "search.suggest", "toc.follow"], "search": "../../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
+    
+    
+      <script src="../../assets/javascripts/bundle.79ae519e.min.js"></script>
+      
+    
+  </body>
+</html>
