@@ -20,8 +20,7 @@ This document provides a structured workflow for analyzing NTUSER.DAT using:
 ## Artifact Location
 
 **Registry Hive:** `NTUSER.DAT`  
-**Typical Path:**  
-`C:\Users\{user}\NTUSER.DAT`
+**Typical Path:**  `C:\Users\{user}\NTUSER.DAT`
 
 Associated transaction logs (if present):
 - `ntuser.dat.LOG1`
