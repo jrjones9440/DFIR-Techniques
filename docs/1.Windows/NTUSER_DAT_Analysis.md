@@ -44,16 +44,14 @@ Associated transaction logs (if present):
 1. Launch **Registry Explorer**
 2. Select **File → Load Hive**
 3. Browse to the offline hive file  
-   Example: `E:\C\Users\user1\NTUSER.DAT`
+      - Example: `E:\C\Users\user1\NTUSER.DAT`
 4. If a **dirty hive** is detected, select **Yes**
 5. Click **OK** to select the transaction logs to replay (skip if not prompted)
-6. In the file selection dialog, navigate to:  
-   `E:\C\Users\user1\`
-7. Highlight `ntuser.dat.LOG1` and `ntuser.dat.LOG2` (CTRL + click) → **Open**
-8. Click **OK** to replay transaction logs
-9. Save cleaned hive as: `NTUSER.DAT_clean`
-10. Select **Yes** to load the updated hive
-11. Select **No** when asked to load the dirty hive
+6. In the “Open” dialog box navigate to offline hive file (such as E:\C\Users\user1) and highlight ntuser.dat.LOG1 and ntuser.dat.LOG2 by holding the CTRL key and clicking the filenames with your mouse. Select Open. (skip if no dirty hive detected).
+7. Click **OK** to replay transaction logs
+8. Select the save location to the directory you are working in, naming it something like: `NTUSER.DAT_clean`
+9. Select **Yes** when asked if you want to load the updated hive.
+10. Select **No** when asked to load the dirty hive
 
 📸 **Example Screenshot**
 
@@ -73,16 +71,15 @@ NTUSER.DAT\Software\Microsoft\Windows\CurrentVersion\Explorer\WordWheelQuery
 ### What it shows
 Search terms typed into **Windows Search / Explorer search**.
 
-### DFIR Notes
-- MRU list is **descending**
-- MRU position `0` is the most recent search
-- Values **do not store timestamps**
-- The key’s **LastWrite timestamp** indicates when the most recent search (MRU 0) occurred
 
-### Task
-- Identify suspicious search terms
-- Document MRU order
-- Document key LastWrite timestamp as the latest search time
+### Procedure
+1. Navigate to the `NTUSER.DAT\Software\Microsoft\Windows\CurrentVersion\Explorer\WordWheelQuery` in Registry Explorer.
+2. Review the searches typed by the account in question and identify any suspicious search terms.
+      - MRU, or Most Recently Used, position is in descending order, position 0 is the most recent search.
+3. Document any searches with timestamps:
+      - WordWheelQuery does not maintain timestamps for its values, it does have one timestamp, the last write time of the key itself.
+      - Since the key contains a Most Recently Used (MRU) list, we know that the most recent search conducted is present in MRU position 0.
+      - Hence that search was conducted at the time WordWheelQuery was last written.
 
 📸 **Example Screenshot**
 
@@ -90,6 +87,12 @@ Search terms typed into **Windows Search / Explorer search**.
 ![Registry Explorer - WordWheelQuery searches](img/ntuser_analysis/02_wordwheelquery.png)
 ```
 
+### DFIR Notes
+- MRU list is **descending**
+- MRU position `0` is the most recent search
+- Values **do not store timestamps**
+- The key’s **LastWrite timestamp** indicates when the most recent search (MRU 0) occurred
+  
 ---
 
 ## Step 3 — TypedPaths (Explorer Path Bar)
@@ -102,17 +105,15 @@ NTUSER.DAT\Software\Microsoft\Windows\CurrentVersion\Explorer\TypedPaths
 ### What it shows
 Locations typed manually into the **Explorer address bar**.
 
-### DFIR Notes
-- No MRU list
-- Entries are ordered by **value name**
-- Key **LastWrite** time reflects the most recent update (most recent entry)
-
-### Task
-- Document suspicious paths such as:
-  - `\\server\share`
-  - removable drives (E:, F:)
-  - staging folders (Temp, Downloads)
-  - unusual admin shares (C$)
+### Procedure
+1. Navigate to the `NTUSER.DAT\Software\Microsoft\Windows\CurrentVersion\Explorer\TypedPaths` key in Registry Explorer.
+2. Document any suspicious entries:
+      - Examples are:
+         - `\\server\share`
+         - removable drives (E:, F:)
+         - staging folders (Temp, Downloads)
+         - unusual admin shares (C$)
+3. TypedPaths does not keep a MRU list, but does keep its entries in order by value name, thus the only timestamp that is available is for the most recent entry which is when the key was updated.
 
 📸 **Example Screenshot**
 
@@ -120,6 +121,11 @@ Locations typed manually into the **Explorer address bar**.
 ![Registry Explorer - TypedPaths](img/ntuser_analysis/03_typedpaths.png)
 ```
 
+### DFIR Notes
+- No MRU list
+- Entries are ordered by **value name**
+- Key **LastWrite** time reflects the most recent update (most recent entry)
+  
 ---
 
 ## Step 4 — RecentDocs (Recent File Activity)
@@ -132,19 +138,16 @@ NTUSER.DAT\Software\Microsoft\Windows\CurrentVersion\Explorer\RecentDocs
 ### What it shows
 Recently opened documents by extension type.
 
-### DFIR Notes
-- Uses MRU lists and key LastWrite timestamps
-- Subkeys store “extra timestamps”:
-  - Each file-type subkey’s LastWrite = time the last file of that type was opened
-- Registry Explorer plugin includes **Extension Last Opened** column
-- MRU ordering helps **time bounding / bookending**
-  - If item is MRU position 41 opened at time T, the 40 above it were opened **after T**
+### Procedure
+1. Navigate to the `NTUSER.DAT\Software\Microsoft\Windows\CurrentVersion\Explorer\RecentDocs` key in Registry Explorer.
+2. Timestamps in the RecentDocs key are identified via MRU lists and the last write times of registry keys. Each key has a timestamp and thus each of the sub-keys of RecentDocs keeps the time of the last file of that type to be opened.
+3. These "extra" timestamps are collected in the Registry Explorer Recent documents plugin in the Extension Last Opened column. By reviewing this column you can bookend the time periods within which multiple files were opened.
+4. The RecentDocs key keeps the order of items opened via its MRU key.
+5. For example, if **test.doc** was opened on **2025-10-10:50:25 UTC** and is MRU position 41, that means that the 40 items above it in the list were all opened **AFTER 2025-10-10:50:25 UTC**.
+6. Review the Extension Last Opened column in Registry Explorer and identify the filenames opened around the timeframe of interest and document timestamps.
+7. Document drive letters referenced within RecentDocs by looking at the Target Name:
+      - You can search for interesting or sensitive files by searching within the Target Name field
 
-### Tasks
-- Review **Extension Last Opened**
-- Identify filenames around the timeframe of interest
-- Record drive letters from **Target Name**
-- Search Target Name for sensitive keywords
 
 📸 **Example Screenshot**
 
@@ -152,6 +155,14 @@ Recently opened documents by extension type.
 ![Registry Explorer - RecentDocs plugin view](img/ntuser_analysis/04_recentdocs.png)
 ```
 
+### DFIR Notes
+- Uses MRU lists and key LastWrite timestamps
+- Subkeys store “extra timestamps”:
+  - Each file-type subkey’s LastWrite = time the last file of that type was opened
+- Registry Explorer plugin includes **Extension Last Opened** column
+- MRU ordering helps **time bounding / bookending**
+  - If item is MRU position 41 opened at time T, the 40 above it were opened **after T**
+    
 ---
 
 ## Step 5 — Office File MRU (Full Paths + Timestamps)
@@ -161,20 +172,22 @@ Recently opened documents by extension type.
 NTUSER.DAT\Software\Microsoft\Office\16.0\Word\User MRU\ADAL_*\File MRU
 ```
 
-> Note: The `ADAL_*` portion varies per user/environment. You may need to expand the tree to locate it.
+> Note: The `ADAL_*` portion varies per user/environment. You may need to expand the tree to locate it. An example is `NTUSER.DAT\Software\Microsoft\Office\16.0\Word\User MRU\ ADAL_71509F4C9F29E24E25306165B32FE79B68FD54A88446B7C792A3A9D5AB6BB5AE\File MRU`
 
-### Why it matters
+### What it shows
 Office MRU provides:
-- Full path
-- Timestamps for every entry
-- Duration of access (Last Closed - Last Opened)
+   - Full path
+   - Timestamps for every entry
+   - Duration of access (Last Closed - Last Opened)
 
-### Tasks
-- Document drive letters used (C:, D:, E:, etc.)
-- Identify cloud storage indicators (examples):
-  - `G:` mapped Google Drive / OneDrive sync folder
-  - paths containing `Google Drive`, `OneDrive`, `SharePoint`
-- Identify sensitive files and how long they were open
+### Procedure
+1. Navigate to the NTUSER.DAT\Software\Microsoft\Office\16.0\Word\User MRU\ ADAL_*\File MRU key in Registry Explorer.
+2. Document what drive letters were used to open Office files of interest (like Word documents) during the timeframe of interest (C:, D:, E:, etc.).
+4. What drive letters may be Cloud storage like Google Drive? Look for paths like:
+      - `Google Drive`
+      - `OneDrive`
+      - `SharePoint`
+5. Identify any sensitive files opened (work with the network owner) and how long they were opened for (subtract Last Closed from Last Opened timestamp).
 
 📸 **Example Screenshot**
 
@@ -192,15 +205,12 @@ NTUSER.DAT\Software\Microsoft\Windows\CurrentVersion\Explorer\ComDlg32\OpenSaveP
 ```
 
 ### What it shows
-Files and folders interacted with via Open/Save dialogs.
+Files and folders interacted with via Open/Save dialogs. Most of the files referenced in OpenSavePidlMRU are also present in RecentDocs. However, this is a good data source to review largely because it provides full path information not available in RecentDocs.
 
-### DFIR Notes
-- Often overlaps with RecentDocs
-- Provides **full path info** in Registry Explorer plugin (Absolute Path column)
-
-### Task
-- Identify suspicious sensitive files
-- Identify staging activity (opening archives, scripts, etc.)
+### Procedure
+1. Navigate to the `NTUSER.DAT\Software\Microsoft\Windows\CurrentVersion\Explorer\ComDlg32\OpenSavePidlMRU` key in Registry Explorer.
+2. Use the full path information available here in the Absolute Path column to look for suspicious or sensitive files opened.
+3. Document any suspicious or sensitive files along with the full path.
 
 📸 **Example Screenshot**
 
@@ -208,6 +218,10 @@ Files and folders interacted with via Open/Save dialogs.
 ![Registry Explorer - OpenSavePidlMRU absolute paths](img/ntuser_analysis/06_opensavepidlmru.png)
 ```
 
+### DFIR Notes
+- Often overlaps with RecentDocs
+- Provides **full path info** in Registry Explorer plugin (Absolute Path column)
+  
 ---
 
 ## Step 7 — LastVisitedPidlMRU (Executable Correlation)
@@ -218,16 +232,13 @@ NTUSER.DAT\Software\Microsoft\Windows\CurrentVersion\Explorer\ComDlg32\LastVisit
 ```
 
 ### What it shows
-Associates the Open/Save dialog usage with the application executable responsible.
+Associates the Open/Save dialog usage with the application executable responsible. 
 
-### DFIR Notes
-- Some entries have timestamps in **Opened On**
-- Only timestamped entries can be validated directly
-- Use MRU order + correlation with OpenSavePidlMRU for weak attribution
-
-### Task
-- Identify executables linked to sensitive file interaction
-- Correlate with OpenSavePidlMRU and timeframe
+### Procedure
+1. Correlate OpenSavePidlMRU information with application information present in the LastVisitedPidlMRU key.
+2. Navigate to the `NTUSER.DAT\Software\Microsoft\Windows\CurrentVersion\Explorer\ComDlg32\LastVisitedPidlMRU` key in Registry Explorer.
+3. Reference timestamps and the MRU position to attempt to identify the Executable responsible for interacting with the file in question.
+4. Only entries with timestamp values in the Opened On column can be validated, others will need more correlating information.
 
 📸 **Example Screenshot**
 
@@ -235,6 +246,11 @@ Associates the Open/Save dialog usage with the application executable responsibl
 ![Registry Explorer - LastVisitedPidlMRU executable correlation](img/ntuser_analysis/07_lastvisitedpidlmru.png)
 ```
 
+### DFIR Notes
+- Some entries have timestamps in **Opened On**
+- Only timestamped entries can be validated directly
+- Use MRU order + correlation with OpenSavePidlMRU for weak attribution
+  
 ---
 
 ## Step 8 — Run Key (User Persistence / Startup Items)
@@ -245,14 +261,16 @@ NTUSER.DAT\Software\Microsoft\Windows\CurrentVersion\Run
 ```
 
 ### Why it matters
-This key runs programs on every user logon and is a common **persistence mechanism**.
+This key runs programs on every user logon and is the most common place for malware to add a reference to itself in an attempt to survive a reboot (commonly called a **persistence mechanism**).
 
-### Task
-- Identify suspicious values such as:
-  - executables in `AppData\Roaming`
-  - scripts (`.vbs`, `.ps1`, `.js`, `.bat`)
-  - references to Temp/Downloads
-  - suspicious LOLBins (rundll32, regsvr32, mshta)
+### Procedure
+1. In addition to helping discover potential malware, this key also gives an indication of applications installed by the user.
+2. Navigate to the `NTUSER.DAT\Software\Microsoft\Windows\CurrentVersion\Run` key in Registry Explorer.
+3. Document any suspicious entries such as:
+      - executables in `AppData\Roaming`
+      - scripts (`.vbs`, `.ps1`, `.js`, `.bat`)
+      - references to Temp/Downloads
+      - suspicious LOLBins (rundll32, regsvr32, mshta)
 
 📸 **Example Screenshot**
 
@@ -287,15 +305,15 @@ RECmd.exe -f "E:\C\Users\user1\NTUSER.DAT" --bn .\Batch\UserActivity.reb --csv "
 ```
 
 4. Open output file in **Timeline Explorer**:  
-   `<timestamp>_RECmd_Batch_UserActivity_Output.csv`
+      -`<timestamp>_RECmd_Batch_UserActivity_Output.csv`
 5. In Timeline Explorer, reset columns:
-   - `Tools → Reset column widths` (Ctrl+R)
+      - `Tools → Reset column widths` (Ctrl+R is the keyboard shortcut)
 6. Focus analysis on:
-   - **Description**
-   - **Key Path**
-   - **Value Data**
+      - **Description**
+      - **Key Path**
+      - **Value Data**
 7. Document interesting findings
-8. Review other CSV outputs for individual keys
+8. Review other CSV outputs for individual keys discussed above.
 
 ---
 
@@ -304,20 +322,20 @@ RECmd.exe -f "E:\C\Users\user1\NTUSER.DAT" --bn .\Batch\UserActivity.reb --csv "
 ### Look for:
 - unusual paths in `Value Data`
 - references to:
-  - `Temp`
-  - `Downloads`
-  - `AppData`
-  - `\UNC\Paths`
-  - external drive letters (E:, F:)
+     - `Temp`
+     - `Downloads`
+     - `AppData`
+     - `\UNC\Paths`
+     - external drive letters (E:, F:)
 - suspicious keywords:
-  - `password`
-  - `vpn`
-  - `putty`
-  - `winscp`
-  - `rclone`
-  - `7zip`
-  - `keylogger`
-  - `powershell`
+     - `password`
+     - `vpn`
+     - `putty`
+     - `winscp`
+     - `rclone`
+     - `7zip`
+     - `keylogger`
+     - `powershell`
 
 ---
 
@@ -354,8 +372,8 @@ RECmd.exe -f "E:\C\Users\user1\NTUSER.DAT" --bn .\Batch\UserActivity.reb --csv "
 - Many NTUSER artifacts are **MRU-based**, not timestamp-based
 - Always document **key LastWrite time**
 - Validate major conclusions using:
-  - Event logs (Security 4624/4688)
-  - Prefetch
-  - SRUM
-  - Jump Lists
-  - File system timestamps
+     - Event logs (Security 4624/4688)
+     - Prefetch
+     - SRUM
+     - Jump Lists
+     - File system timestamps
