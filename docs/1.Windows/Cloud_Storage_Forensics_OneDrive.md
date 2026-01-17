@@ -126,13 +126,12 @@ Before searching, obtain:
 4. Load OneDrive Personal database:
      - **File → OneDrive settings → Load <UserCid>.dat**
      - Example file:
-     - `E:\C\Users\user1\AppData\Local\Microsoft\OneDrive\settings\Personal\a322388cbcb18cb.dat`
+       - `E:\C\Users\user1\AppData\Local\Microsoft\OneDrive\settings\Personal\a322388cbcb18cb.dat`
 5. When asked for registry hive → **Yes**
      - Browse to: `E:\C\Users\user1\NTUSER.DAT`
 6. When asked for $Recycle.Bin → **Yes**
-     - Browse to:
-       - `E:\C\$Recycle.Bin\S-1-5-21-...-1002`
-       - Use the RID you identified to load the correct one. Triage images are particularly useful for this step as access to these folders in mounted disk images often have difficulties due to Windows auto-redirection of Recycle Bin folders.
+     - Browse to: `E:\C\$Recycle.Bin\S-1-5-21-...-1002` (actual $Recycle.Bin will be different depending on the RID you are focused on)
+     - Use the RID you identified to load the correct one. Triage images are particularly useful for this step as access to these folders in mounted disk images often have difficulties due to Windows auto-redirection of Recycle Bin folders.
 8. After load completes, the root of the OneDrive folder hierarchy should appear in the Path pane. Click into the Path pane and begin expanding the folder hierarchy. Spend a few minutes looking through the folders and files to become familiar with the information available.
 
 📸 **Example Screenshot**
